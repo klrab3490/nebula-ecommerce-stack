@@ -1,15 +1,33 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect, useState, use } from 'react';
 
-type Props = {
-    params: {
-        id: string
+export default function ProductPage(props: { params: Promise<{ id: string }> }) {
+    const params = use(props.params);
+    const { id } = params;
+    const [product, setProduct] = useState<{ name: string; description: string } | null>(null);
+
+    useEffect(() => {
+        // Simulate fetching product data
+        async function fetchProduct() {
+            // Replace with actual API call
+            const data = {
+                name: `Product ${id}`,
+                description: `Description for product ${id}`,
+            };
+            setProduct(data);
+        }
+        fetchProduct();
+    }, [id]);
+
+    if (!product) {
+        return <div>Loading...</div>;
     }
-}
 
-export default function page({ params }: Props) {
-  return (
-    <div>Product Page: {params.id}</div>
-  )
+    return (
+        <div>
+            <h1>{product.name}</h1>
+            <p>{product.description}</p>
+        </div>
+    );
 }
