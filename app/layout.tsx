@@ -1,5 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import Navbar from "@/components/custom/Navbar";
+import Footer from "@/components/custom/Footer";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider"; 
 
@@ -27,7 +29,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          {children}
+          <div>
+            <Navbar />
+            {children}
+            <Footer />
+          </div>
         </ThemeProvider>  
       </body>
     </html>
