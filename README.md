@@ -54,18 +54,23 @@ yarn install
 
 ### 3. Setup environment variables
 
-Create a `.env.local` file with the following:
+Create a `.env.local` or `.env` file with the following:
 
 ```env
-# Clerk
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_key
-CLERK_SECRET_KEY=your_key
+# Public Environment Variables
+NEXT_PUBLIC_CURRENCY=$
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=''
 
-# MongoDB
-MONGODB_URI=your_mongodb_uri
+# Private Environment Variables
+CLERK_SECRET_KEY=''
+MONGODB_URI=''
+INNGEST_SIGNING_KEY=''
+INNGEST_EVENT_KEY=''
 
-# Inngest
-INNGEST_EVENT_KEY=your_key
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=''
+CLOUDINARY_API_KEY=''
+CLOUDINARY_API_SECRET=''
 ```
 
 ### 4. Run the development server
@@ -107,7 +112,7 @@ export const createUserFn = inngest.createFunction(
 ## 🌌 Logo
 
 <p align="center">
-  <img src="./logo.png" alt="Nebula E-commerce Stack Logo" width="300"/>
+  <img src="./public/Logo.png" alt="Nebula E-commerce Stack Logo" width="300"/>
 </p>
 
 ---
