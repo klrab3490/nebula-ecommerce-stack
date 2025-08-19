@@ -96,7 +96,7 @@ export default function Navbar() {
                         {/* Center section - Logo */}
                         <div className="flex items-center justify-center">
                             <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-                                <Image src="/Logo.png" alt="Nebula Logo" width={32} height={32} className="bg-white rounded-full" />
+                                <Image src="/Nebula.png" alt="Nebula Logo" width={32} height={32} className="bg-white rounded-full" />
                             </Link>
                         </div>
 
