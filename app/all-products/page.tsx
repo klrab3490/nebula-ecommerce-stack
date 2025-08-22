@@ -2,6 +2,6 @@ import React from 'react'
 
 export default function AllProducts() {
   return (
-    <div>All Products</div>
+    <div className='min-h-screen'>All Products</div>
   )
 }
