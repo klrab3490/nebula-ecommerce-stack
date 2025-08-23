@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { ShoppingCart } from "lucide-react";
-import { useCart } from "@/contexts/cart-context";
+import { useAppContext } from "@/contexts/AppContext";
 
 export function CartIcon() {
-    const { itemCount } = useCart()
+    const { cart } = useAppContext();
+    const { itemCount } = cart;
 
     return (
         <Link href="/cart">

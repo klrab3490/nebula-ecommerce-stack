@@ -5,8 +5,8 @@ import Image from "next/image";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/contexts/cart-context";
 import { notFound, useParams } from "next/navigation";
+import { useAppContext } from "@/contexts/AppContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Heart, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -147,7 +147,7 @@ export default function ProductPage() {
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const [isWishlisted, setIsWishlisted] = useState(false)
-    const { addItem } = useCart()
+    const { addItem } = useAppContext();
 
     const product = products.find((p) => p.id === id)
 

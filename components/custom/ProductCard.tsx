@@ -5,11 +5,11 @@ import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { useCart } from "@/contexts/cart-context"
 import { Heart, ShoppingCart } from "lucide-react"
+import { useAppContext } from "@/contexts/AppContext";
 import { Card, CardHeader, CardContent } from "@/components/ui/card"
 
-interface Product {
+interface ProductCard {
     id: string
     name: string
     price: number
@@ -18,12 +18,12 @@ interface Product {
 }
 
 interface ProductCardProps {
-    product: Product
+    product: ProductCard
 }
 
 export function ProductCard({ product }: ProductCardProps) {
     const [isWishlisted, setIsWishlisted] = useState(false)
-    const { addItem } = useCart()
+    const { addItem } = useAppContext();
 
     const handleAddToCart = () => {
         addItem({

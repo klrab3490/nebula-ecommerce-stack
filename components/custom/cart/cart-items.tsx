@@ -4,14 +4,16 @@ import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import { type CartItem as CartItemType, useCart } from "@/contexts/cart-context";
+import { useAppContext } from "@/contexts/AppContext";
+import type { CartItem as CartItemType } from "@/contexts/AppContext";
+
 
 interface CartItemProps {
     item: CartItemType
 }
 
 export function CartItem({ item }: CartItemProps) {
-    const { updateQuantity, removeItem } = useCart()
+    const { updateQuantity, removeItem } = useAppContext();
 
     const handleQuantityChange = (newQuantity: number) => {
         if (newQuantity <= 0) {

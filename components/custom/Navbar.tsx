@@ -1,18 +1,20 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import Image from "next/image";
-import { useState } from "react";
-import { CartIcon } from "./cart/cart-icon";
-import { usePathname } from "next/navigation";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/components/theme/mode-toggle";
-import { Search, User, Menu, X, ChevronDown } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import Link from "next/link"
+import Image from "next/image"
+import { useState } from "react"
+import { useClerk } from "@clerk/nextjs"
+import { CartIcon } from "./cart/cart-icon"
+import { usePathname } from "next/navigation"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { ModeToggle } from "@/components/theme/mode-toggle"
+import { Search, User, Menu, X } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
 
 export default function Navbar() {
     const pathname = usePathname();
+    const { openSignIn } = useClerk();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
@@ -24,7 +26,7 @@ export default function Navbar() {
         <nav className="sticky top-0 z-50 w-full border-b bg-white/95 dark:bg-gray-900/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/95">
             <div className="mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
-                    <div className="grid grid-cols-3 items-center w-full">
+                    <div className="grid grid-cols-2 md:grid-cols-3 items-center w-full">
                         {/* Left section - Navigation */}
                         <div className="flex items-center justify-start">
                             <div className="hidden lg:flex items-center space-x-1">
@@ -34,41 +36,12 @@ export default function Navbar() {
                                 >
                                     Home
                                 </Link>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="ghost" className="px-3 py-2 text-sm font-medium">
-                                            Products
-                                            <ChevronDown className="ml-1 h-4 w-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="start" className="w-48">
-                                        <DropdownMenuItem asChild>
-                                            <Link href="/all-products" className="w-full">
-                                                All Products
-                                            </Link>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem asChild>
-                                            <Link href="/all-products/new-arrivals" className="w-full">
-                                                New Arrivals
-                                            </Link>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem asChild>
-                                            <Link href="/all-products/best-sellers" className="w-full">
-                                                Best Sellers
-                                            </Link>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem asChild>
-                                            <Link href="/all-products/trending" className="w-full">
-                                                Trending
-                                            </Link>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem asChild>
-                                            <Link href="/all-products/health-beauty" className="w-full">
-                                                Health & Beauty
-                                            </Link>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                                <Link
+                                    href="/all-products"
+                                    className="px-3 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
+                                >
+                                    Products
+                                </Link>
                                 <Link
                                     href="/about"
                                     className="px-3 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
@@ -85,17 +58,17 @@ export default function Navbar() {
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="lg:hidden ml-2"
+                                className="lg:hidden ml-2 h-10 w-10 hover:bg-accent/80"
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                             >
-                                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                             </Button>
                         </div>
 
                         {/* Center section - Logo */}
-                        <div className="flex items-center justify-center">
+                        <div className="flex items-end md:items-center justify-end md:justify-center">
                             <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-                                <Image src="/Nebula.png" alt="Nebula Logo" width={32} height={32} className="bg-white rounded-full" />
+                                <Image src="/Nebula.png" alt="Nebula Logo" width={32} height={32} className="bg-white rounded-full" priority unoptimized />
                             </Link>
                         </div>
 
@@ -112,125 +85,145 @@ export default function Navbar() {
                                 </div>
                             )}
 
-                            <div className="flex items-center gap-1">
+                            <div className="hidden md:flex items-center gap-1">
                                 <Button
                                     variant="ghost"
                                     size="icon"
                                     onClick={() => setIsSearchOpen(!isSearchOpen)}
-                                    className={isSearchOpen ? "bg-accent" : ""}
+                                    className={`h-10 w-10 hover:bg-accent/80 ${isSearchOpen ? "bg-accent" : ""}`}
                                 >
                                     <Search className="h-5 w-5" />
                                 </Button>
 
-                                <Button variant="ghost" size="icon" className="relative">
+                                <Button variant="ghost" size="icon" className="relative h-10 w-10 hover:bg-accent/80">
                                     <CartIcon />
                                 </Button>
 
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="ghost" size="icon">
-                                            <User className="h-5 w-5" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end" className="w-48">
-                                        <DropdownMenuItem>Sign In</DropdownMenuItem>
-                                        <DropdownMenuItem>Create Account</DropdownMenuItem>
-                                        <DropdownMenuItem>My Orders</DropdownMenuItem>
-                                        <DropdownMenuItem>Wishlist</DropdownMenuItem>
-                                        <DropdownMenuItem>Account Settings</DropdownMenuItem>
-                                        <DropdownMenuItem>Seller Dashboard</DropdownMenuItem>
-                                        <DropdownMenuSeparator />
-                                        <DropdownMenuItem>Logout</DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                                <Button variant="ghost" size="icon" className="relative h-10 w-10 hover:bg-accent/80" onClick={() => openSignIn()}>
+                                    <User className="h-5 w-5" />
+                                </Button>
 
-                                <ModeToggle />
+                                <div className="h-10 w-10 flex items-center justify-center">
+                                    <ModeToggle />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {isMenuOpen && (
-                    <div className="lg:hidden border-t backdrop-blur-md">
-                        <div className="px-2 py-4 space-y-3">
+                    <div className="lg:hidden border-t backdrop-blur-md animate-in slide-in-from-top-2 duration-300">
+                        <div className="px-4 py-6 space-y-6">
+                            {/* Mobile Search Section */}
                             {isSearchOpen && (
                                 <div className="relative animate-in slide-in-from-top-2 duration-200">
-                                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                    <Input placeholder="Search products..." className="pl-10 pr-4" autoFocus />
+                                    <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+                                    <Input
+                                        placeholder="Search products..."
+                                        className="pl-12 pr-4 h-12 text-base bg-accent/50 border-border/50 focus:bg-background focus:border-border rounded-xl"
+                                        autoFocus
+                                    />
                                 </div>
                             )}
 
-                            <div className="space-y-1">
+                            <div className="flex items-center justify-between gap-3 pb-4 border-b border-border/50 md:hidden">
+                                <div className="flex items-center gap-3">
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => setIsSearchOpen(!isSearchOpen)}
+                                        className={`h-12 w-12 hover:bg-accent/80 rounded-xl ${isSearchOpen ? "bg-accent" : ""}`}
+                                    >
+                                        <Search className="h-5 w-5" />
+                                    </Button>
+
+                                    <Button variant="ghost" size="icon" className="relative h-12 w-12 hover:bg-accent/80 rounded-xl">
+                                        <CartIcon />
+                                    </Button>
+
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="ghost" size="icon" className="h-12 w-12 hover:bg-accent/80 rounded-xl">
+                                                <User className="h-5 w-5" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end" className="w-48">
+                                            <DropdownMenuItem>Sign In</DropdownMenuItem>
+                                            <DropdownMenuItem>Create Account</DropdownMenuItem>
+                                            <DropdownMenuItem>My Orders</DropdownMenuItem>
+                                            <DropdownMenuItem>Wishlist</DropdownMenuItem>
+                                            <DropdownMenuItem>Account Settings</DropdownMenuItem>
+                                            <DropdownMenuItem>Seller Dashboard</DropdownMenuItem>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuItem>Logout</DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
+
+                                <div className="flex items-center justify-center h-12 w-12">
+                                    <ModeToggle />
+                                </div>
+                            </div>
+
+                            {/* Navigation Links */}
+                            <div className="space-y-2">
+                                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-4 mb-3">
+                                    Navigation
+                                </h3>
                                 <Link
                                     href="/"
-                                    className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary hover:bg-accent rounded-md transition-colors"
+                                    className="flex items-center px-4 py-3 text-base font-medium text-foreground hover:text-primary hover:bg-accent/60 rounded-xl transition-all duration-200 active:scale-95"
                                     onClick={() => setIsMenuOpen(false)}
                                 >
                                     Home
                                 </Link>
-
-                                <div className="space-y-1">
-                                    <div className="px-3 py-2 text-base font-medium text-foreground">Products</div>
-                                    <div className="pl-6 space-y-1">
-                                        <Link
-                                            href="/all-products"
-                                            className="block px-3 py-1 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
-                                            onClick={() => setIsMenuOpen(false)}
-                                        >
-                                            All Products
-                                        </Link>
-                                        <Link
-                                            href="/all-products/new-arrivals"
-                                            className="block px-3 py-1 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
-                                            onClick={() => setIsMenuOpen(false)}
-                                        >
-                                            New Arrivals
-                                        </Link>
-                                        <Link
-                                            href="/all-products/best-sellers"
-                                            className="block px-3 py-1 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
-                                            onClick={() => setIsMenuOpen(false)}
-                                        >
-                                            Best Sellers
-                                        </Link>
-                                        <Link
-                                            href="/all-products/trending"
-                                            className="block px-3 py-1 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
-                                            onClick={() => setIsMenuOpen(false)}
-                                        >
-                                            Trending
-                                        </Link>
-                                        <Link
-                                            href="/all-products/health-beauty"
-                                            className="block px-3 py-1 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
-                                            onClick={() => setIsMenuOpen(false)}
-                                        >
-                                            Health & Beauty
-                                        </Link>
-                                    </div>
-                                </div>
-
                                 <Link
-                                    href="/about"
-                                    className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary hover:bg-accent rounded-md transition-colors"
+                                    href="/all-products"
+                                    className="flex items-center px-4 py-3 text-base font-medium text-foreground hover:text-primary hover:bg-accent/60 rounded-xl transition-all duration-200 active:scale-95"
                                     onClick={() => setIsMenuOpen(false)}
                                 >
-                                    About Us
+                                    Products
+                                </Link>
+                                <Link
+                                    href="/about"
+                                    className="flex items-center px-4 py-3 text-base font-medium text-foreground hover:text-primary hover:bg-accent/60 rounded-xl transition-all duration-200 active:scale-95"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    About
                                 </Link>
                                 <Link
                                     href="/contact"
-                                    className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary hover:bg-accent rounded-md transition-colors"
+                                    className="flex items-center px-4 py-3 text-base font-medium text-foreground hover:text-primary hover:bg-accent/60 rounded-xl transition-all duration-200 active:scale-95"
                                     onClick={() => setIsMenuOpen(false)}
                                 >
-                                    Contact Us
+                                    Contact
                                 </Link>
+                            </div>
+
+                            {/* Quick Actions */}
+                            <div className="space-y-2 pt-4 border-t border-border/50">
+                                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-4 mb-3">
+                                    Quick Actions
+                                </h3>
                                 <Link
                                     href="/seller"
-                                    className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary hover:bg-accent rounded-md transition-colors"
+                                    className="flex items-center px-4 py-3 text-base font-medium text-foreground hover:text-primary hover:bg-accent/60 rounded-xl transition-all duration-200 active:scale-95"
                                     onClick={() => setIsMenuOpen(false)}
                                 >
                                     Seller Dashboard
                                 </Link>
+                                <button
+                                    className="flex items-center w-full px-4 py-3 text-base font-medium text-foreground hover:text-primary hover:bg-accent/60 rounded-xl transition-all duration-200 active:scale-95 text-left"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    My Orders
+                                </button>
+                                <button
+                                    className="flex items-center w-full px-4 py-3 text-base font-medium text-foreground hover:text-primary hover:bg-accent/60 rounded-xl transition-all duration-200 active:scale-95 text-left"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Wishlist
+                                </button>
                             </div>
                         </div>
                     </div>

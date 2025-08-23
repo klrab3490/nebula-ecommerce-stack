@@ -1,12 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/contexts/cart-context";
+import { useAppContext } from "@/contexts/AppContext";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function CartSummary() {
-    const { total, itemCount, clearCart } = useCart()
+    const { cart, clearCart } = useAppContext();
+    const { total, itemCount } = cart;
 
     const shipping = total > 50 ? 0 : 9.99
     const tax = total * 0.08

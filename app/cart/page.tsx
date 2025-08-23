@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/contexts/cart-context";
 import { ArrowLeft, ShoppingBag } from "lucide-react";
+import { useAppContext } from "@/contexts/AppContext";
 import { CartItem } from "@/components/custom/cart/cart-items";
 import { CartSummary } from "@/components/custom/cart/cart-summery";
 
 export default function CartPage() {
-  const { items, itemCount } = useCart()
+  const { cart } = useAppContext();
+  const { items, itemCount } = cart;
 
   if (itemCount === 0) {
     return (
