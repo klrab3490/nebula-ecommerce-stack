@@ -1,12 +1,13 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import Image from "next/image";
-import { cn } from "@/lib/utils";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Heart, ShoppingCart } from "lucide-react";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import Link from "next/link"
+import Image from "next/image"
+import { cn } from "@/lib/utils"
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { useCart } from "@/contexts/cart-context"
+import { Heart, ShoppingCart } from "lucide-react"
+import { Card, CardHeader, CardContent } from "@/components/ui/card"
 
 interface Product {
     id: string
@@ -22,6 +23,16 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
     const [isWishlisted, setIsWishlisted] = useState(false)
+    const { addItem } = useCart()
+
+    const handleAddToCart = () => {
+        addItem({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+        })
+    }
 
     return (
         <Card className="w-full max-w-sm mx-auto group hover:shadow-lg transition-shadow py-0">
@@ -37,9 +48,7 @@ export function ProductCard({ product }: ProductCardProps) {
                             priority
                         />
                         {product.image ? null : (
-                            <span className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">
-                                No Image
-                            </span>
+                            <span className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">No Image</span>
                         )}
                     </div>
                 </Link>
@@ -57,7 +66,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
                 {/* Action Buttons */}
                 <div className="flex gap-2">
-                    <Button className="flex-1">
+                    <Button className="flex-1" onClick={handleAddToCart}>
                         <ShoppingCart className="h-4 w-4 mr-2" />
                         Add to Cart
                     </Button>

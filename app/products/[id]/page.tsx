@@ -3,13 +3,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/contexts/cart-context";
+import { notFound, useParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Heart, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { useParams } from "next/navigation";
 
 interface Product {
     id: string
@@ -147,11 +147,12 @@ export default function ProductPage() {
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const [isWishlisted, setIsWishlisted] = useState(false)
+    const { addItem } = useCart()
 
-    const product = products.find((p) => p.id === id) 
+    const product = products.find((p) => p.id === id)
 
     if (!product) {
-        notFound();
+        notFound()
     }
 
     const nextImage = () => {
@@ -162,17 +163,27 @@ export default function ProductPage() {
         setCurrentImageIndex((prev) => (prev === 0 ? product.images.length - 1 : prev - 1))
     }
 
+    const handleAddToCart = () => {
+        addItem({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.images[0],
+        })
+    }
+
     return (
         <div className="min-h-screen">
             <div className="container mx-auto px-4 py-8">
-                {/* Back button */}
-                <Link href="/all-products" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6">
+                <Link
+                    href="/all-products"
+                    className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6"
+                >
                     <ChevronLeft className="h-4 w-4 mr-1" />
                     Back to products
                 </Link>
 
                 <div className="grid lg:grid-cols-2 gap-8">
-                    {/* Image Gallery */}
                     <div className="space-y-4">
                         <Card className="overflow-hidden p-0">
                             <CardContent className="p-0 relative">
@@ -206,7 +217,6 @@ export default function ProductPage() {
                             </CardContent>
                         </Card>
 
-                        {/* Image thumbnails */}
                         {product.images.length > 1 && (
                             <div className="flex gap-2">
                                 {product.images.map((image, index) => (
@@ -229,7 +239,6 @@ export default function ProductPage() {
                         )}
                     </div>
 
-                    {/* Product Details */}
                     <div className="space-y-6">
                         <div>
                             <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
@@ -246,7 +255,6 @@ export default function ProductPage() {
 
                         <p className="text-muted-foreground leading-relaxed">{product.description}</p>
 
-                        {/* Features */}
                         <div>
                             <h3 className="font-semibold mb-3">Key Features</h3>
                             <ul className="space-y-2">
@@ -259,9 +267,8 @@ export default function ProductPage() {
                             </ul>
                         </div>
 
-                        {/* Action Buttons */}
                         <div className="flex gap-3">
-                            <Button className="flex-1" size="lg">
+                            <Button className="flex-1" size="lg" onClick={handleAddToCart}>
                                 <ShoppingCart className="h-4 w-4 mr-2" />
                                 Add to Cart
                             </Button>
@@ -274,7 +281,6 @@ export default function ProductPage() {
                             </Button>
                         </div>
 
-                        {/* Specifications */}
                         <Card>
                             <CardContent className="p-6">
                                 <h3 className="font-semibold mb-4">Specifications</h3>
@@ -291,7 +297,6 @@ export default function ProductPage() {
                     </div>
                 </div>
 
-                {/* FAQ Section */}
                 <div className="mt-12 flex flex-col items-center justify-center">
                     <h2 className="text-2xl font-bold mb-6 text-center">Frequently Asked Questions</h2>
                     <Accordion type="single" collapsible className="max-w-7xl w-full">

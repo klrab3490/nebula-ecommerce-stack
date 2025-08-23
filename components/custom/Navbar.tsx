@@ -3,19 +3,18 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { CartIcon } from "./cart/cart-icon";
 import { usePathname } from "next/navigation";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/theme/mode-toggle";
-import { Search, ShoppingCart, User, Menu, X, ChevronDown } from "lucide-react";
+import { Search, User, Menu, X, ChevronDown } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 
 export default function Navbar() {
-    const cartItemCount = 3 // This would come from your cart state
-    const pathname = usePathname()
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
-    const [isSearchOpen, setIsSearchOpen] = useState(false)
+    const pathname = usePathname();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     if (pathname === "/seller") {
         return null
@@ -71,13 +70,13 @@ export default function Navbar() {
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                                 <Link
-                                    href="/about-us"
+                                    href="/about"
                                     className="px-3 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
                                 >
                                     About
                                 </Link>
                                 <Link
-                                    href="/contact-us"
+                                    href="/contact"
                                     className="px-3 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
                                 >
                                     Contact
@@ -124,15 +123,7 @@ export default function Navbar() {
                                 </Button>
 
                                 <Button variant="ghost" size="icon" className="relative">
-                                    <ShoppingCart className="h-5 w-5" />
-                                    {cartItemCount > 0 && (
-                                        <Badge
-                                            variant="destructive"
-                                            className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 text-xs flex items-center justify-center"
-                                        >
-                                            {cartItemCount}
-                                        </Badge>
-                                    )}
+                                    <CartIcon />
                                 </Button>
 
                                 <DropdownMenu>
@@ -220,14 +211,14 @@ export default function Navbar() {
                                 </div>
 
                                 <Link
-                                    href="/about-us"
+                                    href="/about"
                                     className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary hover:bg-accent rounded-md transition-colors"
                                     onClick={() => setIsMenuOpen(false)}
                                 >
                                     About Us
                                 </Link>
                                 <Link
-                                    href="/contact-us"
+                                    href="/contact"
                                     className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary hover:bg-accent rounded-md transition-colors"
                                     onClick={() => setIsMenuOpen(false)}
                                 >
