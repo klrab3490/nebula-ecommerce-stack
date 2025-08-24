@@ -11,6 +11,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    env:
+      NEXT_PUBLIC_CURRENCY: ${{ secrets.NEXT_PUBLIC_CURRENCY }}
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+
     steps:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
