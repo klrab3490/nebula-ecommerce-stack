@@ -91,18 +91,18 @@ export default function Footer() {
                     </div>
 
                     {/* Bottom Section */}
-                    <div className="mt-12 pt-8 border-t flex flex-col sm:flex-row justify-between items-center gap-4">
-                        <p className="text-sm text-muted-foreground w-full text-center sm:text-left">
-                            © 2025 Nebula E-Commerce Stack. All rights reserved.
+                    <div className="mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-6">
+                        <p className="text-sm text-muted-foreground w-full text-center md:text-left">
+                            © 2025 <span className="font-semibold text-foreground">Nebula E-Commerce Stack</span>. All rights reserved.
                         </p>
-                        <div className="flex gap-6 text-sm w-full justify-center sm:justify-end">
-                            <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
+                        <div className="flex gap-4 md:gap-8 text-sm w-full justify-center md:justify-end">
+                            <Link href="/legal#privacy" className="text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline">
                                 Privacy Policy
                             </Link>
-                            <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
+                            <Link href="/legal#terms" className="text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline">
                                 Terms of Service
                             </Link>
-                            <Link href="/cookies" className="text-muted-foreground hover:text-foreground transition-colors">
+                            <Link href="/legal#cookies" className="text-muted-foreground hover:text-primary transition-colors underline-offset-2 hover:underline">
                                 Cookie Policy
                             </Link>
                         </div>

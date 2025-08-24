@@ -1,20 +1,22 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import Image from "next/image"
-import { useState } from "react"
-import { useClerk } from "@clerk/nextjs"
-import { CartIcon } from "./cart/cart-icon"
-import { usePathname } from "next/navigation"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { ModeToggle } from "@/components/theme/mode-toggle"
-import { Search, User, Menu, X } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
+import Link from "next/link";
+import Image from "next/image";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useClerk, UserButton } from "@clerk/nextjs";
+import { useAppContext } from "@/contexts/AppContext";
+import { usePathname, useRouter } from "next/navigation";
+import { ModeToggle } from "@/components/theme/mode-toggle";
+import { CartIcon } from "@/components/custom/cart/cart-icon";
+import { Menu, House, Search, ShoppingBag, ShoppingCart, User, X } from "lucide-react";
 
 export default function Navbar() {
+    const router = useRouter();
     const pathname = usePathname();
     const { openSignIn } = useClerk();
+    const { isSeller, user } = useAppContext();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
@@ -26,7 +28,7 @@ export default function Navbar() {
         <nav className="sticky top-0 z-50 w-full border-b bg-white/95 dark:bg-gray-900/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/95">
             <div className="mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
-                    <div className="grid grid-cols-2 md:grid-cols-3 items-center w-full">
+                    <div className="grid grid-cols-3 items-center w-full">
                         {/* Left section - Navigation */}
                         <div className="flex items-center justify-start">
                             <div className="hidden lg:flex items-center space-x-1">
@@ -54,6 +56,14 @@ export default function Navbar() {
                                 >
                                     Contact
                                 </Link>
+                                {user && isSeller && (
+                                    <Link
+                                        href="/seller"
+                                        className="px-3 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
+                                    >
+                                        Seller Dashboard
+                                    </Link>
+                                )}
                             </div>
                             <Button
                                 variant="ghost"
@@ -66,7 +76,7 @@ export default function Navbar() {
                         </div>
 
                         {/* Center section - Logo */}
-                        <div className="flex items-end md:items-center justify-end md:justify-center">
+                        <div className="flex items-center justify-center">
                             <Link href="/" className="flex items-center gap-2 flex-shrink-0">
                                 <Image src="/Nebula.png" alt="Nebula Logo" width={32} height={32} className="bg-white rounded-full" priority unoptimized />
                             </Link>
@@ -85,25 +95,38 @@ export default function Navbar() {
                                 </div>
                             )}
 
-                            <div className="hidden md:flex items-center gap-1">
+                            <div className="flex items-center gap-1">
                                 <Button
                                     variant="ghost"
                                     size="icon"
                                     onClick={() => setIsSearchOpen(!isSearchOpen)}
-                                    className={`h-10 w-10 hover:bg-accent/80 ${isSearchOpen ? "bg-accent" : ""}`}
+                                    className={`hidden md:inline-flex h-10 w-10 hover:bg-accent/80 ${isSearchOpen ? "bg-accent" : ""}`}
                                 >
                                     <Search className="h-5 w-5" />
                                 </Button>
 
-                                <Button variant="ghost" size="icon" className="relative h-10 w-10 hover:bg-accent/80">
+                                <Button variant="ghost" size="icon" className="hidden md:inline-flex relative h-10 w-10 hover:bg-accent/80">
                                     <CartIcon />
                                 </Button>
 
-                                <Button variant="ghost" size="icon" className="relative h-10 w-10 hover:bg-accent/80" onClick={() => openSignIn()}>
-                                    <User className="h-5 w-5" />
-                                </Button>
+                                {user ? (
+                                    <div className="relative h-10 w-10 hover:bg-accent/80 flex items-center justify-center rounded-md">
+                                        <UserButton>
+                                            <UserButton.MenuItems>
+                                                <UserButton.Action label="Home" labelIcon={<House className='h-5 w-5' />} onClick={() => { router.push('/') }} />
+                                                {/* <UserButton.Action label="Profile" labelIcon={<User className='h-5 w-5' />} onClick={() => { router.push('/profile') }} /> */}
+                                                <UserButton.Action label="Cart" labelIcon={<ShoppingCart className='h-5 w-5' />} onClick={() => { router.push('/cart') }} />
+                                                <UserButton.Action label="Orders" labelIcon={<ShoppingBag className='h-5 w-5' />} onClick={() => { router.push('/my-orders') }} />
+                                            </UserButton.MenuItems>
+                                        </UserButton>
+                                    </div>
+                                ) : (
+                                    <Button variant="ghost" size="icon" className="relative h-10 w-10 hover:bg-accent/80 flex items-center justify-center" onClick={() => openSignIn()}>
+                                        <User className="h-5 w-5" />
+                                    </Button>
+                                )}
 
-                                <div className="h-10 w-10 flex items-center justify-center">
+                                <div className="h-10 w-10 hidden md:flex items-center justify-center">
                                     <ModeToggle />
                                 </div>
                             </div>
@@ -140,24 +163,6 @@ export default function Navbar() {
                                     <Button variant="ghost" size="icon" className="relative h-12 w-12 hover:bg-accent/80 rounded-xl">
                                         <CartIcon />
                                     </Button>
-
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="icon" className="h-12 w-12 hover:bg-accent/80 rounded-xl">
-                                                <User className="h-5 w-5" />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end" className="w-48">
-                                            <DropdownMenuItem>Sign In</DropdownMenuItem>
-                                            <DropdownMenuItem>Create Account</DropdownMenuItem>
-                                            <DropdownMenuItem>My Orders</DropdownMenuItem>
-                                            <DropdownMenuItem>Wishlist</DropdownMenuItem>
-                                            <DropdownMenuItem>Account Settings</DropdownMenuItem>
-                                            <DropdownMenuItem>Seller Dashboard</DropdownMenuItem>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuItem>Logout</DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
                                 </div>
 
                                 <div className="flex items-center justify-center h-12 w-12">
@@ -205,13 +210,15 @@ export default function Navbar() {
                                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-4 mb-3">
                                     Quick Actions
                                 </h3>
-                                <Link
-                                    href="/seller"
-                                    className="flex items-center px-4 py-3 text-base font-medium text-foreground hover:text-primary hover:bg-accent/60 rounded-xl transition-all duration-200 active:scale-95"
-                                    onClick={() => setIsMenuOpen(false)}
-                                >
-                                    Seller Dashboard
-                                </Link>
+                                {user && isSeller && (
+                                    <Link
+                                        href="/seller"
+                                        className="flex items-center px-4 py-3 text-base font-medium text-foreground hover:text-primary hover:bg-accent/60 rounded-xl transition-all duration-200 active:scale-95"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        Seller Dashboard
+                                    </Link>
+                                )}
                                 <button
                                     className="flex items-center w-full px-4 py-3 text-base font-medium text-foreground hover:text-primary hover:bg-accent/60 rounded-xl transition-all duration-200 active:scale-95 text-left"
                                     onClick={() => setIsMenuOpen(false)}

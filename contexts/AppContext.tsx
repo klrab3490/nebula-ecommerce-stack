@@ -1,5 +1,6 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState, useReducer, ReactNode } from "react";
 
@@ -113,6 +114,7 @@ interface AppContextType {
     router: ReturnType<typeof useRouter>;
     isSeller: boolean;
     setIsSeller: React.Dispatch<React.SetStateAction<boolean>>;
+    user: ReturnType<typeof useUser>["user"];
     userData: UserData | false;
     fetchUserData: () => Promise<void>;
     products: Product[];
@@ -145,6 +147,8 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     const currency = process.env.NEXT_PUBLIC_CURRENCY;
     const router = useRouter();
 
+    const { user } = useUser();
+
     const [products, setProducts] = useState<Product[]>([]);
     const [userData, setUserData] = useState<UserData | false>(false);
     const [isSeller, setIsSeller] = useState<boolean>(true);
@@ -155,6 +159,20 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
         total: 0,
         itemCount: 0,
     });
+
+    // Sync Clerk user into our context state
+    useEffect(() => {
+        if (user) {
+            setUserData({
+                id: user.id,
+                name: user.fullName || user.username || "Guest",
+                email: user.primaryEmailAddress?.emailAddress || "",
+                ...user.publicMetadata, // optional: attach Clerk metadata
+            });
+        } else {
+            setUserData(false);
+        }
+    }, [user]);
 
     // Load cart from localStorage on mount
     useEffect(() => {
@@ -196,6 +214,7 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
         router,
         isSeller,
         setIsSeller,
+        user,
         userData,
         fetchUserData,
         products,
