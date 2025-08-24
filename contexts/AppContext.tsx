@@ -151,7 +151,7 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
     const [products, setProducts] = useState<Product[]>([]);
     const [userData, setUserData] = useState<UserData | false>(false);
-    const [isSeller, setIsSeller] = useState<boolean>(true);
+    const [isSeller, setIsSeller] = useState<boolean>(false);
 
     // Cart state with reducer
     const [cart, dispatch] = useReducer(cartReducer, {
@@ -167,8 +167,12 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
                 id: user.id,
                 name: user.fullName || user.username || "Guest",
                 email: user.primaryEmailAddress?.emailAddress || "",
+                ...(user.publicMetadata?.role ? { role: user.publicMetadata.role } : {}),
                 ...user.publicMetadata, // optional: attach Clerk metadata
             });
+            if (user.publicMetadata?.role) {
+                setIsSeller(user.publicMetadata.role === "seller");
+            }
         } else {
             setUserData(false);
         }
