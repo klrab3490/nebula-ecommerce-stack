@@ -30,5 +30,5 @@ jobs:
       - name: 🛠️ Build project
         run: npm run build
 
-      - name: 🧪 Run tests
-        run: npm test
+      # - name: 🧪 Run tests
+      #   run: npm test

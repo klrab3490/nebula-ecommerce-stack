@@ -17,7 +17,7 @@ type UserData = {
     id: string;
     name: string;
     email: string;
-    [key: string]: any;
+    [key: string]: unknown;
 };
 
 export interface CartItem {
