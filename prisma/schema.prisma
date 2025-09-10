@@ -26,7 +26,25 @@ model Product {
   categories  String[]
 
   OrderProduct OrderProduct[]
+  ProductFAQ  ProductFAQ[]
 }
+
+model FAQ {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  question  String
+  answer    String
+
+  ProductFAQ ProductFAQ[]
+}
+
+model ProductFAQ {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @db.ObjectId
+  faq       FAQ     @relation(fields: [faqId], references: [id])
+  faqId     String  @db.ObjectId
+}
+
 
 model Order {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
