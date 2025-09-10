@@ -1,5 +1,6 @@
 "use client";
 
+// import { prisma } from "@/lib/prisma"; // Do not import prisma on the client
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState, useReducer, ReactNode } from "react";
@@ -162,20 +163,38 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
     // Sync Clerk user into our context state
     useEffect(() => {
-        if (user) {
-            setUserData({
-                id: user.id,
-                name: user.fullName || user.username || "Guest",
-                email: user.primaryEmailAddress?.emailAddress || "",
-                ...(user.publicMetadata?.role ? { role: user.publicMetadata.role } : {}),
-                ...user.publicMetadata, // optional: attach Clerk metadata
-            });
-            if (user.publicMetadata?.role) {
-                setIsSeller(user.publicMetadata.role === "seller");
+        const syncUser = async () => {
+            if (user) {
+                setUserData({
+                    id: user.id,
+                    name: user.fullName || user.username || "Guest",
+                    email: user.primaryEmailAddress?.emailAddress || "",
+                    ...(user.publicMetadata?.role ? { role: user.publicMetadata.role } : {}),
+                    ...user.publicMetadata,
+                });
+                if (user.publicMetadata?.role) {
+                    setIsSeller(user.publicMetadata.role === "seller");
+                }
+                // Call API route to sync user with DB
+                try {
+                    await fetch("/api/user", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            id: user.id,
+                            name: user.fullName || user.username,
+                            email: user.primaryEmailAddress?.emailAddress || "",
+                            role: user.publicMetadata?.role || "buyer",
+                        }),
+                    });
+                } catch (error) {
+                    console.error("Error syncing user with DB:", error);
+                }
+            } else {
+                setUserData(false);
             }
-        } else {
-            setUserData(false);
-        }
+        };
+        syncUser();
     }, [user]);
 
     // Load cart from localStorage on mount
