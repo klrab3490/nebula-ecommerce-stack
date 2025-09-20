@@ -18,9 +18,15 @@ export default function SellerSideBar() {
                 <section>
                     <h3 className="text-lg font-semibold mb-2">Quick Links</h3>
                     <ul className="space-y-2">
-                        <li className="hover:text-blue-600 cursor-pointer">All Products</li>
-                        <li className="hover:text-blue-600 cursor-pointer">Seller Orders</li>
-                        <li className="hover:text-blue-600 cursor-pointer">Add Address</li>
+                        <li>
+                            <Link href="/seller/product-list" className="hover:text-blue-600 cursor-pointer block">All Products</Link>
+                        </li>
+                        <li>
+                            <Link href="/seller/orders" className="hover:text-blue-600 cursor-pointer block">Seller Orders</Link>
+                        </li>
+                        <li>
+                            <Link href="/add-address" className="hover:text-blue-600 cursor-pointer block">Add Address</Link>
+                        </li>
                     </ul>
                 </section>
             </nav>
