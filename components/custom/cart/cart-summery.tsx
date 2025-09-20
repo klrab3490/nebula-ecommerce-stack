@@ -22,7 +22,7 @@ export function CartSummary() {
             <CardContent className="space-y-4">
                 <div className="flex justify-between text-sm">
                     <span>Subtotal ({itemCount} items)</span>
-                    <span>${total.toFixed(2)}</span>
+                    <span>{(useAppContext().currency || "$")}{total.toFixed(2)}</span>
                 </div>
 
                 <div className="flex justify-between text-sm">
