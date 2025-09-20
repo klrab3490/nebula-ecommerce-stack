@@ -4,20 +4,22 @@
 import { NextRequest } from "next/server";
 
 // Mock Prisma before importing the route
-const mockPrisma = {
-  product: {
-    findUnique: jest.fn(),
-    create: jest.fn(),
-    findMany: jest.fn(),
-  },
-};
-
 jest.mock("@/lib/prisma", () => ({
-  prisma: mockPrisma,
+  prisma: {
+    product: {
+      findUnique: jest.fn(),
+      create: jest.fn(),
+      findMany: jest.fn(),
+    },
+  },
 }));
 
 // Import after mocking
-const { POST, GET } = require("@/app/api/products/route");
+import { POST, GET } from "@/app/api/products/route";
+import { prisma } from "@/lib/prisma";
+
+// Type cast the mocked prisma for easier access to mock methods
+const mockPrisma = prisma as jest.Mocked<typeof prisma>;
 
 // Helper to create mock request
 const createMockRequest = (body: unknown) => {

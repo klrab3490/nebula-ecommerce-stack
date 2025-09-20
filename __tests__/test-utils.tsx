@@ -8,8 +8,9 @@ import { render, RenderOptions } from "@testing-library/react";
 import { AppContextProvider } from "@/contexts/AppContext";
 
 // Mock Next.js Image component
+import Image from "next/image";
 export const MockImage = ({ src, alt, ...props }: { src: string; alt: string;[key: string]: unknown }) => (
-  <img src={src} alt={alt} {...props} />
+  <Image src={src} alt={alt} width={500} height={500} {...props} />
 );
 
 // Mock Next.js Link component

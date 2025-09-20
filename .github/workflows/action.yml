@@ -1,7 +1,5 @@
 name: Next.js CI
 
-description: CI pipeline for Next.js application
-
 on:
   push:
     branches: [main]
@@ -37,5 +35,5 @@ jobs:
       - name: 🛠️ Build project
         run: npm run build
 
-      # - name: 🧪 Run tests
-      #   run: npm test
+      - name: 🧪 Run tests
+        run: npm test
