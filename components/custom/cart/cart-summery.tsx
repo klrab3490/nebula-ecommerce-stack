@@ -27,23 +27,23 @@ export function CartSummary() {
 
                 <div className="flex justify-between text-sm">
                     <span>Shipping</span>
-                    <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+                    <span>{shipping === 0 ? "Free" : `${useAppContext().currency || "$"}${shipping.toFixed(2)}`}</span>
                 </div>
 
                 <div className="flex justify-between text-sm">
                     <span>Tax</span>
-                    <span>${tax.toFixed(2)}</span>
+                    <span>{(useAppContext().currency || "$")}{tax.toFixed(2)}</span>
                 </div>
 
                 <Separator />
 
                 <div className="flex justify-between font-medium">
                     <span>Total</span>
-                    <span>${finalTotal.toFixed(2)}</span>
+                    <span>{(useAppContext().currency || "$")}{finalTotal.toFixed(2)}</span>
                 </div>
 
                 {total < 50 && (
-                    <p className="text-xs text-muted-foreground">Add ${(50 - total).toFixed(2)} more for free shipping</p>
+                    <p className="text-xs text-muted-foreground">Add {(useAppContext().currency || "$")}{(50 - total).toFixed(2)} more for free shipping</p>
                 )}
             </CardContent>
 
