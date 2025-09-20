@@ -1,13 +1,13 @@
 import React from 'react';
 import SellerSideBar from '@/components/custom/SellerSideBar';
 
-export default function SellerProducts() {
+export default function SellerLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className='flex h-full'>
+    <div className="flex h-screen">
       <SellerSideBar />
-      <div className='flex-1'>
-        <h1>Seller Products</h1>
-      </div>
+      <main className="flex-1 p-6 overflow-y-scroll">
+        {children}
+      </main>
     </div>
-  )
+  );
 }

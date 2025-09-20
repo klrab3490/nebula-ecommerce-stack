@@ -20,7 +20,7 @@ export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-    if (pathname === "/seller") {
+    if (pathname.startsWith("/seller")) {
         return null
     }
 
