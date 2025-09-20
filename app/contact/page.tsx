@@ -23,7 +23,7 @@ export default function ContactUs() {
         <div className="max-w-3xl mx-auto px-4 py-12">
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-foreground">Contact Us</h1>
-            <p className="text-muted-foreground mt-2">We'd love to hear from you. Send us a message and we'll respond soon.</p>
+            <p className="text-muted-foreground mt-2">We&#39;d love to hear from you. Send us a message and we&#39;ll respond soon.</p>
           </div>
 
           <form onSubmit={onSubmit} className="bg-card border rounded-xl shadow-sm p-6 md:p-8 space-y-5">

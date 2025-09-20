@@ -2,11 +2,9 @@
 
 import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ProductCard } from "@/components/custom/ProductCard";
 import { Search, SlidersHorizontal } from "lucide-react";
-import { useAppContext } from "@/contexts/AppContext";
+import { ProductCard } from "@/components/custom/ProductCard";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type Product = {
   id: string;
@@ -29,7 +27,6 @@ const allProducts: Product[] = [
 ];
 
 export default function AllProductsPage() {
-  const { currency } = useAppContext();
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<"All" | Product["category"]>("All");
   const [sort, setSort] = useState("popular");
@@ -86,7 +83,7 @@ export default function AllProductsPage() {
           </div>
 
           <div className="mt-6">
-            <Tabs defaultValue="All" value={activeCategory} onValueChange={(v) => setActiveCategory(v as any)}>
+            <Tabs defaultValue="All" value={activeCategory} onValueChange={(v) => setActiveCategory(v as "All" | Product["category"])}>
               <TabsList className="flex flex-wrap gap-2">
                 {(["All", "Hair", "Skin", "Accessories"] as const).map(cat => (
                   <TabsTrigger key={cat} value={cat} className="px-3 py-1.5">
