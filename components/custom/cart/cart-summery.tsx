@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function CartSummary() {
-    const { cart, clearCart } = useAppContext();
+    const { cart, clearCart, currency } = useAppContext();
     const { total, itemCount } = cart;
 
     const shipping = total > 50 ? 0 : 9.99
@@ -22,28 +22,28 @@ export function CartSummary() {
             <CardContent className="space-y-4">
                 <div className="flex justify-between text-sm">
                     <span>Subtotal ({itemCount} items)</span>
-                    <span>${total.toFixed(2)}</span>
+                    <span>{(currency || "$")}{total.toFixed(2)}</span>
                 </div>
 
                 <div className="flex justify-between text-sm">
                     <span>Shipping</span>
-                    <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+                    <span>{shipping === 0 ? "Free" : `${currency || "$"}${shipping.toFixed(2)}`}</span>
                 </div>
 
                 <div className="flex justify-between text-sm">
                     <span>Tax</span>
-                    <span>${tax.toFixed(2)}</span>
+                    <span>{(currency || "$")}{tax.toFixed(2)}</span>
                 </div>
 
                 <Separator />
 
                 <div className="flex justify-between font-medium">
                     <span>Total</span>
-                    <span>${finalTotal.toFixed(2)}</span>
+                    <span>{(currency || "$")}{finalTotal.toFixed(2)}</span>
                 </div>
 
                 {total < 50 && (
-                    <p className="text-xs text-muted-foreground">Add ${(50 - total).toFixed(2)} more for free shipping</p>
+                    <p className="text-xs text-muted-foreground">Add {(currency || "$")}{(50 - total).toFixed(2)} more for free shipping</p>
                 )}
             </CardContent>
 

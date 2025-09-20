@@ -23,7 +23,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
     const [isWishlisted, setIsWishlisted] = useState(false)
-    const { addItem } = useAppContext();
+    const { addItem, currency } = useAppContext();
 
     const handleAddToCart = () => {
         addItem({
@@ -62,7 +62,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 </Link>
 
                 {/* Price */}
-                <p className="text-2xl font-bold text-primary mb-4">${product.price}</p>
+                <p className="text-2xl font-bold text-primary mb-4">{(currency || "$")}{product.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
 
                 {/* Action Buttons */}
                 <div className="flex gap-2">

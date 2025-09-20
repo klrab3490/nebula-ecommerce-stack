@@ -13,7 +13,7 @@ interface CartItemProps {
 }
 
 export function CartItem({ item }: CartItemProps) {
-    const { updateQuantity, removeItem } = useAppContext();
+    const { updateQuantity, removeItem, currency } = useAppContext();
 
     const handleQuantityChange = (newQuantity: number) => {
         if (newQuantity <= 0) {
@@ -35,7 +35,7 @@ export function CartItem({ item }: CartItemProps) {
                 <div className="flex-1 min-w-0">
                     <h3 className="font-medium text-foreground truncate">{item.name}</h3>
                     {item.variant && <p className="text-sm text-muted-foreground">{item.variant}</p>}
-                    <p className="text-sm font-medium text-foreground">${item.price.toFixed(2)}</p>
+                    <p className="text-sm font-medium text-foreground">{(currency || "$")}{item.price.toFixed(2)}</p>
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -61,7 +61,7 @@ export function CartItem({ item }: CartItemProps) {
                 </div>
 
                 <div className="text-right">
-                    <p className="font-medium text-foreground">${(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-medium text-foreground">{(currency || "$")}{(item.price * item.quantity).toFixed(2)}</p>
                     <Button
                         variant="ghost"
                         size="sm"
