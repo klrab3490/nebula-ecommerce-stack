@@ -12,14 +12,14 @@ export default function ContactUs() {
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
     console.log("Contact form submitted", data);
-    
+
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     setSubmitted(true);
     setIsSubmitting(false);
     form.reset();
@@ -62,8 +62,8 @@ export default function ContactUs() {
       {/* Modern Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20"></div>
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-300/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
-      
+      <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+
       <div className="relative z-10">
         {/* Hero Section */}
         <section className="py-20">
@@ -79,7 +79,7 @@ export default function ContactUs() {
                 💬 Get In Touch
               </h1>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium">
-                We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+                We&#39;d love to hear from you. Send us a message and we&#39;ll respond as soon as possible.
               </p>
               <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto mt-6 rounded-full"></div>
             </div>
@@ -94,12 +94,12 @@ export default function ContactUs() {
                 >
                   {/* Glow Effect */}
                   <div className={`absolute -inset-0.5 bg-gradient-to-r ${info.gradient} rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-500`}></div>
-                  
+
                   {/* Main Card */}
                   <div className="relative bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-2xl p-6 text-center shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-white/30 dark:border-zinc-700/50 group-hover:bg-white/90 dark:group-hover:bg-zinc-900/90">
                     {/* Shine Effect */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out rounded-2xl"></div>
-                    
+
                     <div className="relative z-10">
                       <div className="relative inline-flex items-center justify-center w-16 h-16 mb-4">
                         <div className={`absolute -inset-2 bg-gradient-to-r ${info.gradient} rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500`}></div>
@@ -123,29 +123,29 @@ export default function ContactUs() {
               <div className="relative">
                 {/* Glow Effect */}
                 <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 rounded-3xl blur opacity-20 animate-pulse"></div>
-                
+
                 {/* Main Form Card */}
                 <form onSubmit={onSubmit} className="relative bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl rounded-3xl p-8 md:p-12 shadow-2xl border border-white/30 dark:border-zinc-700/50 space-y-8">
                   {/* Shine Effect */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-3xl opacity-50"></div>
-                  
+
                   <div className="relative z-10">
                     <div className="text-center mb-8">
                       <h2 className="text-2xl md:text-3xl font-black mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                         ✉️ Send us a Message
                       </h2>
-                      <p className="text-muted-foreground">Fill out the form below and we'll get back to you soon</p>
+                      <p className="text-muted-foreground">Fill out the form below and we&#39;ll get back to you soon</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                       <div className="space-y-2">
                         <label htmlFor="name" className="text-sm font-bold text-foreground">Full Name</label>
                         <div className="relative group">
-                          <Input 
-                            id="name" 
-                            name="name" 
-                            placeholder="Enter your full name" 
-                            required 
+                          <Input
+                            id="name"
+                            name="name"
+                            placeholder="Enter your full name"
+                            required
                             className="h-12 bg-white/50 dark:bg-zinc-800/50 backdrop-blur-sm border-2 border-white/20 dark:border-zinc-700/50 rounded-xl focus:border-purple-500 transition-all duration-300 group-hover:bg-white/70 dark:group-hover:bg-zinc-800/70"
                           />
                         </div>
@@ -153,12 +153,12 @@ export default function ContactUs() {
                       <div className="space-y-2">
                         <label htmlFor="email" className="text-sm font-bold text-foreground">Email Address</label>
                         <div className="relative group">
-                          <Input 
-                            id="email" 
-                            name="email" 
-                            type="email" 
-                            placeholder="your@email.com" 
-                            required 
+                          <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="your@email.com"
+                            required
                             className="h-12 bg-white/50 dark:bg-zinc-800/50 backdrop-blur-sm border-2 border-white/20 dark:border-zinc-700/50 rounded-xl focus:border-purple-500 transition-all duration-300 group-hover:bg-white/70 dark:group-hover:bg-zinc-800/70"
                           />
                         </div>
@@ -168,11 +168,11 @@ export default function ContactUs() {
                     <div className="space-y-2 mb-6">
                       <label htmlFor="subject" className="text-sm font-bold text-foreground">Subject</label>
                       <div className="relative group">
-                        <Input 
-                          id="subject" 
-                          name="subject" 
-                          placeholder="What's this about?" 
-                          required 
+                        <Input
+                          id="subject"
+                          name="subject"
+                          placeholder="What's this about?"
+                          required
                           className="h-12 bg-white/50 dark:bg-zinc-800/50 backdrop-blur-sm border-2 border-white/20 dark:border-zinc-700/50 rounded-xl focus:border-purple-500 transition-all duration-300 group-hover:bg-white/70 dark:group-hover:bg-zinc-800/70"
                         />
                       </div>
@@ -196,7 +196,7 @@ export default function ContactUs() {
                       {submitted ? (
                         <div className="flex items-center gap-2 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 px-4 py-2 rounded-full">
                           <CheckCircle className="w-5 h-5" />
-                          <span className="font-semibold">Message sent successfully! We'll be in touch soon.</span>
+                          <span className="font-semibold">Message sent successfully! We&#39;ll be in touch soon.</span>
                         </div>
                       ) : (
                         <div className="flex items-center gap-2 text-muted-foreground">
@@ -204,9 +204,9 @@ export default function ContactUs() {
                           <span className="text-sm font-medium">We usually respond within 1–2 business days</span>
                         </div>
                       )}
-                      
-                      <Button 
-                        type="submit" 
+
+                      <Button
+                        type="submit"
                         disabled={isSubmitting}
                         className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl px-8 py-4 font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
                       >

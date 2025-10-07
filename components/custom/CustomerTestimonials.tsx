@@ -71,15 +71,15 @@ export default function CustomerTestimonials() {
       {/* Modern Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20"></div>
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-purple-300/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-0 left-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
-      
+      <div className="absolute bottom-0 left-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+
       <div className="max-w-6xl mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
             💬 What Our Customers Say
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-medium">
-            Real stories from people who've experienced the natural goodness of our premium products
+            Real stories from people who&#39;ve experienced the natural goodness of our premium products
           </p>
           <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto mt-4 rounded-full"></div>
         </div>
@@ -98,12 +98,12 @@ export default function CustomerTestimonials() {
           <div className="max-w-4xl mx-auto relative">
             {/* Glow Effect */}
             <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 rounded-3xl blur opacity-20 animate-pulse"></div>
-            
+
             {/* Main Card */}
             <div className="relative bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl rounded-3xl p-8 md:p-12 shadow-2xl border border-white/30 dark:border-zinc-700/50 transition-all duration-500">
               {/* Shine Effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-1000 rounded-3xl"></div>
-              
+
               <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
                 {/* Enhanced Avatar */}
                 <div className="flex-shrink-0 relative">
@@ -130,9 +130,9 @@ export default function CustomerTestimonials() {
 
                   {/* Enhanced Testimonial text */}
                   <blockquote className="text-foreground text-lg md:text-xl leading-relaxed mb-6 italic font-medium relative">
-                    <span className="text-6xl text-purple-300 dark:text-purple-700 absolute -top-4 -left-2 opacity-50">"</span>
+                    <span className="text-6xl text-purple-300 dark:text-purple-700 absolute -top-4 -left-2 opacity-50">&quot;</span>
                     <span className="relative z-10">{testimonials[currentIndex].text}</span>
-                    <span className="text-6xl text-purple-300 dark:text-purple-700 absolute -bottom-8 -right-2 opacity-50">"</span>
+                    <span className="text-6xl text-purple-300 dark:text-purple-700 absolute -bottom-8 -right-2 opacity-50">&quot;</span>
                   </blockquote>
 
                   {/* Enhanced Customer info */}
