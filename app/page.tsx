@@ -7,10 +7,10 @@ import CustomerTestimonials from "@/components/custom/CustomerTestimonials";
 const products = [
     {
         id: "1",
-        name: "Premium Wireless Headphones",
+        name: "Wireless Headphones",
         price: 199.99,
         image: "/premium-wireless-headphones-front.png",
-        alt: "Premium Wireless Headphones",
+        alt: "Wireless Headphones",
     },
     {
         id: "2",
@@ -56,12 +56,12 @@ export default function Home() {
             <section className="relative overflow-hidden">
                 <HeroSlider />
             </section>
-            
+
             {/* Product Categories */}
             <section>
                 <ProductCategories />
             </section>
-            
+
             {/* Enhanced Our Products Section */}
             <section className="py-20 relative">
                 <div className="max-w-7xl mx-auto px-4">
@@ -76,8 +76,8 @@ export default function Home() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                         {products.map((product, index) => (
-                            <div 
-                                key={product.id} 
+                            <div
+                                key={product.id}
                                 className="animate-fade-in-up"
                                 style={{ animationDelay: `${index * 100}ms` }}
                             >
@@ -87,12 +87,12 @@ export default function Home() {
                     </div>
                 </div>
             </section>
-            
+
             {/* Featured Products with Sale Timer */}
             <section>
                 <FeaturedProducts />
             </section>
-            
+
             {/* Customer Testimonials */}
             <section>
                 <CustomerTestimonials />
