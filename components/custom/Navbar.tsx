@@ -9,6 +9,7 @@ import { useClerk, UserButton } from "@clerk/nextjs";
 import { useAppContext } from "@/contexts/AppContext";
 import { usePathname, useRouter } from "next/navigation";
 import { ModeToggle } from "@/components/theme/mode-toggle";
+import { getPalette } from "@/components/theme/colorPalette";
 import { CartIcon } from "@/components/custom/cart/cart-icon";
 import { Menu, House, Search, ShoppingBag, ShoppingCart, User, X } from "lucide-react";
 
@@ -20,12 +21,15 @@ export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
+    // use the shared category palette for subtle gradients in the navbar
+    const palette = getPalette(0); // using the first palette (violet-pink-blue)
+
     if (pathname.startsWith("/seller")) {
         return null
     }
 
     return (
-        <nav className="sticky top-0 z-50 w-full border-b bg-white/95 dark:bg-gray-900/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/95">
+        <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/95">
             <div className="mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
                     <div className="grid grid-cols-3 items-center w-full">
@@ -78,7 +82,9 @@ export default function Navbar() {
                         {/* Center section - Logo */}
                         <div className="flex items-center justify-center">
                             <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-                                <Image src="/Nebula.png" alt="Nebula Logo" width={32} height={32} className="bg-white rounded-full" priority unoptimized />
+                                <div className={`rounded-full p-0.5 bg-gradient-to-r ${palette.gradient}`}>
+                                    <Image src="/Nebula.png" alt="Nebula Logo" width={32} height={32} className="rounded-full bg-white" priority unoptimized />
+                                </div>
                             </Link>
                         </div>
 
@@ -100,12 +106,12 @@ export default function Navbar() {
                                     variant="ghost"
                                     size="icon"
                                     onClick={() => setIsSearchOpen(!isSearchOpen)}
-                                    className={`hidden md:inline-flex h-10 w-10 hover:bg-accent/80 ${isSearchOpen ? "bg-accent" : ""}`}
+                                    className={`hidden md:inline-flex h-10 w-10 hover:bg-accent/80 ${isSearchOpen ? "bg-accent" : ""} bg-gradient-to-r ${palette.accent} bg-opacity-10 hover:bg-opacity-20`}
                                 >
                                     <Search className="h-5 w-5" />
                                 </Button>
 
-                                <Button variant="ghost" size="icon" className="hidden md:inline-flex relative h-10 w-10 hover:bg-accent/80">
+                                <Button variant="ghost" size="icon" className={`hidden md:inline-flex relative h-10 w-10 hover:bg-accent/80 rounded-md border border-border/50`}>
                                     <CartIcon />
                                 </Button>
 
@@ -135,7 +141,7 @@ export default function Navbar() {
                 </div>
 
                 {isMenuOpen && (
-                    <div className="lg:hidden border-t backdrop-blur-md animate-in slide-in-from-top-2 duration-300">
+                    <div className="lg:hidden border-t border-border/50 bg-background/95 backdrop-blur-md animate-in slide-in-from-top-2 duration-300">
                         <div className="px-4 py-6 space-y-6">
                             {/* Mobile Search Section */}
                             {isSearchOpen && (

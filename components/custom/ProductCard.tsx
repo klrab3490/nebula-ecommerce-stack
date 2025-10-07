@@ -38,12 +38,12 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="group relative overflow-hidden">
             {/* Glow Effect */}
             <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-500"></div>
-            
+
             {/* Main Card */}
             <Card className="relative bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-white/20 dark:border-zinc-700/50 overflow-hidden group-hover:bg-white/95 dark:group-hover:bg-zinc-900/95">
                 {/* Shine Effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
-                
+
                 <CardHeader className="p-0 relative">
                     <Link href={`/products/${product.id}`} tabIndex={-1} aria-label={`View details for ${product.name}`}>
                         <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-zinc-800 dark:to-zinc-900">
@@ -59,11 +59,11 @@ export function ProductCard({ product }: ProductCardProps) {
                             {product.image ? null : (
                                 <span className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm z-10">No Image</span>
                             )}
-                            
+
                             {/* Wishlist Button Overlay */}
-                            <Button 
-                                variant="ghost" 
-                                size="icon" 
+                            <Button
+                                variant="ghost"
+                                size="icon"
                                 className="absolute top-4 right-4 bg-white/80 dark:bg-black/80 backdrop-blur-sm hover:bg-white dark:hover:bg-black rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 shadow-lg"
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -91,7 +91,7 @@ export function ProductCard({ product }: ProductCardProps) {
                     </div>
 
                     {/* Enhanced Action Button */}
-                    <Button 
+                    <Button
                         className="w-full relative overflow-hidden bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl py-6 font-bold shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 group/btn"
                         onClick={handleAddToCart}
                     >
