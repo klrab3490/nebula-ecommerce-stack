@@ -55,67 +55,100 @@ export default function AllProductsPage() {
 
   return (
     <div className="min-h-screen">
-      <section className="bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 border-b">
-        <div className="max-w-7xl mx-auto px-4 py-10">
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-foreground">All Products</h1>
-              <p className="text-muted-foreground mt-2">Browse our full catalog and find what suits you best.</p>
+      {/* Enhanced Hero Section */}
+      <section className="relative py-20 overflow-hidden">
+        {/* Modern Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-300/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+        
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
+          <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+            <div className="text-center md:text-left">
+              <h1 className="text-4xl md:text-6xl font-black mb-4 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+                🛍️ All Products
+              </h1>
+              <p className="text-lg text-muted-foreground max-w-2xl font-medium">
+                Explore our complete collection of premium beauty and wellness products
+              </p>
+              <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto md:mx-0 mt-4 rounded-full"></div>
             </div>
 
             <div className="w-full md:w-auto">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search products..."
-                  className="pl-10 pr-4 h-10 w-full md:w-80 bg-background/50"
-                  aria-label="Search products"
-                />
+              <div className="relative group">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
+                <div className="relative">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground z-10" />
+                  <Input
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search products..."
+                    className="pl-12 pr-4 h-14 w-full md:w-96 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 rounded-2xl text-lg shadow-xl focus:shadow-2xl transition-all duration-300"
+                    aria-label="Search products"
+                  />
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-6 flex items-center gap-3">
-            <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">Showing {filtered.length} items</span>
+          <div className="mt-8 flex items-center gap-4 bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 rounded-2xl px-6 py-4">
+            <SlidersHorizontal className="h-5 w-5 text-muted-foreground" />
+            <span className="text-sm font-medium text-muted-foreground">Showing {filtered.length} premium items</span>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-8">
             <Tabs defaultValue="All" value={activeCategory} onValueChange={(v) => setActiveCategory(v as "All" | Product["category"])}>
-              <TabsList className="flex flex-wrap gap-2">
-                {(["All", "Hair", "Skin", "Accessories"] as const).map(cat => (
-                  <TabsTrigger key={cat} value={cat} className="px-3 py-1.5">
-                    {cat}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+              <div className="bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 rounded-2xl p-2">
+                <TabsList className="flex flex-wrap gap-2 bg-transparent">
+                  {(["All", "Hair", "Skin", "Accessories"] as const).map(cat => (
+                    <TabsTrigger 
+                      key={cat} 
+                      value={cat} 
+                      className="px-6 py-3 rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white font-bold transition-all duration-300"
+                    >
+                      {cat === "All" ? "🔥 All" : cat === "Hair" ? "💇 Hair" : cat === "Skin" ? "✨ Skin" : "🎧 Accessories"}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </div>
+              
               <TabsContent value={activeCategory}>
-                <div className="flex items-center justify-end mt-4">
-                  <label className="text-sm text-muted-foreground mr-2">Sort by</label>
-                  <select
-                    className="h-9 rounded-md border bg-transparent px-3 text-sm"
-                    value={sort}
-                    onChange={(e) => setSort(e.target.value)}
-                    aria-label="Sort products"
-                  >
-                    <option value="popular">Most Popular</option>
-                    <option value="name">Name (A–Z)</option>
-                    <option value="price-asc">Price (Low to High)</option>
-                    <option value="price-desc">Price (High to Low)</option>
-                  </select>
+                <div className="flex items-center justify-end mt-6">
+                  <div className="bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 rounded-xl px-4 py-2 flex items-center gap-3">
+                    <label className="text-sm font-medium text-muted-foreground">Sort by</label>
+                    <select
+                      className="bg-transparent border-0 text-sm font-medium focus:outline-none cursor-pointer"
+                      value={sort}
+                      onChange={(e) => setSort(e.target.value)}
+                      aria-label="Sort products"
+                    >
+                      <option value="popular">Most Popular</option>
+                      <option value="name">Name (A–Z)</option>
+                      <option value="price-asc">Price (Low to High)</option>
+                      <option value="price-desc">Price (High to Low)</option>
+                    </select>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-6">
-                  {filtered.map((p) => (
-                    <ProductCard key={p.id} product={{ id: p.id, name: p.name, price: p.price, image: p.image, alt: p.alt }} />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-8">
+                  {filtered.map((p, index) => (
+                    <div 
+                      key={p.id} 
+                      className="animate-fade-in-up"
+                      style={{ animationDelay: `${index * 100}ms` }}
+                    >
+                      <ProductCard product={{ id: p.id, name: p.name, price: p.price, image: p.image, alt: p.alt }} />
+                    </div>
                   ))}
                 </div>
 
                 {filtered.length === 0 && (
-                  <div className="text-center py-16 text-muted-foreground">
-                    No products match your search.
+                  <div className="text-center py-20">
+                    <div className="bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 rounded-2xl p-12 inline-block">
+                      <div className="text-6xl mb-4">🔍</div>
+                      <h3 className="text-xl font-bold text-foreground mb-2">No products found</h3>
+                      <p className="text-muted-foreground">Try adjusting your search or filter criteria</p>
+                    </div>
                   </div>
                 )}
               </TabsContent>

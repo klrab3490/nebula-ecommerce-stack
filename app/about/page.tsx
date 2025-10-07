@@ -61,51 +61,81 @@ export default function About() {
     ]
 
     return (
-        <div className="min-h-screen">
-            <div className="max-w-4xl mx-auto px-6 py-12">
-                {/* Hero Section */}
-                <div className="text-center mb-12">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900/50 rounded-full mb-6 ring-2 ring-green-200 dark:ring-green-800">
-                        <Leaf className="w-8 h-8 text-green-600 dark:text-green-400" />
+        <div className="min-h-screen relative overflow-hidden">
+            {/* Modern Background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20"></div>
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-300/10 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+            
+            <div className="max-w-4xl mx-auto px-6 py-16 relative z-10">
+                {/* Enhanced Hero Section */}
+                <div className="text-center mb-16">
+                    <div className="relative inline-flex items-center justify-center w-20 h-20 mb-6">
+                        <div className="absolute -inset-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-full blur-xl animate-pulse"></div>
+                        <div className="relative bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 rounded-full p-5">
+                            <Leaf className="w-10 h-10 text-green-600 dark:text-green-400" />
+                        </div>
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-50 mb-4">About Our Journey</h1>
-                    <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                        Discover the story behind our commitment to pure, natural herbal care
+                    <h1 className="text-4xl md:text-6xl font-black mb-6 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+                        🌿 About Our Journey
+                    </h1>
+                    <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium">
+                        Discover the story behind our commitment to pure, natural herbal care and wellness
                     </p>
+                    <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto mt-6 rounded-full"></div>
                 </div>
 
-                {/* Language Tabs */}
+                {/* Enhanced Language Tabs */}
                 <Tabs defaultValue="english" className="w-full">
-                    <TabsList className="flex w-full justify-center gap-4 mb-8 bg-gradient-to-r from-green-100/60 via-emerald-100/40 to-teal-100/60 dark:from-gray-900/60 dark:via-gray-800/40 dark:to-gray-900/60 backdrop-blur-sm border dark:border-gray-700 rounded-xl p-2 shadow-sm">
-                        <TabsTrigger
-                            value="english"
-                            className="flex items-center gap-2 px-6 py-3 rounded-lg text-lg font-semibold transition-colors duration-200 data-[state=active]:bg-green-600 data-[state=active]:text-white dark:data-[state=active]:bg-emerald-700 dark:data-[state=active]:text-white hover:bg-green-100 dark:hover:bg-gray-700 focus:outline-none"
-                        >
-                            English
-                        </TabsTrigger>
-                        <TabsTrigger
-                            value="malayalam"
-                            className="flex items-center gap-2 px-6 py-3 rounded-lg text-lg font-semibold transition-colors duration-200 data-[state=active]:bg-green-600 data-[state=active]:text-white dark:data-[state=active]:bg-emerald-700 dark:data-[state=active]:text-white hover:bg-green-100 dark:hover:bg-gray-700 focus:outline-none"
-                        >
-                            മലയാളം
-                        </TabsTrigger>
-                    </TabsList>
+                    <div className="bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 rounded-2xl p-2 mb-12">
+                        <TabsList className="flex w-full justify-center gap-4 bg-transparent">
+                            <TabsTrigger
+                                value="english"
+                                className="flex items-center gap-2 px-8 py-4 rounded-xl text-lg font-bold transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white hover:bg-white/20 focus:outline-none"
+                            >
+                                🇺🇸 English
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="malayalam"
+                                className="flex items-center gap-2 px-8 py-4 rounded-xl text-lg font-bold transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white hover:bg-white/20 focus:outline-none"
+                            >
+                                🇮🇳 മലയാളം
+                            </TabsTrigger>
+                        </TabsList>
+                    </div>
 
-                    {/* English Content */}
+                    {/* Enhanced English Content */}
                     <TabsContent value="english" className="space-y-8">
                         <div className="grid gap-8">
                             {sections.map((section, index) => (
                                 <div
                                     key={index}
-                                    className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-green-200 dark:hover:border-green-800"
+                                    className="group relative overflow-hidden"
+                                    style={{ animationDelay: `${index * 100}ms` }}
                                 >
-                                    <div className="flex items-start gap-4">
-                                        <div className="flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center text-green-600 dark:text-green-400 ring-2 ring-green-200/50 dark:ring-green-800/50">
-                                            {section.icon}
-                                        </div>
-                                        <div className="flex-1">
-                                            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mb-4">{section.title}</h2>
-                                            <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">{section.content}</p>
+                                    {/* Glow Effect */}
+                                    <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 rounded-3xl blur opacity-0 group-hover:opacity-20 transition-all duration-500"></div>
+                                    
+                                    {/* Main Card */}
+                                    <div className="relative bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 border border-white/30 dark:border-zinc-700/50 group-hover:bg-white/90 dark:group-hover:bg-zinc-900/90">
+                                        {/* Shine Effect */}
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out rounded-3xl"></div>
+                                        
+                                        <div className="flex items-start gap-6 relative z-10">
+                                            <div className="flex-shrink-0 relative">
+                                                <div className="absolute -inset-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                                <div className="relative w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center text-white shadow-lg">
+                                                    {section.icon}
+                                                </div>
+                                            </div>
+                                            <div className="flex-1">
+                                                <h2 className="text-2xl font-black mb-4 group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-pink-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+                                                    {section.title}
+                                                </h2>
+                                                <p className="text-muted-foreground leading-relaxed text-lg font-medium">
+                                                    {section.content}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -113,21 +143,38 @@ export default function About() {
                         </div>
                     </TabsContent>
 
-                    {/* Malayalam Content */}
+                    {/* Enhanced Malayalam Content */}
                     <TabsContent value="malayalam" className="space-y-8">
                         <div className="grid gap-8">
                             {sections.map((section, index) => (
                                 <div
                                     key={index}
-                                    className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-green-200 dark:hover:border-green-800"
+                                    className="group relative overflow-hidden"
+                                    style={{ animationDelay: `${index * 100}ms` }}
                                 >
-                                    <div className="flex items-start gap-4">
-                                        <div className="flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center text-green-600 dark:text-green-400 ring-2 ring-green-200/50 dark:ring-green-800/50">
-                                            {section.icon}
-                                        </div>
-                                        <div className="flex-1">
-                                            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mb-4">{section.titleMl}</h2>
-                                            <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">{section.contentMl}</p>
+                                    {/* Glow Effect */}
+                                    <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 rounded-3xl blur opacity-0 group-hover:opacity-20 transition-all duration-500"></div>
+                                    
+                                    {/* Main Card */}
+                                    <div className="relative bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 border border-white/30 dark:border-zinc-700/50 group-hover:bg-white/90 dark:group-hover:bg-zinc-900/90">
+                                        {/* Shine Effect */}
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out rounded-3xl"></div>
+                                        
+                                        <div className="flex items-start gap-6 relative z-10">
+                                            <div className="flex-shrink-0 relative">
+                                                <div className="absolute -inset-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                                <div className="relative w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center text-white shadow-lg">
+                                                    {section.icon}
+                                                </div>
+                                            </div>
+                                            <div className="flex-1">
+                                                <h2 className="text-2xl font-black mb-4 group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-pink-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+                                                    {section.titleMl}
+                                                </h2>
+                                                <p className="text-muted-foreground leading-relaxed text-lg font-medium">
+                                                    {section.contentMl}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -136,24 +183,37 @@ export default function About() {
                     </TabsContent>
                 </Tabs>
 
-                {/* Call to Action */}
-                <div className="mt-16 text-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-gray-100 dark:border-gray-700">
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mb-4">Experience the Power of Nature</h3>
-                    <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
-                        Join thousands of satisfied customers who have discovered the benefits of pure, authentic herbal care.
-                    </p>
-                    <div className="flex flex-wrap justify-center gap-4">
-                        <div className="flex items-center gap-2 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 px-4 py-2 rounded-full">
-                            <Leaf className="w-5 h-5" />
-                            <span className="font-medium">100% Natural</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 px-4 py-2 rounded-full">
-                            <Heart className="w-5 h-5" />
-                            <span className="font-medium">Safe & Effective</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 px-4 py-2 rounded-full">
-                            <Award className="w-5 h-5" />
-                            <span className="font-medium">Trusted Quality</span>
+                {/* Enhanced Call to Action */}
+                <div className="mt-20 text-center relative">
+                    {/* Glow Effect */}
+                    <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 rounded-3xl blur opacity-20 animate-pulse"></div>
+                    
+                    {/* Main Card */}
+                    <div className="relative bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-3xl p-12 shadow-2xl border border-white/30 dark:border-zinc-700/50">
+                        {/* Shine Effect */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-3xl opacity-50"></div>
+                        
+                        <div className="relative z-10">
+                            <h3 className="text-3xl md:text-4xl font-black mb-6 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+                                ✨ Experience the Power of Nature
+                            </h3>
+                            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed font-medium">
+                                Join thousands of satisfied customers who have discovered the benefits of pure, authentic herbal care.
+                            </p>
+                            <div className="flex flex-wrap justify-center gap-6">
+                                <div className="flex items-center gap-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-3 rounded-2xl font-bold shadow-lg">
+                                    <Leaf className="w-6 h-6" />
+                                    <span>100% Natural</span>
+                                </div>
+                                <div className="flex items-center gap-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-2xl font-bold shadow-lg">
+                                    <Heart className="w-6 h-6" />
+                                    <span>Safe & Effective</span>
+                                </div>
+                                <div className="flex items-center gap-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-6 py-3 rounded-2xl font-bold shadow-lg">
+                                    <Award className="w-6 h-6" />
+                                    <span>Trusted Quality</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

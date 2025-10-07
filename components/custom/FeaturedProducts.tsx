@@ -5,6 +5,31 @@ import { Button } from "@/components/ui/button"
 import { useState, useEffect } from "react"
 import { Clock, Star, ShoppingCart, Eye } from "lucide-react"
 
+// Custom animations styles
+const shimmerKeyframes = `
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes glow {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+  }
+  .animate-shimmer {
+    animation: shimmer 3s infinite;
+  }
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite;
+  }
+`
+
 interface Product {
   id: number
   name: string
@@ -109,11 +134,15 @@ export default function FeaturedProducts({
   }, [daysFromNow])
 
   const renderStarRating = (rating: number, maxRating = 5) => (
-    <div className="flex items-center gap-1" role="img" aria-label={`${rating} out of ${maxRating} stars`}>
+    <div className="flex items-center gap-0.5" role="img" aria-label={`${rating} out of ${maxRating} stars`}>
       {Array.from({ length: maxRating }, (_, i) => (
         <Star
           key={i}
-          className={`w-4 h-4 ${i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300 dark:text-gray-600"}`}
+          className={`w-5 h-5 transition-all duration-300 ${
+            i < rating 
+              ? "text-amber-400 fill-amber-400 hover:text-amber-300 hover:fill-amber-300 drop-shadow-sm transform hover:scale-110" 
+              : "text-gray-300 dark:text-gray-600 hover:text-gray-400"
+          }`}
           aria-hidden="true"
         />
       ))}
@@ -128,22 +157,37 @@ export default function FeaturedProducts({
   ]
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 py-8 transition-colors">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-center gap-4 mb-8">
-            <Clock className="text-red-500 dark:text-red-400 w-6 h-6" aria-hidden="true" />
-            <span className="text-red-600 dark:text-red-300 font-semibold text-lg">Hurry up ! Sale end in:</span>
-            <div className="flex gap-3">
-              {timeUnits.map((unit) => (
+    <div className="max-w-7xl mx-auto px-4 py-12">
+      <style jsx>{shimmerKeyframes}</style>
+      {/* Enhanced Sale Timer Section with Glass Morphism */}
+      <div className="relative mb-16 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-red-500/20 via-orange-500/20 to-pink-500/20 dark:from-red-500/10 dark:via-orange-500/10 dark:to-pink-500/10 backdrop-blur-sm"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
+        <div className="relative bg-white/10 dark:bg-black/10 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-3xl p-8 shadow-2xl">
+          <div className="flex flex-col items-center gap-6">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <Clock className="text-red-500 dark:text-red-400 w-8 h-8 animate-pulse" aria-hidden="true" />
+                <div className="absolute -inset-1 bg-red-500/20 rounded-full animate-ping"></div>
+              </div>
+              <h2 className="font-bold text-2xl tracking-wide bg-gradient-to-r from-red-600 to-orange-600 dark:from-red-400 dark:to-orange-400 bg-clip-text text-transparent">
+                ⚡ FLASH SALE ENDS IN ⚡
+              </h2>
+            </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              {timeUnits.map((unit, index) => (
                 <div
                   key={unit.label}
-                  className="bg-white dark:bg-zinc-800 border-2 border-red-200 dark:border-red-700 rounded-xl px-4 py-3 text-center min-w-[70px] shadow-sm"
+                  className="relative group"
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className="text-red-600 dark:text-red-400 font-bold text-2xl tabular-nums">
-                    {String(unit.value).padStart(2, "0")}
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-500"></div>
+                  <div className="relative bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border border-white/30 dark:border-zinc-700/50 rounded-2xl px-6 py-4 text-center min-w-[85px] shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                    <div className="font-black text-3xl tabular-nums bg-gradient-to-b from-red-600 to-red-800 dark:from-red-400 dark:to-red-600 bg-clip-text text-transparent drop-shadow-sm">
+                      {String(unit.value).padStart(2, "0")}
+                    </div>
+                    <div className="text-red-500/80 dark:text-red-400/80 text-sm uppercase font-bold tracking-widest mt-1">{unit.label}</div>
                   </div>
-                  <div className="text-red-400 dark:text-red-300 text-xs uppercase font-medium">{unit.label}</div>
                 </div>
               ))}
             </div>
@@ -151,8 +195,20 @@ export default function FeaturedProducts({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {products.map((product) => {
+      {/* Section Title */}
+      <div className="text-center mb-12">
+        <h2 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+          🔥 Featured Products
+        </h2>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-medium">
+          Discover our handpicked selection of premium products at unbeatable prices
+        </p>
+        <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto mt-4 rounded-full"></div>
+      </div>
+
+      {/* Enhanced Product Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {products.map((product, index) => {
           const isReadMore = product.buttonText === "Read More"
 
           const handleButtonClick = () => {
@@ -166,57 +222,92 @@ export default function FeaturedProducts({
           return (
             <div
               key={product.id}
-              className="group bg-card rounded-xl shadow-sm hover:shadow-lg overflow-hidden relative border border-border transition-all duration-300 hover:-translate-y-1"
+              className="group relative overflow-hidden"
+              style={{ animationDelay: `${index * 100}ms` }}
             >
-              {/* Discount Badge */}
-              <div className="absolute top-3 left-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white px-3 py-1.5 rounded-full text-sm font-semibold shadow-lg z-10">
-                -{product.discount}%
-              </div>
-
-              <div className="p-6">
-                {/* Product Image */}
-                <div className="relative mb-4 bg-muted rounded-lg overflow-hidden">
-                  <Image
-                    src={product.image || "/placeholder.svg?height=200&width=200&query=product"}
-                    alt={product.name}
-                    className="w-full h-48 object-contain group-hover:scale-105 transition-transform duration-300"
-                    width={200}
-                    height={200}
-                  />
+              {/* Glow Effect */}
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-500 animate-pulse"></div>
+              
+              {/* Main Card */}
+              <div className="relative bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-white/20 dark:border-zinc-700/50 overflow-hidden">
+                
+                {/* Discount Badge with Animation */}
+                <div className="absolute top-4 left-4 z-20">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur-sm animate-pulse"></div>
+                    <div className="relative bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                      <span className="drop-shadow-sm">-{product.discount}%</span>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Product Info */}
-                <h3 className="font-semibold text-foreground mb-3 line-clamp-2 leading-tight">{product.name}</h3>
+                {/* Shine Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
 
-                {/* Rating */}
-                <div className="mb-3">{renderStarRating(product.rating)}</div>
+                <div className="p-7">
+                  {/* Product Image with Enhanced Effects */}
+                  <div className="relative mb-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-zinc-800 dark:to-zinc-900 rounded-2xl overflow-hidden shadow-inner">
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5"></div>
+                    <Image
+                      src={product.image || "/placeholder.svg?height=200&width=200&query=product"}
+                      alt={product.name}
+                      className="w-full h-52 object-contain group-hover:scale-110 transition-all duration-700 ease-out p-4 relative z-10"
+                      width={200}
+                      height={200}
+                    />
+                  </div>
 
-                {/* Pricing */}
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-muted-foreground line-through text-sm">
-                    ₹{product.originalPrice.toLocaleString()}
-                  </span>
-                  <span className="text-xl font-bold text-foreground">₹{product.salePrice.toLocaleString()}</span>
+                  {/* Product Info with Better Typography */}
+                  <h3 className="font-bold text-lg text-foreground mb-4 line-clamp-2 leading-tight group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">
+                    {product.name}
+                  </h3>
+
+                  {/* Enhanced Rating */}
+                  <div className="mb-4 flex items-center gap-2">
+                    {renderStarRating(product.rating)}
+                    <span className="text-sm font-medium text-muted-foreground/80">({product.rating}.0)</span>
+                  </div>
+
+                  {/* Enhanced Pricing with Better Visual Hierarchy */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-3">
+                      <span className="text-muted-foreground line-through text-base font-medium">
+                        ₹{product.originalPrice.toLocaleString()}
+                      </span>
+                      <div className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-1 rounded-lg text-xs font-bold">
+                        SAVE ₹{(product.originalPrice - product.salePrice).toLocaleString()}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="mb-6">
+                    <span className="text-2xl font-black bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
+                      ₹{product.salePrice.toLocaleString()}
+                    </span>
+                  </div>
+
+                  {/* Enhanced Action Button */}
+                  <Button
+                    onClick={handleButtonClick}
+                    className="w-full relative overflow-hidden bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl py-6 font-bold text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 group/btn"
+                    size="lg"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+                    <div className="relative flex items-center justify-center gap-2">
+                      {isReadMore ? (
+                        <>
+                          <Eye className="w-5 h-5" />
+                          <span>Read More</span>
+                        </>
+                      ) : (
+                        <>
+                          <ShoppingCart className="w-5 h-5" />
+                          <span>Add To Cart</span>
+                        </>
+                      )}
+                    </div>
+                  </Button>
                 </div>
-
-                {/* Action Button */}
-                <Button
-                  onClick={handleButtonClick}
-                  className="w-full bg-secondary hover:bg-secondary/80 text-secondary-foreground border border-border transition-colors"
-                  size="lg"
-                >
-                  {isReadMore ? (
-                    <>
-                      <Eye className="w-4 h-4 mr-2" />
-                      Read More
-                    </>
-                  ) : (
-                    <>
-                      <ShoppingCart className="w-4 h-4 mr-2" />
-                      Add To Cart
-                    </>
-                  )}
-                </Button>
               </div>
             </div>
           )
