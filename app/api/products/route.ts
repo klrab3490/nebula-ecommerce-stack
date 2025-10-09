@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, description, price, sku, stock, images, categories } =
+    const { name, description, price, discountedPrice, sku, stock, images, categories, featured } =
       await req.json();
 
     // Validate required fields
@@ -37,6 +37,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Validate discounted price for featured products
+    if (featured && discountedPrice !== null) {
+      if (typeof discountedPrice !== "number" || discountedPrice <= 0) {
+        return NextResponse.json(
+          { error: "Discounted price must be a positive number for featured products" },
+          { status: 400 }
+        );
+      }
+      
+      if (discountedPrice >= price) {
+        return NextResponse.json(
+          { error: "Discounted price must be less than the original price" },
+          { status: 400 }
+        );
+      }
+    }
+
     // Check if SKU already exists
     const existingProduct = await prisma.product.findUnique({
       where: { sku },
@@ -49,16 +66,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Get current Date & Time
+    const now = new Date();
+
     // Create the product
     const product = await prisma.product.create({
       data: {
         name: name.trim(),
         description: description.trim(),
         price,
+        discountedPrice: discountedPrice || 0,
         sku: sku.trim(),
         stock,
         images: images || [],
         categories: categories || [],
+        featured: featured || false,
+        createdAt: now,
+        updatedAt: now,
       },
     });
 
@@ -95,11 +119,11 @@ export async function GET() {
   try {
     const products = await prisma.product.findMany({
       orderBy: {
-        id: "desc",
+        createdAt: "desc",
       },
     });
 
-    return NextResponse.json({ products });
+    return NextResponse.json({ products: products }, { status: 200 });
   } catch (error) {
     console.error("API error fetching products:", error);
     return NextResponse.json(

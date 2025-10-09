@@ -12,9 +12,16 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card"
 interface ProductCard {
     id: string
     name: string
+    description: string
     price: number
-    image: string
-    alt: string
+    discountedPrice?: number
+    sku: string
+    stock: number
+    images: string[]
+    categories: string[]
+    featured: boolean
+    createdAt: Date
+    updatedAt: Date
 }
 
 interface ProductCardProps {
@@ -29,10 +36,13 @@ export function ProductCard({ product }: ProductCardProps) {
         addItem({
             id: product.id,
             name: product.name,
-            price: product.price,
-            image: product.image,
+            price: product.discountedPrice || product.price,
+            image: product.images[0] || "/placeholder.svg",
         })
     }
+
+    const currentPrice = product.discountedPrice || product.price
+    const hasDiscount = product.discountedPrice && product.discountedPrice < product.price
 
     return (
         <div className="group relative overflow-hidden">
@@ -49,14 +59,14 @@ export function ProductCard({ product }: ProductCardProps) {
                         <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-zinc-800 dark:to-zinc-900">
                             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-pink-500/5 to-blue-500/5"></div>
                             <Image
-                                src={product.image || "/placeholder.svg"}
-                                alt={product.alt || product.name}
+                                src={product.images[0] || "/placeholder.svg"}
+                                alt={product.name}
                                 width={400}
                                 height={400}
                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out p-4 relative z-10"
                                 priority
                             />
-                            {product.image ? null : (
+                            {!product.images[0] && (
                                 <span className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm z-10">No Image</span>
                             )}
 
@@ -85,20 +95,32 @@ export function ProductCard({ product }: ProductCardProps) {
 
                     {/* Enhanced Price */}
                     <div className="mb-4">
+                        {hasDiscount && (
+                            <p className="text-sm text-muted-foreground line-through mb-1">
+                                {(currency || "$")}{product.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </p>
+                        )}
                         <p className="text-2xl font-black bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
-                            {(currency || "$")}{product.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            {(currency || "$")}{currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </p>
+                        {product.stock < 10 && product.stock > 0 && (
+                            <p className="text-xs text-orange-600 dark:text-orange-400 mt-1">Only {product.stock} left!</p>
+                        )}
+                        {product.stock === 0 && (
+                            <p className="text-xs text-red-600 dark:text-red-400 mt-1">Out of stock</p>
+                        )}
                     </div>
 
                     {/* Enhanced Action Button */}
                     <Button
-                        className="w-full relative overflow-hidden bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl py-6 font-bold shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 group/btn"
+                        className="w-full relative overflow-hidden bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl py-6 font-bold shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 group/btn disabled:opacity-50 disabled:cursor-not-allowed"
                         onClick={handleAddToCart}
+                        disabled={product.stock === 0}
                     >
                         <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
                         <div className="relative flex items-center justify-center gap-2">
                             <ShoppingCart className="h-5 w-5" />
-                            <span>Add to Cart</span>
+                            <span>{product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}</span>
                         </div>
                     </Button>
                 </CardContent>

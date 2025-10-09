@@ -8,25 +8,29 @@ generator client {
 }
 
 model User {
-  id    String  @id @default(auto()) @map("_id") @db.ObjectId
-  email String  @unique
-  name  String
-  role  String
-  clerkId String @unique
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  email   String  @unique
+  name    String
+  role    String
+  clerkId String  @unique
 }
 
 model Product {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String
-  price       Float
-  sku         String   @unique
-  stock       Int
-  images      String[]
-  categories  String[]
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  description    String
+  price          Float
+  discountedPrice Float?
+  sku            String   @unique
+  stock          Int
+  images         String[]
+  categories     String[]
+  featured       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   OrderProduct OrderProduct[]
-  ProductFAQ  ProductFAQ[]
+  ProductFAQ   ProductFAQ[]
 }
 
 model FAQ {

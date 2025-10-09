@@ -1,57 +1,86 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { ProductCard } from "@/components/custom/ProductCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  alt: string;
-  category: "Hair" | "Skin" | "Accessories";
-};
-
-const allProducts: Product[] = [
-  { id: "1", name: "Rose Mary Hair Oil (100 ML)", price: 420, image: "/rose-mary-hair-oil-bottle-green-label.png", alt: "Rose Mary Hair Oil", category: "Hair" },
-  { id: "2", name: "Herbal Face Pack (100 gm)", price: 420, image: "/herbal-face-pack-jar-black-container.png", alt: "Herbal Face Pack", category: "Skin" },
-  { id: "3", name: "Nikantha Anti-dandruff Oil (100ml)", price: 499, image: "/anti-dandruff-oil-bottle-blue-label.png", alt: "Anti-dandruff Oil", category: "Hair" },
-  { id: "4", name: "Beetroot Lip Balm (12gm)", price: 399, image: "/beetroot-lip-balm-round-black-container.png", alt: "Beetroot Lip Balm", category: "Skin" },
-  { id: "5", name: "Premium Wireless Headphones", price: 199.99, image: "/premium-wireless-headphones-front.png", alt: "Premium Wireless Headphones", category: "Accessories" },
-  { id: "6", name: "Smart Fitness Watch", price: 299.99, image: "/smart-fitness-watch.png", alt: "Smart Fitness Watch", category: "Accessories" },
-  { id: "7", name: "Bluetooth Speaker", price: 89.99, image: "/bluetooth-speaker.png", alt: "Bluetooth Speaker", category: "Accessories" },
-  { id: "8", name: "USB-C Hub", price: 59.99, image: "/usb-c-hub.png", alt: "USB-C Hub", category: "Accessories" },
-];
+interface Product {
+  id: string
+  name: string
+  description: string
+  price: number
+  discountedPrice?: number
+  sku: string
+  stock: number
+  images: string[]
+  categories: string[]
+  featured: boolean
+  createdAt: Date
+  updatedAt: Date
+}
 
 export default function AllProductsPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState<"All" | Product["category"]>("All");
+  const [activeCategory, setActiveCategory] = useState<string>("All");
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('/api/products');
+        if (response.ok) {
+          const data = await response.json();
+          setProducts(data.products);
+        }
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   const [sort, setSort] = useState("popular");
 
+  // Get unique categories from products
+  const categories = useMemo(() => {
+    const allCategories = products.flatMap(product => product.categories);
+    return ["All", ...Array.from(new Set(allCategories))];
+  }, [products]);
+
   const filtered = useMemo(() => {
-    let items = allProducts.filter(p =>
+    let items = products.filter(p =>
       p.name.toLowerCase().includes(query.trim().toLowerCase())
     );
-    if (activeCategory !== "All") items = items.filter(p => p.category === activeCategory);
+    
+    if (activeCategory !== "All") {
+      items = items.filter(p => p.categories.includes(activeCategory));
+    }
 
     switch (sort) {
       case "price-asc":
-        items = [...items].sort((a, b) => a.price - b.price);
+        items = [...items].sort((a, b) => (a.discountedPrice || a.price) - (b.discountedPrice || b.price));
         break;
       case "price-desc":
-        items = [...items].sort((a, b) => b.price - a.price);
+        items = [...items].sort((a, b) => (b.discountedPrice || b.price) - (a.discountedPrice || a.price));
         break;
       case "name":
         items = [...items].sort((a, b) => a.name.localeCompare(b.name));
         break;
+      case "newest":
+        items = [...items].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        break;
       default:
         break;
     }
+
     return items;
-  }, [query, activeCategory, sort]);
+  }, [products, query, activeCategory, sort]);
 
   return (
     <div className="min-h-screen">
@@ -97,16 +126,16 @@ export default function AllProductsPage() {
           </div>
 
           <div className="mt-8">
-            <Tabs defaultValue="All" value={activeCategory} onValueChange={(v) => setActiveCategory(v as "All" | Product["category"])}>
+            <Tabs defaultValue="All" value={activeCategory} onValueChange={(v) => setActiveCategory(v as string)}>
               <div className="bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 rounded-2xl p-2">
                 <TabsList className="flex flex-wrap gap-2 bg-transparent">
-                  {(["All", "Hair", "Skin", "Accessories"] as const).map(cat => (
+                  {categories.map(cat => (
                     <TabsTrigger 
                       key={cat} 
                       value={cat} 
                       className="px-6 py-3 rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white font-bold transition-all duration-300"
                     >
-                      {cat === "All" ? "🔥 All" : cat === "Hair" ? "💇 Hair" : cat === "Skin" ? "✨ Skin" : "🎧 Accessories"}
+                      {cat === "All" ? "🔥 All" : `� ${cat}`}
                     </TabsTrigger>
                   ))}
                 </TabsList>
@@ -123,6 +152,7 @@ export default function AllProductsPage() {
                       aria-label="Sort products"
                     >
                       <option value="popular">Most Popular</option>
+                      <option value="newest">Newest First</option>
                       <option value="name">Name (A–Z)</option>
                       <option value="price-asc">Price (Low to High)</option>
                       <option value="price-desc">Price (High to Low)</option>
@@ -130,19 +160,36 @@ export default function AllProductsPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-8">
-                  {filtered.map((p, index) => (
-                    <div 
-                      key={p.id} 
-                      className="animate-fade-in-up"
-                      style={{ animationDelay: `${index * 100}ms` }}
-                    >
-                      <ProductCard product={{ id: p.id, name: p.name, price: p.price, image: p.image, alt: p.alt }} />
-                    </div>
-                  ))}
-                </div>
+                {/* Loading State */}
+                {loading && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-8">
+                    {[...Array(12)].map((_, index) => (
+                      <div key={index} className="bg-white/90 dark:bg-zinc-900/90 rounded-2xl p-6 shadow-xl animate-pulse">
+                        <div className="aspect-square bg-gray-200 dark:bg-gray-700 rounded-xl mb-4"></div>
+                        <div className="bg-gray-200 dark:bg-gray-700 h-6 rounded mb-2"></div>
+                        <div className="bg-gray-200 dark:bg-gray-700 h-4 rounded mb-4 w-3/4"></div>
+                        <div className="bg-gray-200 dark:bg-gray-700 h-12 rounded"></div>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
-                {filtered.length === 0 && (
+                {/* Products Grid */}
+                {!loading && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-8">
+                    {filtered.map((p, index) => (
+                      <div 
+                        key={p.id} 
+                        className="animate-fade-in-up"
+                        style={{ animationDelay: `${index * 100}ms` }}
+                      >
+                        <ProductCard product={p} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {!loading && filtered.length === 0 && (
                   <div className="text-center py-20">
                     <div className="bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 rounded-2xl p-12 inline-block">
                       <div className="text-6xl mb-4">🔍</div>

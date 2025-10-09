@@ -1,9 +1,10 @@
 "use client"
 
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
 import { useState, useEffect } from "react"
-import { Clock, Star, ShoppingCart, Eye } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { getCurrencySymbol } from "@/lib/currency"
+import { Clock, Star, ShoppingCart } from "lucide-react"
 
 // Custom animations styles
 const shimmerKeyframes = `
@@ -31,14 +32,18 @@ const shimmerKeyframes = `
 `
 
 interface Product {
-  id: number
+  id: string
   name: string
-  originalPrice: number
-  salePrice: number
-  discount: number
-  image: string
-  rating: number
-  buttonText?: string
+  description: string
+  price: number
+  discountedPrice?: number
+  sku: string
+  stock: number
+  images: string[]
+  categories: string[]
+  featured: boolean
+  createdAt: Date
+  updatedAt: Date
 }
 
 interface TimeLeft {
@@ -49,64 +54,47 @@ interface TimeLeft {
 }
 
 interface FeaturedProductsProps {
-  products?: Product[]
   daysFromNow?: number
-  onAddToCart?: (productId: number) => void
-  onReadMore?: (productId: number) => void
+  onAddToCart?: (productId: string) => void
+  onReadMore?: (productId: string) => void
 }
 
-const featuredProducts: Product[] = [
-  {
-    id: 1,
-    name: "Rose Mary Hair Oil (100 ML)",
-    originalPrice: 550,
-    salePrice: 420,
-    discount: 26,
-    image: "/rose-mary-hair-oil-bottle-green-label.png",
-    rating: 4,
-  },
-  {
-    id: 2,
-    name: "Herbal Face Pack (100 gm)",
-    originalPrice: 550,
-    salePrice: 420,
-    discount: 24,
-    image: "/herbal-face-pack-jar-black-container.png",
-    rating: 5,
-    buttonText: "Read More",
-  },
-  {
-    id: 3,
-    name: "Nikantha Anti-dandruff Oil (100ml)",
-    originalPrice: 600,
-    salePrice: 499,
-    discount: 17,
-    image: "/anti-dandruff-oil-bottle-blue-label.png",
-    rating: 4,
-  },
-  {
-    id: 4,
-    name: "Beetroot Lip Balm (12gm)",
-    originalPrice: 450,
-    salePrice: 399,
-    discount: 11,
-    image: "/beetroot-lip-balm-round-black-container.png",
-    rating: 3,
-  },
-]
-
 export default function FeaturedProducts({
-  products = featuredProducts,
   daysFromNow = 7,
   onAddToCart,
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
   onReadMore,
 }: FeaturedProductsProps) {
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+  const currencySymbol = getCurrencySymbol()
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
   })
+
+  // Fetch featured products from API
+  useEffect(() => {
+    const fetchFeaturedProducts = async () => {
+      try {
+        const response = await fetch('/api/products')
+        if (response.ok) {
+          const data = await response.json()
+          // Filter only featured products
+          const featuredProducts = data.products.filter((product: Product) => product.featured)
+          setProducts(featuredProducts)
+        }
+      } catch (error) {
+        console.error('Failed to fetch featured products:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchFeaturedProducts()
+  }, [])
 
   useEffect(() => {
     const targetDate = new Date()
@@ -133,6 +121,7 @@ export default function FeaturedProducts({
     return () => clearInterval(timer)
   }, [daysFromNow])
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const renderStarRating = (rating: number, maxRating = 5) => (
     <div className="flex items-center gap-0.5" role="img" aria-label={`${rating} out of ${maxRating} stars`}>
       {Array.from({ length: maxRating }, (_, i) => (
@@ -206,18 +195,37 @@ export default function FeaturedProducts({
         <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto mt-4 rounded-full"></div>
       </div>
 
-      {/* Enhanced Product Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {products.map((product, index) => {
-          const isReadMore = product.buttonText === "Read More"
+      {/* Loading State */}
+      {loading && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {[...Array(4)].map((_, index) => (
+            <div key={index} className="bg-white/95 dark:bg-zinc-900/95 rounded-2xl p-7 shadow-xl animate-pulse">
+              <div className="bg-gray-200 dark:bg-gray-700 h-52 rounded-2xl mb-6"></div>
+              <div className="bg-gray-200 dark:bg-gray-700 h-4 rounded mb-4"></div>
+              <div className="bg-gray-200 dark:bg-gray-700 h-4 rounded mb-4 w-3/4"></div>
+              <div className="bg-gray-200 dark:bg-gray-700 h-6 rounded mb-6"></div>
+              <div className="bg-gray-200 dark:bg-gray-700 h-12 rounded"></div>
+            </div>
+          ))}
+        </div>
+      )}
 
-          const handleButtonClick = () => {
-            if (isReadMore && onReadMore) {
-              onReadMore(product.id)
-            } else if (onAddToCart) {
-              onAddToCart(product.id)
+      {/* Enhanced Product Cards Grid */}
+      {!loading && products.length > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {products.map((product, index) => {
+            const hasDiscount = product.discountedPrice && product.discountedPrice < product.price
+            const discountPercentage = hasDiscount 
+              ? Math.round(((product.price - product.discountedPrice!) / product.price) * 100)
+              : 0
+            const currentPrice = hasDiscount ? product.discountedPrice! : product.price
+            const originalPrice = product.price
+
+            const handleButtonClick = () => {
+              if (onAddToCart) {
+                onAddToCart(product.id)
+              }
             }
-          }
 
           return (
             <div
@@ -232,14 +240,16 @@ export default function FeaturedProducts({
               <div className="relative bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-white/20 dark:border-zinc-700/50 overflow-hidden">
                 
                 {/* Discount Badge with Animation */}
-                <div className="absolute top-4 left-4 z-20">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur-sm animate-pulse"></div>
-                    <div className="relative bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transform group-hover:scale-110 transition-transform duration-300">
-                      <span className="drop-shadow-sm">-{product.discount}%</span>
+                {hasDiscount && (
+                  <div className="absolute top-4 left-4 z-20">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur-sm animate-pulse"></div>
+                      <div className="relative bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                        <span className="drop-shadow-sm">-{discountPercentage}%</span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
 
                 {/* Shine Effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
@@ -249,7 +259,7 @@ export default function FeaturedProducts({
                   <div className="relative mb-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-zinc-800 dark:to-zinc-900 rounded-2xl overflow-hidden shadow-inner">
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5"></div>
                     <Image
-                      src={product.image || "/placeholder.svg?height=200&width=200&query=product"}
+                      src={product.images[0] || "/placeholder.svg?height=200&width=200&query=product"}
                       alt={product.name}
                       className="w-full h-52 object-contain group-hover:scale-110 transition-all duration-700 ease-out p-4 relative z-10"
                       width={200}
@@ -262,49 +272,54 @@ export default function FeaturedProducts({
                     {product.name}
                   </h3>
 
-                  {/* Enhanced Rating */}
-                  <div className="mb-4 flex items-center gap-2">
-                    {renderStarRating(product.rating)}
-                    <span className="text-sm font-medium text-muted-foreground/80">({product.rating}.0)</span>
+                  {/* Category Badge */}
+                  <div className="mb-4 flex flex-wrap gap-1">
+                    {product.categories.slice(0, 2).map((category, idx) => (
+                      <span key={idx} className="text-xs px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full font-medium">
+                        {category}
+                      </span>
+                    ))}
                   </div>
 
                   {/* Enhanced Pricing with Better Visual Hierarchy */}
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-3">
-                      <span className="text-muted-foreground line-through text-base font-medium">
-                        ₹{product.originalPrice.toLocaleString()}
-                      </span>
-                      <div className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-1 rounded-lg text-xs font-bold">
-                        SAVE ₹{(product.originalPrice - product.salePrice).toLocaleString()}
-                      </div>
+                      {hasDiscount && (
+                        <>
+                          <span className="text-muted-foreground line-through text-base font-medium">
+                            {currencySymbol}{originalPrice.toLocaleString()}
+                          </span>
+                          <div className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-1 rounded-lg text-xs font-bold">
+                            SAVE {currencySymbol}{(originalPrice - currentPrice).toLocaleString()}
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                   
                   <div className="mb-6">
                     <span className="text-2xl font-black bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
-                      ₹{product.salePrice.toLocaleString()}
+                      {currencySymbol}{currentPrice.toLocaleString()}
                     </span>
+                    {product.stock < 10 && product.stock > 0 && (
+                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-1">Only {product.stock} left in stock!</p>
+                    )}
+                    {product.stock === 0 && (
+                      <p className="text-xs text-red-600 dark:text-red-400 mt-1">Out of stock</p>
+                    )}
                   </div>
 
                   {/* Enhanced Action Button */}
                   <Button
                     onClick={handleButtonClick}
-                    className="w-full relative overflow-hidden bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl py-6 font-bold text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 group/btn"
+                    disabled={product.stock === 0}
+                    className="w-full relative overflow-hidden bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl py-6 font-bold text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 group/btn disabled:opacity-50 disabled:cursor-not-allowed"
                     size="lg"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
                     <div className="relative flex items-center justify-center gap-2">
-                      {isReadMore ? (
-                        <>
-                          <Eye className="w-5 h-5" />
-                          <span>Read More</span>
-                        </>
-                      ) : (
-                        <>
-                          <ShoppingCart className="w-5 h-5" />
-                          <span>Add To Cart</span>
-                        </>
-                      )}
+                      <ShoppingCart className="w-5 h-5" />
+                      <span>{product.stock === 0 ? 'Out of Stock' : 'Add To Cart'}</span>
                     </div>
                   </Button>
                 </div>
@@ -312,7 +327,19 @@ export default function FeaturedProducts({
             </div>
           )
         })}
-      </div>
+        </div>
+      )}
+
+      {/* No Products State */}
+      {!loading && products.length === 0 && (
+        <div className="text-center py-16">
+          <div className="w-24 h-24 bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span className="text-slate-500 text-4xl">📦</span>
+          </div>
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">No Featured Products Yet</h3>
+          <p className="text-slate-600 dark:text-slate-400 mb-6">Check back later for amazing deals and featured items!</p>
+        </div>
+      )}
     </div>
   )
 }
