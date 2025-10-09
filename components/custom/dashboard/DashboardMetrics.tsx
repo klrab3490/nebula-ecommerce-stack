@@ -11,6 +11,7 @@ import {
   ArrowUpRight,
   ArrowDownRight
 } from "lucide-react";
+import { formatCurrency } from '@/lib/currency';
 import { cn } from "@/lib/utils";
 
 interface MetricCardProps {
@@ -68,6 +69,7 @@ export function MetricCard({
   );
 }
 
+
 interface DashboardMetricsProps {
   metrics?: {
     totalRevenue: number;
@@ -93,7 +95,7 @@ export function DashboardMetrics({ metrics }: DashboardMetricsProps) {
   const cards: MetricCardProps[] = [
     {
       title: "Total Revenue",
-      value: `$${data.totalRevenue.toLocaleString()}`,
+      value: formatCurrency(data.totalRevenue),
       change: { value: 20.1, label: "from last month" },
       icon: DollarSign,
       trend: 'up',
@@ -164,18 +166,18 @@ export function RevenueGoal({ current, target, period = "this month" }: RevenueG
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
             <p className="text-muted-foreground">Current</p>
-            <p className="font-bold text-lg">${current.toLocaleString()}</p>
+            <p className="font-bold text-lg">{formatCurrency(current)}</p>
           </div>
           <div>
             <p className="text-muted-foreground">Target</p>
-            <p className="font-bold text-lg">${target.toLocaleString()}</p>
+            <p className="font-bold text-lg">{formatCurrency(target)}</p>
           </div>
         </div>
 
         {remaining > 0 && (
           <div className="pt-2 border-t">
             <p className="text-xs text-muted-foreground">
-              ${remaining.toLocaleString()} remaining to reach goal
+              {formatCurrency(remaining)} remaining to reach goal
             </p>
           </div>
         )}

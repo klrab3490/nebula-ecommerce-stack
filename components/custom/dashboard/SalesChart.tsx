@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Chart, ChartData } from "@/components/ui/chart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TrendingUp, Calendar, DollarSign } from "lucide-react";
+import { formatCurrency } from '@/lib/currency';
 
 interface SalesChartProps {
   data?: {
@@ -82,7 +83,7 @@ export function SalesChart({ data }: SalesChartProps) {
                   <DollarSign className="h-3 w-3" />
                   Total (7 days)
                 </p>
-                <p className="text-lg font-bold">${getTotalSales('daily').toLocaleString()}</p>
+                <p className="text-lg font-bold">{formatCurrency(getTotalSales('daily'))}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
@@ -104,7 +105,7 @@ export function SalesChart({ data }: SalesChartProps) {
                   <DollarSign className="h-3 w-3" />
                   Total (4 weeks)
                 </p>
-                <p className="text-lg font-bold">${getTotalSales('weekly').toLocaleString()}</p>
+                <p className="text-lg font-bold">{formatCurrency(getTotalSales('weekly'))}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
@@ -126,7 +127,7 @@ export function SalesChart({ data }: SalesChartProps) {
                   <DollarSign className="h-3 w-3" />
                   Total (6 months)
                 </p>
-                <p className="text-lg font-bold">${getTotalSales('monthly').toLocaleString()}</p>
+                <p className="text-lg font-bold">{formatCurrency(getTotalSales('monthly'))}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground flex items-center gap-1">

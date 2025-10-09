@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Eye } from "lucide-react";
+import { formatCurrency } from '@/lib/currency';
 import Link from "next/link";
 
 interface Order {
@@ -159,7 +160,7 @@ export function RecentOrders({ orders, showViewAll = true }: RecentOrdersProps) 
                   </TableCell>
                   <TableCell>{order.items}</TableCell>
                   <TableCell className="text-right font-medium">
-                    ${order.total.toFixed(2)}
+                    {formatCurrency(order.total)}
                   </TableCell>
                   <TableCell>
                     <Button variant="ghost" size="sm">
