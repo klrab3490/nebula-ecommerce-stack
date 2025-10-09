@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -26,6 +27,7 @@ interface Product {
 }
 
 export default function SellerProducts() {
+  const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,11 +42,11 @@ export default function SellerProducts() {
         setError(null);
         const response = await fetch('/api/products');
         const data = await response.json();
-        
+
         if (!response.ok) {
           throw new Error(data.error || 'Failed to fetch products');
         }
-        
+
         console.log(data.products)
         setProducts(data.products || []);
       } catch (err) {
@@ -70,6 +72,24 @@ export default function SellerProducts() {
 
     return matchesSearch && matchesCategory;
   });
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this product?')) return;
+    // Optimistic removal
+    const prev = products;
+    setProducts(prev => prev.filter(p => p.id !== id));
+    try {
+      const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to delete');
+      }
+    } catch (err) {
+      // rollback
+      setProducts(prev);
+      alert(err instanceof Error ? err.message : 'Error deleting product');
+    }
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -244,8 +264,8 @@ export default function SellerProducts() {
               <AlertTriangle className="h-12 w-12 mx-auto text-red-500 mb-4" />
               <p className="text-lg font-medium text-red-600">Error loading products</p>
               <p className="text-muted-foreground mb-4">{error}</p>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => window.location.reload()}
                 className="mt-2"
               >
@@ -280,7 +300,7 @@ export default function SellerProducts() {
                   <TableRow key={product.id}>
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        {product.images && (
+                        {product.images && product.images.length > 0 && (
                           <div className="relative h-10 w-10 rounded-lg overflow-hidden bg-gray-100">
                             <Image
                               src={product.images[0]}
@@ -322,15 +342,15 @@ export default function SellerProducts() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => router.push(`/seller/products/${product.id}`)}>
                             <Eye className="h-4 w-4 mr-2" />
                             View Details
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => router.push(`/seller/products/${product.id}/edit`)}>
                             <Edit className="h-4 w-4 mr-2" />
                             Edit Product
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="text-red-600">
+                          <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(product.id)}>
                             <Trash2 className="h-4 w-4 mr-2" />
                             Delete
                           </DropdownMenuItem>

@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, description, price, discountedPrice, sku, stock, images, categories, featured } =
+    const { name, description, price, discountedPrice, sku, stock, images, categories, featured, faqs } =
       await req.json();
 
     // Validate required fields
@@ -69,13 +69,22 @@ export async function POST(req: NextRequest) {
     // Get current Date & Time
     const now = new Date();
 
-    // Create the product
+    // Prepare nested create for FAQs if provided
+    // Each FAQ will be created and linked via the ProductFAQ join model
+    type IncomingFAQ = { question?: unknown; answer?: unknown };
+    const faqCreates = Array.isArray(faqs)
+      ? (faqs as IncomingFAQ[])
+          .filter((f) => f && typeof f.question === "string" && typeof f.answer === "string")
+          .map((f) => ({ faq: { create: { question: (f.question as string).trim(), answer: (f.answer as string).trim() } } }))
+      : [];
+
+    // Create the product (with nested FAQ relations when present)
     const product = await prisma.product.create({
       data: {
         name: name.trim(),
         description: description.trim(),
         price,
-        discountedPrice: discountedPrice || 0,
+        discountedPrice: discountedPrice ?? null,
         sku: sku.trim(),
         stock,
         images: images || [],
@@ -83,6 +92,12 @@ export async function POST(req: NextRequest) {
         featured: featured || false,
         createdAt: now,
         updatedAt: now,
+        ProductFAQ: faqCreates.length > 0 ? { create: faqCreates } : undefined,
+      },
+      include: {
+        ProductFAQ: {
+          include: { faq: true },
+        },
       },
     });
 

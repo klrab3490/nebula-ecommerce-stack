@@ -8,45 +8,45 @@ import ProductCategories from "@/components/custom/ProductCategories"
 import CustomerTestimonials from "@/components/custom/CustomerTestimonials"
 
 interface Product {
-  id: string
-  name: string
-  description: string
-  price: number
-  discountedPrice?: number
-  sku: string
-  stock: number
-  images: string[]
-  categories: string[]
-  featured: boolean
-  createdAt: Date
-  updatedAt: Date
+    id: string
+    name: string
+    description: string
+    price: number
+    discountedPrice?: number
+    sku: string
+    stock: number
+    images: string[]
+    categories: string[]
+    featured: boolean
+    createdAt: Date
+    updatedAt: Date
 }
 
 export default function Home() {
-  const [products, setProducts] = useState<Product[]>([])
-  const [loading, setLoading] = useState(true)
+    const [products, setProducts] = useState<Product[]>([])
+    const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch('/api/products')
-        if (response.ok) {
-          const data = await response.json()
-          // Get latest 8 products (non-featured for general display)
-          const generalProducts = data.products
-            .filter((product: Product) => !product.featured && product.stock > 0)
-            .slice(0, 8)
-          setProducts(generalProducts)
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await fetch('/api/products')
+                if (response.ok) {
+                    const data = await response.json()
+                    // Get latest 8 products (non-featured for general display)
+                    const generalProducts = data.products
+                        .filter((product: Product) => !product.featured && product.stock > 0)
+                        .slice(0, 8)
+                    setProducts(generalProducts)
+                }
+            } catch (error) {
+                console.error('Failed to fetch products:', error)
+            } finally {
+                setLoading(false)
+            }
         }
-      } catch (error) {
-        console.error('Failed to fetch products:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
 
-    fetchProducts()
-  }, [])
+        fetchProducts()
+    }, [])
     return (
         <div className="font-sans flex flex-col min-h-screen">
             {/* Hero Slider */}

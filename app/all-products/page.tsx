@@ -27,6 +27,50 @@ export default function AllProductsPage() {
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<string>("All");
 
+  // Initialize activeCategory from URL search params like ?category=Hair%20Oils
+  useEffect(() => {
+    const applyCategoryFromUrl = () => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const cat = params.get('category');
+        if (cat && cat.trim().length > 0) {
+          setActiveCategory(decodeURIComponent(cat));
+        } else {
+          setActiveCategory('All');
+        }
+      } catch {
+        // ignore if window not available or parsing fails
+      }
+    };
+
+    applyCategoryFromUrl();
+
+    // handle back/forward navigation
+    const onPop = () => applyCategoryFromUrl();
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+
+  // When user changes category via UI, update the URL so links like
+  // /all-products?category=Hair%20Oils work and are shareable.
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      if (activeCategory && activeCategory !== 'All') {
+        params.set('category', encodeURIComponent(activeCategory));
+      } else {
+        params.delete('category');
+      }
+
+      const newSearch = params.toString();
+      const newUrl = window.location.pathname + (newSearch ? `?${newSearch}` : '');
+      // Replace the URL without reloading
+      window.history.replaceState({}, '', newUrl);
+    } catch {
+      // ignore
+    }
+  }, [activeCategory]);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -135,7 +179,7 @@ export default function AllProductsPage() {
                       value={cat} 
                       className="px-6 py-3 rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white font-bold transition-all duration-300"
                     >
-                      {cat === "All" ? "🔥 All" : `� ${cat}`}
+                        {cat === "All" ? "🔥 All" : `� ${cat}`}
                     </TabsTrigger>
                   ))}
                 </TabsList>

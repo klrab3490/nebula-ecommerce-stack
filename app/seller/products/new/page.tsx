@@ -17,6 +17,7 @@ interface ProductFormData {
   stock: string;       // Stock quantity (converted to Int)
   images: string[];    // Array of image URLs
   categories: string[]; // Array of category names
+  faqs: { question: string; answer: string }[]; // Array of FAQs
   featured: boolean;   // Whether product is featured
 }
 
@@ -41,11 +42,14 @@ export default function AddProductPage() {
     stock: "",
     images: [],
     categories: [],
+    faqs: [],
     featured: false
   });
 
   const [newImageUrl, setNewImageUrl] = useState("");
   const [newCategory, setNewCategory] = useState("");
+  const [newFAQQuestion, setNewFAQQuestion] = useState("");
+  const [newFAQAnswer, setNewFAQAnswer] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validateForm = (): boolean => {
@@ -83,6 +87,13 @@ export default function AddProductPage() {
     if (formData.categories.length === 0) {
       newErrors.categories = "At least one category is required";
     }
+
+    // Validate FAQs: ensure any added FAQ has both question and answer
+    formData.faqs.forEach((faq, idx) => {
+      if (!faq.question.trim() || !faq.answer.trim()) {
+        newErrors[`faq_${idx}`] = `FAQ ${idx + 1} requires both question and answer`;
+      }
+    });
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -122,6 +133,23 @@ export default function AddProductPage() {
     }
   };
 
+  const addFAQ = (question: string, answer: string) => {
+    if (!question?.trim() || !answer?.trim()) return;
+    setFormData(prev => ({
+      ...prev,
+      faqs: [...prev.faqs, { question: question.trim(), answer: answer.trim() }]
+    }));
+    setNewFAQQuestion("");
+    setNewFAQAnswer("");
+  };
+
+  const removeFAQ = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      faqs: prev.faqs.filter((_, i) => i !== index)
+    }));
+  };
+
   const removeCategory = (index: number) => {
     setFormData(prev => ({
       ...prev,
@@ -153,6 +181,7 @@ export default function AddProductPage() {
           stock: parseInt(formData.stock),
           images: formData.images,
           categories: formData.categories,
+          faqs: formData.faqs,
           featured: formData.featured,
         }),
       });
@@ -625,6 +654,91 @@ export default function AddProductPage() {
             )}
           </CardContent>
         </Card>
+
+          {/* FAQs */}
+          <Card className="border-0 shadow-lg bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm">
+            <CardHeader className="pb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-rose-100 dark:bg-rose-900/50 rounded-full flex items-center justify-center">
+                  <span className="text-rose-600 dark:text-rose-400 text-xl">❓</span>
+                </div>
+                <div>
+                  <CardTitle className="text-xl">Product FAQs</CardTitle>
+                  <CardDescription className="text-sm">
+                    Frequently asked questions to help customers learn more about your product
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Add FAQ</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <Input
+                    placeholder="Question"
+                    value={newFAQQuestion}
+                    onChange={(e) => setNewFAQQuestion(e.target.value)}
+                    className="h-12 text-base transition-all duration-200 border-slate-200 focus:border-primary focus:ring-primary/20 hover:border-slate-300"
+                  />
+                  <Input
+                    placeholder="Answer"
+                    value={newFAQAnswer}
+                    onChange={(e) => setNewFAQAnswer(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addFAQ(newFAQQuestion, newFAQAnswer))}
+                    className="h-12 text-base transition-all duration-200 border-slate-200 focus:border-primary focus:ring-primary/20 hover:border-slate-300"
+                  />
+                </div>
+                <div className="flex items-center gap-3">
+                  <Button
+                    type="button"
+                    onClick={() => addFAQ(newFAQQuestion, newFAQAnswer)}
+                    variant="outline"
+                    className="h-10 px-4 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-200"
+                  >
+                    Add FAQ
+                  </Button>
+                  <p className="text-xs text-slate-500">Add short Q&A pairs to address common customer concerns</p>
+                </div>
+              </div>
+
+              {formData.faqs.length > 0 ? (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300">Added FAQs ({formData.faqs.length})</h4>
+                  </div>
+                  <div className="space-y-3">
+                    {formData.faqs.map((faq, index) => (
+                      <div key={index} className="group p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+                        <div className="flex justify-between items-start gap-3">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-slate-900 dark:text-slate-100 truncate">{faq.question}</p>
+                            <p className="text-xs text-slate-500 mt-1 truncate">{faq.answer}</p>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeFAQ(index)}
+                            className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+                  <div className="w-12 h-12 bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span className="text-slate-500 text-xl">❓</span>
+                  </div>
+                  <h3 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-1">No FAQs added</h3>
+                  <p className="text-xs text-slate-500">You can add frequently asked questions to provide more product details</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
         {/* Submit Section */}
         <div className="flex flex-col sm:flex-row gap-4 sm:justify-between items-center pt-6 border-t border-slate-200 dark:border-slate-700">
