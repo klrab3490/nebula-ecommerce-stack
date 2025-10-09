@@ -29,3 +29,16 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function GET() {
+  try {
+    const users = await prisma.user.findMany();
+    return NextResponse.json({ users });
+  } catch (error) {
+    console.error("API error fetching users:", error);
+    return NextResponse.json(
+      { success: false, error: error?.toString() },
+      { status: 500 }
+    );
+  }
+}
