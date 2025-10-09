@@ -1,38 +1,14 @@
 "use client";
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-  Search,
-  Filter,
-  MoreHorizontal,
-  Eye,
-  Package,
-  Truck,
-  CheckCircle,
-  Clock,
-  XCircle,
-  Download,
-  RefreshCw
-} from 'lucide-react';
 import { formatCurrency } from '@/lib/currency';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Search, Filter, MoreHorizontal, Eye, Package, Truck, Clock, RefreshCw, CheckCircle, XCircle, Download } from 'lucide-react';
 
 interface OrderItem {
   id: string;
@@ -169,7 +145,21 @@ export default function SellerOrdersClient({ orders: initialOrders }: Props) {
                 <Input placeholder="Search by order ID, customer name, or email..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
               </div>
               <div>
-                <Button variant="outline"> <Filter className="h-4 w-4 mr-2" /> Status: {statusFilter === 'all' ? 'All' : statusFilter} </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline">
+                      <Filter className="h-4 w-4 mr-2" /> Status: {statusFilter === 'all' ? 'All' : statusFilter}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onClick={() => setStatusFilter('all')}>All</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setStatusFilter('pending')}>Pending</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setStatusFilter('processing')}>Processing</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setStatusFilter('shipped')}>Shipped</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setStatusFilter('delivered')}>Delivered</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setStatusFilter('cancelled')}>Cancelled</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           </CardContent>
