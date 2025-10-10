@@ -571,19 +571,22 @@ export default function AddProductPage() {
               <div className="flex gap-3 justify-center">
                 <UploadButton
                   endpoint="imageUploader"
+                  appearance={{
+                    button:
+                      "ut-upload-button relative flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-medium px-4 py-2.5 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200",
+                    container: "flex justify-center",
+                    allowedContent: "text-xs text-gray-400 mt-2",
+                  }}
                   onClientUploadComplete={(res) => {
                     if (!res || res.length === 0) return;
 
-                    // ✅ The correct property for the uploaded file URL:
-                    const uploadedUrl = res[0].ufsUrl;
-
-                    // ✅ Add it to your formData state
+                    const uploadedUrl = res[0].url; // ✅ correct field
                     setFormData((prev) => ({
                       ...prev,
                       images: [...prev.images, uploadedUrl],
                     }));
 
-                    console.log("Uploaded file URL:", uploadedUrl);
+                    console.log("✅ Uploaded URL:", uploadedUrl);
                   }}
                   onUploadError={(error: Error) => {
                     alert(`Upload failed: ${error.message}`);
