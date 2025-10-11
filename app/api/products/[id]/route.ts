@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { requireAuth } from '@/lib/authSeller';
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -46,6 +47,8 @@ export async function PUT(
   req: NextRequest,
   context: RouteContext
 ) {
+  const authCheck = await requireAuth(req, ['seller', 'admin']);
+  if (authCheck instanceof NextResponse) return authCheck;
   try {
   const params = await getParams(context as RouteContext);
   const id = params?.id as string | undefined;
@@ -125,6 +128,8 @@ export async function DELETE(
   req: NextRequest,
   context: RouteContext
 ) {
+  const authCheck = await requireAuth(req, ['seller', 'admin']);
+  if (authCheck instanceof NextResponse) return authCheck;
   try {
   const params = await getParams(context as RouteContext);
   const id = params?.id as string | undefined;

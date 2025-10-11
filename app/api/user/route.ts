@@ -2,10 +2,20 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAuth, validateSessionMatchesUserId } from '@/lib/authSeller';
 
 export async function POST(req: NextRequest) {
   try {
     const { id, name, email, role } = await req.json();
+    // Ensure request is coming from an authenticated Clerk session
+    const authCheck = await requireAuth(undefined);
+    if (authCheck instanceof NextResponse) return authCheck;
+
+    // Ensure the session user matches the clerk id being synced
+    const sessionValid = await validateSessionMatchesUserId(id);
+    if (!sessionValid) {
+      return NextResponse.json({ success: false, error: 'Session mismatch' }, { status: 401 });
+    }
     // Check if user exists
     const existing = await prisma.user.findMany({
       where: { name },

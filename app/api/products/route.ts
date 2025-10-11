@@ -2,8 +2,12 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAuth } from '@/lib/authSeller';
 
 export async function POST(req: NextRequest) {
+  // require seller/admin role
+  const authCheck = await requireAuth(req, ['seller', 'admin']);
+  if (authCheck instanceof NextResponse) return authCheck;
   try {
     const { name, description, price, discountedPrice, sku, stock, images, categories, featured, faqs } =
       await req.json();
