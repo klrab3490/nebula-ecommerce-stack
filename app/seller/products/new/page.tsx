@@ -5,15 +5,9 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Plus, X, Loader2 } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { getCurrencySymbol } from "@/lib/currency";
 import { UploadButton } from "@/utils/uploadthing";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface ProductFormData {
   name: string; // Product name
@@ -592,6 +586,23 @@ export default function AddProductPage() {
                     alert(`Upload failed: ${error.message}`);
                   }}
                 />
+              </div>
+
+              {/* Quick add by URL */}
+              <div className="flex items-center gap-3 justify-center">
+                <Input
+                  placeholder="Paste image URL and press Add"
+                  value={newImageUrl}
+                  onChange={(e) => setNewImageUrl(e.target.value)}
+                  className="h-10 w-80"
+                />
+                <Button
+                  type="button"
+                  onClick={addImage}
+                  disabled={!newImageUrl.trim()}
+                >
+                  Add
+                </Button>
               </div>
 
               {formData.images.length > 0 ? (

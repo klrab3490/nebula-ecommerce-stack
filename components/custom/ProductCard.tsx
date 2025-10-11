@@ -5,6 +5,7 @@ import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import { formatCurrency } from '@/lib/currency';
 import { Heart, ShoppingCart } from "lucide-react"
 import { useAppContext } from "@/contexts/AppContext";
 import { Card, CardHeader, CardContent } from "@/components/ui/card"
@@ -97,11 +98,11 @@ export function ProductCard({ product }: ProductCardProps) {
                     <div className="mb-4">
                         {hasDiscount && (
                             <p className="text-sm text-muted-foreground line-through mb-1">
-                                {(currency || "$")}{product.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                {formatCurrency(product.price, currency)}
                             </p>
                         )}
                         <p className="text-2xl font-black bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
-                            {(currency || "$")}{currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            {formatCurrency(currentPrice, currency)}
                         </p>
                         {product.stock < 10 && product.stock > 0 && (
                             <p className="text-xs text-orange-600 dark:text-orange-400 mt-1">Only {product.stock} left!</p>

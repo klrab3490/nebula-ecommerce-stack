@@ -1,18 +1,10 @@
 "use client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import {
-  DollarSign,
-  ShoppingCart,
-  Package,
-  TrendingUp,
-  Users,
-  ArrowUpRight,
-  ArrowDownRight
-} from "lucide-react";
-import { formatCurrency } from '@/lib/currency';
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { formatCurrency } from '@/lib/currency';
+import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DollarSign, ShoppingCart, Package, TrendingUp, Users, ArrowUpRight, ArrowDownRight } from "lucide-react";
 
 interface MetricCardProps {
   title: string;

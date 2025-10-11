@@ -1,11 +1,11 @@
 "use client";
 import Link from 'next/link';
 import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Plus, Search, Filter, MoreHorizontal, Eye, Edit, Trash2, Package, AlertTriangle } from 'lucide-react';
@@ -140,14 +140,14 @@ export default function SellerProducts() {
             <div className="flex items-center gap-2">
               <Package className="h-4 w-4 text-muted-foreground" />
               <div>
-                <p className="text-sm text-muted-foreground">Total Products</p>
-                <p className="text-2xl font-bold">
+                <div className="text-sm text-muted-foreground">Total Products</div>
+                <div className="text-2xl font-bold">
                   {loading ? (
                     <span className="animate-pulse bg-gray-200 h-8 w-12 rounded inline-block"></span>
                   ) : (
                     totalProducts
                   )}
-                </p>
+                </div>
               </div>
             </div>
           </CardContent>
@@ -158,14 +158,14 @@ export default function SellerProducts() {
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 bg-green-500 rounded-full" />
               <div>
-                <p className="text-sm text-muted-foreground">Active</p>
-                <p className="text-2xl font-bold">
+                <div className="text-sm text-muted-foreground">Active</div>
+                <div className="text-2xl font-bold">
                   {loading ? (
                     <div className="animate-pulse bg-gray-200 h-8 w-12 rounded"></div>
                   ) : (
                     activeProducts
                   )}
-                </p>
+                </div>
               </div>
             </div>
           </CardContent>
@@ -176,14 +176,14 @@ export default function SellerProducts() {
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-yellow-600" />
               <div>
-                <p className="text-sm text-muted-foreground">Low Stock</p>
-                <p className="text-2xl font-bold">
+                <div className="text-sm text-muted-foreground">Low Stock</div>
+                <div className="text-2xl font-bold">
                   {loading ? (
                     <div className="animate-pulse bg-gray-200 h-8 w-12 rounded"></div>
                   ) : (
                     lowStockProducts
                   )}
-                </p>
+                </div>
               </div>
             </div>
           </CardContent>
@@ -194,14 +194,14 @@ export default function SellerProducts() {
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 bg-red-500 rounded-full" />
               <div>
-                <p className="text-sm text-muted-foreground">Out of Stock</p>
-                <p className="text-2xl font-bold">
+                <div className="text-sm text-muted-foreground">Out of Stock</div>
+                <div className="text-2xl font-bold">
                   {loading ? (
                     <div className="animate-pulse bg-gray-200 h-8 w-12 rounded"></div>
                   ) : (
                     outOfStockProducts
                   )}
-                </p>
+                </div>
               </div>
             </div>
           </CardContent>

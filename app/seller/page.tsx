@@ -1,12 +1,12 @@
 import React from 'react';
-import { DashboardMetrics, RevenueGoal } from '@/components/custom/dashboard/DashboardMetrics';
-import { RecentOrders } from '@/components/custom/dashboard/RecentOrders';
-import { SalesChart } from '@/components/custom/dashboard/SalesChart';
-import { QuickActions } from '@/components/custom/dashboard/QuickActions';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { prisma } from '@/lib/prisma';
 import { Badge } from '@/components/ui/badge';
 import { CalendarDays, AlertCircle } from 'lucide-react';
-import { prisma } from '@/lib/prisma';
+import { SalesChart } from '@/components/custom/dashboard/SalesChart';
+import { QuickActions } from '@/components/custom/dashboard/QuickActions';
+import { RecentOrders } from '@/components/custom/dashboard/RecentOrders';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DashboardMetrics, RevenueGoal } from '@/components/custom/dashboard/DashboardMetrics';
 
 type Notification = {
   id: string;

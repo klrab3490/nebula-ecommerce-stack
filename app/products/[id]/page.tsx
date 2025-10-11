@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
+import { useParams } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useParams } from "next/navigation";
+import { formatCurrency } from '@/lib/currency';
+import { useState, useEffect, useRef } from "react";
 import { useAppContext } from "@/contexts/AppContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Heart, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
@@ -84,7 +85,25 @@ export default function ProductPage() {
         fetchProduct()
     }, [id])
 
-    if (loading) return <div className="py-12 text-center">Loading...</div>
+    if (loading) return (
+        <div className="fixed inset-0 flex items-center justify-center bg-background z-50">
+            <div className="flex flex-col items-center gap-4">
+                <div className="relative w-16 h-16">
+                    <div className="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+                    <div className="absolute inset-2 rounded-full border-2 border-primary/30 border-t-transparent animate-spin-slow" />
+                </div>
+                <span className="text-lg font-medium text-muted-foreground animate-pulse">Loading product...</span>
+            </div>
+            <style jsx>{`
+                @keyframes spin-slow {
+                    to { transform: rotate(360deg); }
+                }
+                .animate-spin-slow {
+                    animation: spin-slow 2s linear infinite;
+                }
+            `}</style>
+        </div>
+    );
     if (error) return <div className="py-12 text-center text-red-600">{error}</div>
     if (!product) return <div className="py-12 text-center">Product not found</div>
     const nextImage = () => {
@@ -223,11 +242,11 @@ export default function ProductPage() {
                         <div>
                             <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
                             <div className="flex items-center gap-2 mb-4">
-                                <span className="text-3xl font-bold">${product.price}</span>
+                                <span className="text-3xl font-bold">{formatCurrency(product.price)}</span>
                                 {product.originalPrice && (
                                     <>
-                                        <span className="text-lg text-muted-foreground line-through">${product.originalPrice}</span>
-                                        <Badge variant="destructive">Save ${product.originalPrice - product.price}</Badge>
+                                        <span className="text-lg text-muted-foreground line-through">{formatCurrency(product.originalPrice)}</span>
+                                        <Badge variant="destructive">Save {formatCurrency(product.originalPrice - product.price)}</Badge>
                                     </>
                                 )}
                             </div>
