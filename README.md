@@ -111,6 +111,74 @@ The app contains an API route (`/app/api/user/route.ts`) which demonstrates sync
 
 ---
 
+## Checkout & Payment Integration (Razorpay + Shiprocket)
+
+This project includes a basic checkout flow wired to Razorpay for payments and a placeholder for Shiprocket shipment creation. The implementation is minimal and intended as a starting point — replace the Shiprocket stub with real API calls and add any missing validation/auth as needed.
+
+### Required environment variables
+
+Add these to your `.env` file at the project root:
+
+- `RAZORPAY_KEY_ID` — Razorpay API Key ID
+- `RAZORPAY_KEY_SECRET` — Razorpay API Key Secret
+- (optional) `SHIPROCKET_EMAIL` — Shiprocket account email (if you implement Shiprocket token flow)
+- (optional) `SHIPROCKET_PASSWORD` — Shiprocket password (if you implement Shiprocket token flow)
+
+**Example `.env`:**
+```
+RAZORPAY_KEY_ID=rzp_test_xxx
+RAZORPAY_KEY_SECRET=xxxxxxxxxxxxxxxxxxxx
+# SHIPROCKET_EMAIL=you@example.com
+# SHIPROCKET_PASSWORD=yourpassword
+```
+
+### Endpoints added in this repo
+
+- `POST /api/checkout/create-order`
+   - Body: `{ cart, userId? }`
+   - Creates an Order in the database (`status: pending`) and returns `{ orderId, shipment? }`
+- `POST /api/checkout/razorpay/create-order`
+   - No body expected (current implementation finds the first pending order)
+   - Creates a Razorpay order (server-side) and returns `{ key, orderId, amount, currency }`
+- `POST /api/checkout/razorpay/verify`
+   - Body: `{ razorpay_payment_id, razorpay_order_id, razorpay_signature }`
+   - Verifies the signature and marks the order as paid
+
+### Frontend pages
+
+- `/checkout` — checkout landing page (calls create-order)
+- `/checkout/payment` — client opens Razorpay checkout (calls create-order → razorpay/create-order → opens popup)
+- `/checkout/success` — success page shown after verification
+
+### Testing the flow locally
+
+1. Start the dev server:
+   ```cmd
+   cd /d C:\Users\rahul\Desktop\Works\Personal\nebula-ecommerce-stack
+   npm run dev
+   ```
+2. Add items to the cart in the UI and click "Proceed to Checkout".
+3. Complete payment through the Razorpay popup (in test mode use Razorpay test cards or UPI test flows).
+4. After payment completes, the client posts to `/api/checkout/razorpay/verify` which updates order status to `paid`.
+
+### Notes, caveats and next steps
+
+- Shiprocket integration in `lib/shiprocket.ts` is a placeholder that returns a fake shipment id. To use Shiprocket:
+   - Implement authentication (token exchange) with Shiprocket API and call the create shipment endpoint.
+   - Extend `prisma/schema.prisma` to store shipment/tracking on the `Order` model and run prisma migrations.
+- Current Razorpay endpoints assume a single pending order (they use `findFirst({ status: 'pending' })`). For production use:
+   - Create the order explicitly and pass the `orderId` to the Razorpay create-order endpoint to avoid race conditions and to handle multiple concurrent users.
+   - Add server-side validation of cart items, prices and stock before creating orders.
+- Add webhooks for Razorpay to handle asynchronous events (captures, refunds). This repo does not yet implement webhooks.
+
+If you want, I can next:
+- Implement a full Shiprocket integration and update the Prisma schema + migrations.
+- Improve the Razorpay flow to accept an explicit `orderId` and add webhooks.
+- Wire orders to authenticated users using Clerk (installed in this repo).
+
+Tell me which of the above you'd like me to implement next and I will proceed.
+
+
 ## Contributing
 
 Contributions are welcome. If you'd like to add features, open an issue or a PR with a short description of the change.

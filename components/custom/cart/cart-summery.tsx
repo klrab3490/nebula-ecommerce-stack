@@ -48,8 +48,8 @@ export function CartSummary() {
             </CardContent>
 
             <CardFooter className="flex flex-col gap-2">
-                <Button className="w-full" size="lg" disabled={itemCount === 0}>
-                    Proceed to Checkout
+                <Button className="w-full" size="lg" disabled={itemCount === 0} asChild>
+                    <a href="/checkout">Proceed to Checkout</a>
                 </Button>
 
                 <Button variant="outline" className="w-full bg-transparent" onClick={clearCart} disabled={itemCount === 0}>
