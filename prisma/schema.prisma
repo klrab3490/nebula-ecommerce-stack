@@ -29,8 +29,9 @@ model Product {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  OrderProduct OrderProduct[]
-  ProductFAQ   ProductFAQ[]
+  OrderProduct   OrderProduct[]
+  ProductFAQ     ProductFAQ[]
+  BundleProduct  BundleProduct[]
 }
 
 model FAQ {
@@ -66,4 +67,34 @@ model OrderProduct {
   product   Product @relation(fields: [productId], references: [id])
   productId String  @db.ObjectId
   quantity  Int
+  bundleId  String? @db.ObjectId
+  bundle    Bundle? @relation(fields: [bundleId], references: [id])
+}
+
+model Bundle {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  discountType String  // "percentage" | "fixed" | "buy_x_get_y"
+  discountValue Float   // percentage (0-100) or fixed amount
+  minQuantity Int      @default(1)
+  maxQuantity Int?     // null for unlimited
+  isActive    Boolean  @default(true)
+  validFrom   DateTime @default(now())
+  validUntil  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  BundleProduct BundleProduct[]
+  OrderProduct  OrderProduct[]
+}
+
+model BundleProduct {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  bundle    Bundle  @relation(fields: [bundleId], references: [id])
+  bundleId  String  @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @db.ObjectId
+  quantity  Int     @default(1) // quantity required for this bundle
+  isRequired Boolean @default(true) // false for optional items
 }

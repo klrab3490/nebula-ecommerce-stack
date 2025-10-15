@@ -10,6 +10,7 @@ This repository is an opinionated starter that wires authentication, a database 
 - Clerk — Authentication and user management (via `@clerk/nextjs`)
 - Prisma — Typesafe database client (configured to use MongoDB in `prisma/schema.prisma`)
 - MongoDB — Database (Prisma datasource uses the MongoDB provider)
+- UploadThing — File upload service for handling product images and media
 - TailwindCSS — Utility-first styling (configured in the project)
 - TypeScript — Static typing
 
@@ -43,21 +44,28 @@ Note: `mongoose` is listed in `package.json` but the application code uses Prism
 
 3. Create environment variables
 
-Create a `.env` or `.env.local` file at the repo root with at least the following values:
+Create a `.env.local` file at the repo root with the following values:
 
+```bash
+# Public Environment Variables
+NEXT_PUBLIC_CURRENCY=INR
+
+# Clerk (Authentication)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
+
+# Database (MongoDB)
+DATABASE_URL="mongodb+srv://<user>:<pass>@<cluster>/<db>?retryWrites=true&w=majority&appName=<appName>"
+
+# UploadThing (File uploads)
+UPLOADTHING_TOKEN=your_uploadthing_token
+
+# Razorpay (Payment processing) - Optional, required only for checkout functionality
+RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_key_secret
 ```
-# Prisma / MongoDB
-DATABASE_URL="mongodb+srv://<user>:<pass>@<cluster>/<db>?retryWrites=true&w=majority"
 
-# Clerk (auth)
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
-CLERK_SECRET_KEY=
-
-# Optional / app-specific
-NEXT_PUBLIC_CURRENCY=USD
-```
-
-Adjust values to match your environment. The Prisma client is configured to use `DATABASE_URL` (see `prisma/schema.prisma`).
+You can also copy from `.env.example` and fill in your values. The Prisma client is configured to use `DATABASE_URL` (see `prisma/schema.prisma`).
 
 4. Run the dev server
 
@@ -96,6 +104,21 @@ Set your Clerk keys in the environment and follow Clerk docs to create an applic
 
 ---
 
+## File Uploads
+
+UploadThing is integrated for handling file uploads (primarily for product images). The integration includes:
+
+- File upload API routes at `/api/uploadthing`
+- Upload components in `utils/uploadthing.ts` (`UploadButton`, `UploadDropzone`)
+- Configuration supports image uploads up to 4MB
+
+To use UploadThing:
+1. Create an account at [uploadthing.com](https://uploadthing.com)
+2. Get your token and add it to `UPLOADTHING_TOKEN` in your environment variables
+3. Use the `UploadButton` or `UploadDropzone` components in your React components
+
+---
+
 ## Notes & recommendations
 
 - The project includes `@prisma/client` and a `prisma` generator; keep `postinstall` to ensure the client is generated after `npm install`.
@@ -115,22 +138,16 @@ The app contains an API route (`/app/api/user/route.ts`) which demonstrates sync
 
 This project includes a basic checkout flow wired to Razorpay for payments and a placeholder for Shiprocket shipment creation. The implementation is minimal and intended as a starting point — replace the Shiprocket stub with real API calls and add any missing validation/auth as needed.
 
-### Required environment variables
+### Required environment variables for checkout
 
-Add these to your `.env` file at the project root:
+Add these to your `.env.local` file at the project root (in addition to the basic environment variables):
 
 - `RAZORPAY_KEY_ID` — Razorpay API Key ID
 - `RAZORPAY_KEY_SECRET` — Razorpay API Key Secret
 - (optional) `SHIPROCKET_EMAIL` — Shiprocket account email (if you implement Shiprocket token flow)
 - (optional) `SHIPROCKET_PASSWORD` — Shiprocket password (if you implement Shiprocket token flow)
 
-**Example `.env`:**
-```
-RAZORPAY_KEY_ID=rzp_test_xxx
-RAZORPAY_KEY_SECRET=xxxxxxxxxxxxxxxxxxxx
-# SHIPROCKET_EMAIL=you@example.com
-# SHIPROCKET_PASSWORD=yourpassword
-```
+These are already included in the main environment variables section above, but are essential for the payment functionality to work.
 
 ### Endpoints added in this repo
 
@@ -154,7 +171,6 @@ RAZORPAY_KEY_SECRET=xxxxxxxxxxxxxxxxxxxx
 
 1. Start the dev server:
    ```cmd
-   cd /d C:\Users\rahul\Desktop\Works\Personal\nebula-ecommerce-stack
    npm run dev
    ```
 2. Add items to the cart in the UI and click "Proceed to Checkout".
