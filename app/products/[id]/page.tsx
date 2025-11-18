@@ -159,7 +159,7 @@ export default function ProductPage() {
         <div className="min-h-screen">
             <div className="container mx-auto px-4 py-8">
                 <Link
-                    href="/all-products"
+                    href="/products"
                     className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6"
                 >
                     <ChevronLeft className="h-4 w-4 mr-1" />
