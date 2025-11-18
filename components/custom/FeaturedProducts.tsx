@@ -150,8 +150,8 @@ export default function FeaturedProducts({
       <style jsx>{shimmerKeyframes}</style>
       {/* Enhanced Sale Timer Section with Glass Morphism */}
       <div className="relative mb-16 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-red-500/20 via-orange-500/20 to-pink-500/20 dark:from-red-500/10 dark:via-orange-500/10 dark:to-pink-500/10 backdrop-blur-sm"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
+        <div className="absolute inset-0 bg-linear-to-br from-red-500/20 via-orange-500/20 to-pink-500/20 dark:from-red-500/10 dark:via-orange-500/10 dark:to-pink-500/10 backdrop-blur-sm"></div>
+        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
         <div className="relative bg-white/10 dark:bg-black/10 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-3xl p-8 shadow-2xl">
           <div className="flex flex-col items-center gap-6">
             <div className="flex items-center gap-4">
@@ -159,7 +159,7 @@ export default function FeaturedProducts({
                 <Clock className="text-red-500 dark:text-red-400 w-8 h-8 animate-pulse" aria-hidden="true" />
                 <div className="absolute -inset-1 bg-red-500/20 rounded-full animate-ping"></div>
               </div>
-              <h2 className="font-bold text-2xl tracking-wide bg-gradient-to-r from-red-600 to-orange-600 dark:from-red-400 dark:to-orange-400 bg-clip-text text-transparent">
+              <h2 className="font-bold text-2xl tracking-wide bg-linear-to-r from-red-600 to-orange-600 dark:from-red-400 dark:to-orange-400 bg-clip-text text-transparent">
                 ⚡ FLASH SALE ENDS IN ⚡
               </h2>
             </div>
@@ -170,9 +170,9 @@ export default function FeaturedProducts({
                   className="relative group"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-500"></div>
+                  <div className="absolute -inset-0.5 bg-linear-to-r from-red-500 to-orange-500 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-500"></div>
                   <div className="relative bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border border-white/30 dark:border-zinc-700/50 rounded-2xl px-6 py-4 text-center min-w-[85px] shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
-                    <div className="font-black text-3xl tabular-nums bg-gradient-to-b from-red-600 to-red-800 dark:from-red-400 dark:to-red-600 bg-clip-text text-transparent drop-shadow-sm">
+                    <div className="font-black text-3xl tabular-nums bg-linear-to-b from-red-600 to-red-800 dark:from-red-400 dark:to-red-600 bg-clip-text text-transparent drop-shadow-sm">
                       {String(unit.value).padStart(2, "0")}
                     </div>
                     <div className="text-red-500/80 dark:text-red-400/80 text-sm uppercase font-bold tracking-widest mt-1">{unit.label}</div>
@@ -186,13 +186,13 @@ export default function FeaturedProducts({
 
       {/* Section Title */}
       <div className="text-center mb-12">
-        <h2 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+        <h2 className="text-4xl md:text-5xl font-black mb-4 bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
           🔥 Featured Products
         </h2>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-medium">
           Discover our handpicked selection of premium products at unbeatable prices
         </p>
-        <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto mt-4 rounded-full"></div>
+        <div className="w-24 h-1 bg-linear-to-r from-purple-500 to-pink-500 mx-auto mt-4 rounded-full"></div>
       </div>
 
       {/* Loading State */}
@@ -234,7 +234,7 @@ export default function FeaturedProducts({
               style={{ animationDelay: `${index * 100}ms` }}
             >
               {/* Glow Effect */}
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-500 animate-pulse"></div>
+              <div className="absolute -inset-0.5 bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-500 animate-pulse"></div>
               
               {/* Main Card */}
               <div className="relative bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-white/20 dark:border-zinc-700/50 overflow-hidden">
@@ -243,8 +243,8 @@ export default function FeaturedProducts({
                 {hasDiscount && (
                   <div className="absolute top-4 left-4 z-20">
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur-sm animate-pulse"></div>
-                      <div className="relative bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                      <div className="absolute inset-0 bg-linear-to-r from-purple-600 to-pink-600 rounded-full blur-sm animate-pulse"></div>
+                      <div className="relative bg-linear-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transform group-hover:scale-110 transition-transform duration-300">
                         <span className="drop-shadow-sm">-{discountPercentage}%</span>
                       </div>
                     </div>
@@ -252,12 +252,12 @@ export default function FeaturedProducts({
                 )}
 
                 {/* Shine Effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
 
                 <div className="p-7">
                   {/* Product Image with Enhanced Effects */}
-                  <div className="relative mb-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-zinc-800 dark:to-zinc-900 rounded-2xl overflow-hidden shadow-inner">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5"></div>
+                  <div className="relative mb-6 bg-linear-to-br from-gray-50 to-gray-100 dark:from-zinc-800 dark:to-zinc-900 rounded-2xl overflow-hidden shadow-inner">
+                    <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5"></div>
                     <Image
                       src={product.images[0] || "/placeholder.svg?height=200&width=200&query=product"}
                       alt={product.name}
@@ -298,7 +298,7 @@ export default function FeaturedProducts({
                   </div>
                   
                   <div className="mb-6">
-                    <span className="text-2xl font-black bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
+                    <span className="text-2xl font-black bg-linear-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
                       {currencySymbol}{currentPrice.toLocaleString()}
                     </span>
                     {product.stock < 10 && product.stock > 0 && (
@@ -313,10 +313,10 @@ export default function FeaturedProducts({
                   <Button
                     onClick={handleButtonClick}
                     disabled={product.stock === 0}
-                    className="w-full relative overflow-hidden bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl py-6 font-bold text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 group/btn disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full relative overflow-hidden bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl py-6 font-bold text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 group/btn disabled:opacity-50 disabled:cursor-not-allowed"
                     size="lg"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
                     <div className="relative flex items-center justify-center gap-2">
                       <ShoppingCart className="w-5 h-5" />
                       <span>{product.stock === 0 ? 'Out of Stock' : 'Add To Cart'}</span>

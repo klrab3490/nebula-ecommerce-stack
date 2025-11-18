@@ -69,19 +69,19 @@ export default function CustomerTestimonials() {
   return (
     <section className="py-20 w-full relative overflow-hidden">
       {/* Modern Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20"></div>
+      <div className="absolute inset-0 bg-linear-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20"></div>
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-purple-300/10 rounded-full blur-3xl animate-pulse"></div>
       <div className="absolute bottom-0 left-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
 
       <div className="max-w-6xl mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-black mb-4 bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
             💬 What Our Customers Say
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-medium">
             Real stories from people who&#39;ve experienced the natural goodness of our premium products
           </p>
-          <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto mt-4 rounded-full"></div>
+          <div className="w-24 h-1 bg-linear-to-r from-purple-500 to-pink-500 mx-auto mt-4 rounded-full"></div>
         </div>
 
         <div className="relative">
@@ -97,17 +97,17 @@ export default function CustomerTestimonials() {
 
           <div className="max-w-4xl mx-auto relative">
             {/* Glow Effect */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 rounded-3xl blur opacity-20 animate-pulse"></div>
+            <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 rounded-3xl blur opacity-20 animate-pulse"></div>
 
             {/* Main Card */}
             <div className="relative bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl rounded-3xl p-8 md:p-12 shadow-2xl border border-white/30 dark:border-zinc-700/50 transition-all duration-500">
               {/* Shine Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-1000 rounded-3xl"></div>
+              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-1000 rounded-3xl"></div>
 
               <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
                 {/* Enhanced Avatar */}
                 <div className="flex-shrink-0 relative">
-                  <div className="absolute -inset-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur opacity-50 animate-pulse"></div>
+                  <div className="absolute -inset-2 bg-linear-to-r from-purple-500 to-pink-500 rounded-full blur opacity-50 animate-pulse"></div>
                   <Image
                     src={testimonials[currentIndex].avatar || "/placeholder.svg"}
                     alt={testimonials[currentIndex].name}
@@ -119,7 +119,7 @@ export default function CustomerTestimonials() {
 
                 <div className="flex-1 text-center md:text-left">
                   {/* Enhanced Product badge */}
-                  <div className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-bold mb-4 shadow-lg">
+                  <div className="inline-block bg-linear-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-bold mb-4 shadow-lg">
                     ✨ {testimonials[currentIndex].product}
                   </div>
 
@@ -137,7 +137,7 @@ export default function CustomerTestimonials() {
 
                   {/* Enhanced Customer info */}
                   <div>
-                    <h4 className="font-black text-lg bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">{testimonials[currentIndex].name}</h4>
+                    <h4 className="font-black text-lg bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">{testimonials[currentIndex].name}</h4>
                     <p className="text-muted-foreground font-medium">📍 {testimonials[currentIndex].location}</p>
                   </div>
                 </div>

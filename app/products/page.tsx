@@ -131,25 +131,25 @@ export default function AllProductsPage() {
       {/* Enhanced Hero Section */}
       <section className="relative py-20 overflow-hidden">
         {/* Modern Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20"></div>
+        <div className="absolute inset-0 bg-linear-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20"></div>
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-300/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
         
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <div className="text-center md:text-left">
-              <h1 className="text-4xl md:text-6xl font-black mb-4 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+              <h1 className="text-4xl md:text-6xl font-black mb-4 bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
                 🛍️ All Products
               </h1>
               <p className="text-lg text-muted-foreground max-w-2xl font-medium">
                 Explore our complete collection of premium beauty and wellness products
               </p>
-              <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto md:mx-0 mt-4 rounded-full"></div>
+              <div className="w-24 h-1 bg-linear-to-r from-purple-500 to-pink-500 mx-auto md:mx-0 mt-4 rounded-full"></div>
             </div>
 
             <div className="w-full md:w-auto">
               <div className="relative group">
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
+                <div className="absolute -inset-0.5 bg-linear-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
                 <div className="relative">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground z-10" />
                   <Input
@@ -177,7 +177,7 @@ export default function AllProductsPage() {
                     <TabsTrigger 
                       key={cat} 
                       value={cat} 
-                      className="px-6 py-3 rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white font-bold transition-all duration-300"
+                      className="px-6 py-3 rounded-xl data-[state=active]:bg-linear-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white font-bold transition-all duration-300"
                     >
                         {cat === "All" ? "🔥 All" : `� ${cat}`}
                     </TabsTrigger>

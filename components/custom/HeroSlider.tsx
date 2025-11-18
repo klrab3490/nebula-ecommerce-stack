@@ -120,7 +120,7 @@ export default function HeroSlider() {
     return (
         <div className="relative w-full h-fit overflow-hidden rounded-b-3xl shadow-2xl">
             {/* Modern Overlay Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent z-10 pointer-events-none"></div>
+            <div className="absolute inset-0 bg-linear-to-t from-black/20 via-transparent to-transparent z-10 pointer-events-none"></div>
             
             {/* Slides Container */}
             <div
@@ -142,7 +142,7 @@ export default function HeroSlider() {
                             </div>
                         ) : (
                             // Product Slide
-                            <div className="w-full h-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center">
+                            <div className="w-full h-full bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center">
                                 <div className="container mx-auto px-6">
                                     <div className="grid md:grid-cols-2 gap-12 items-center">
                                         {/* Product Image */}
@@ -214,9 +214,9 @@ export default function HeroSlider() {
             </div>
 
             {/* Enhanced Progress Bar */}
-            <div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-sm">
+            <div className="absolute bottom-0 left-0 w-full h-2 bg-linear-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-sm">
                 <div
-                    className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-100 ease-linear shadow-lg"
+                    className="h-full bg-linear-to-r from-purple-500 to-pink-500 transition-all duration-100 ease-linear shadow-lg"
                     style={{
                         width: isAutoPlaying ? `${((currentSlide + 1) / slides.length) * 100}%` : "0%",
                     }}

@@ -63,13 +63,13 @@ export default function Home() {
             <section className="py-20 relative">
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="text-center mb-16">
-                        <h1 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+                        <h1 className="text-4xl md:text-5xl font-black mb-4 bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
                             🛒 Our Premium Collection
                         </h1>
                         <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-medium">
                             Handpicked products designed to enhance your lifestyle with quality and innovation
                         </p>
-                        <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto mt-4 rounded-full"></div>
+                        <div className="w-24 h-1 bg-linear-to-r from-purple-500 to-pink-500 mx-auto mt-4 rounded-full"></div>
                     </div>
                     {/* Loading State */}
                     {loading && (

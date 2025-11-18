@@ -60,7 +60,7 @@ export default function ContactUs() {
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Modern Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20"></div>
+      <div className="absolute inset-0 bg-linear-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20"></div>
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-300/10 rounded-full blur-3xl animate-pulse"></div>
       <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
 
@@ -70,18 +70,18 @@ export default function ContactUs() {
           <div className="max-w-6xl mx-auto px-4">
             <div className="text-center mb-16">
               <div className="relative inline-flex items-center justify-center w-20 h-20 mb-6">
-                <div className="absolute -inset-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-xl animate-pulse"></div>
+                <div className="absolute -inset-2 bg-linear-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-xl animate-pulse"></div>
                 <div className="relative bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 rounded-full p-5">
                   <MessageSquare className="w-10 h-10 text-blue-600 dark:text-blue-400" />
                 </div>
               </div>
-              <h1 className="text-4xl md:text-6xl font-black mb-6 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+              <h1 className="text-4xl md:text-6xl font-black mb-6 bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
                 💬 Get In Touch
               </h1>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium">
                 We&#39;d love to hear from you. Send us a message and we&#39;ll respond as soon as possible.
               </p>
-              <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto mt-6 rounded-full"></div>
+              <div className="w-24 h-1 bg-linear-to-r from-purple-500 to-pink-500 mx-auto mt-6 rounded-full"></div>
             </div>
 
             {/* Contact Info Cards */}
@@ -93,21 +93,21 @@ export default function ContactUs() {
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   {/* Glow Effect */}
-                  <div className={`absolute -inset-0.5 bg-gradient-to-r ${info.gradient} rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-500`}></div>
+                  <div className={`absolute -inset-0.5 bg-linear-to-r ${info.gradient} rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-500`}></div>
 
                   {/* Main Card */}
                   <div className="relative bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-2xl p-6 text-center shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-white/30 dark:border-zinc-700/50 group-hover:bg-white/90 dark:group-hover:bg-zinc-900/90">
                     {/* Shine Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out rounded-2xl"></div>
+                    <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out rounded-2xl"></div>
 
                     <div className="relative z-10">
                       <div className="relative inline-flex items-center justify-center w-16 h-16 mb-4">
-                        <div className={`absolute -inset-2 bg-gradient-to-r ${info.gradient} rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500`}></div>
-                        <div className={`relative bg-gradient-to-r ${info.gradient} rounded-2xl p-4 text-white shadow-lg`}>
+                        <div className={`absolute -inset-2 bg-linear-to-r ${info.gradient} rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500`}></div>
+                        <div className={`relative bg-linear-to-r ${info.gradient} rounded-2xl p-4 text-white shadow-lg`}>
                           {info.icon}
                         </div>
                       </div>
-                      <h3 className="font-bold text-lg mb-2 group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-pink-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+                      <h3 className="font-bold text-lg mb-2 group-hover:bg-linear-to-r group-hover:from-purple-600 group-hover:to-pink-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
                         {info.title}
                       </h3>
                       <p className="font-semibold text-foreground mb-1">{info.content}</p>
@@ -122,16 +122,16 @@ export default function ContactUs() {
             <div className="max-w-3xl mx-auto">
               <div className="relative">
                 {/* Glow Effect */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 rounded-3xl blur opacity-20 animate-pulse"></div>
+                <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 rounded-3xl blur opacity-20 animate-pulse"></div>
 
                 {/* Main Form Card */}
                 <form onSubmit={onSubmit} className="relative bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl rounded-3xl p-8 md:p-12 shadow-2xl border border-white/30 dark:border-zinc-700/50 space-y-8">
                   {/* Shine Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-3xl opacity-50"></div>
+                  <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent rounded-3xl opacity-50"></div>
 
                   <div className="relative z-10">
                     <div className="text-center mb-8">
-                      <h2 className="text-2xl md:text-3xl font-black mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                      <h2 className="text-2xl md:text-3xl font-black mb-2 bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                         ✉️ Send us a Message
                       </h2>
                       <p className="text-muted-foreground">Fill out the form below and we&#39;ll get back to you soon</p>
@@ -208,7 +208,7 @@ export default function ContactUs() {
                       <Button
                         type="submit"
                         disabled={isSubmitting}
-                        className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl px-8 py-4 font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
+                        className="bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl px-8 py-4 font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
                       >
                         <div className="flex items-center gap-2">
                           {isSubmitting ? (

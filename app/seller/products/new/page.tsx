@@ -224,13 +224,13 @@ export default function AddProductPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       <div className="container mx-auto px-4 py-12 max-w-5xl">
         <div className="mb-12 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-6">
             <Plus className="h-8 w-8 text-primary" />
           </div>
-          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-slate-900 to-slate-600 dark:from-slate-100 dark:to-slate-400 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold mb-4 bg-linear-to-r from-slate-900 to-slate-600 dark:from-slate-100 dark:to-slate-400 bg-clip-text text-transparent">
             Add New Product
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -496,7 +496,7 @@ export default function AddProductPage() {
                 </div>
               </div>
 
-              <div className="mt-8 p-6 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl border border-amber-200 dark:border-amber-800">
+              <div className="mt-8 p-6 bg-linear-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl border border-amber-200 dark:border-amber-800">
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
@@ -567,7 +567,7 @@ export default function AddProductPage() {
                   endpoint="imageUploader"
                   appearance={{
                     button:
-                      "ut-upload-button relative flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-medium px-4 py-2.5 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200",
+                      "ut-upload-button relative flex items-center justify-center gap-2 rounded-lg bg-linear-to-r from-indigo-500 to-purple-500 text-white font-medium px-4 py-2.5 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200",
                     container: "flex justify-center",
                     allowedContent: "text-xs text-gray-400 mt-2",
                   }}
@@ -758,7 +758,7 @@ export default function AddProductPage() {
                     {formData.categories.map((category, index) => (
                       <div
                         key={index}
-                        className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-primary/5 text-primary rounded-full text-sm font-medium border border-primary/20 hover:border-primary/40 transition-all duration-200"
+                        className="group flex items-center gap-2 px-4 py-2 bg-linear-to-r from-primary/10 to-primary/5 text-primary rounded-full text-sm font-medium border border-primary/20 hover:border-primary/40 transition-all duration-200"
                       >
                         <span>{category}</span>
                         <Button
@@ -920,7 +920,7 @@ export default function AddProductPage() {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full sm:w-auto h-12 px-8 text-base bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto h-12 px-8 text-base bg-linear-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isSubmitting ? (
                 <>

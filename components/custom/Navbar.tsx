@@ -82,7 +82,7 @@ export default function Navbar() {
                         {/* Center section - Logo */}
                         <div className="flex items-center justify-center">
                             <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-                                <div className={`rounded-full p-0.5 bg-gradient-to-r ${palette.gradient}`}>
+                                <div className={`rounded-full p-0.5 bg-linear-to-r ${palette.gradient}`}>
                                     <Image src="/Nebula.png" alt="Nebula Logo" width={32} height={32} className="rounded-full bg-white" priority unoptimized />
                                 </div>
                             </Link>
@@ -106,7 +106,7 @@ export default function Navbar() {
                                     variant="ghost"
                                     size="icon"
                                     onClick={() => setIsSearchOpen(!isSearchOpen)}
-                                    className={`hidden md:inline-flex h-10 w-10 hover:bg-accent/80 ${isSearchOpen ? "bg-accent" : ""} bg-gradient-to-r ${palette.accent} bg-opacity-10 hover:bg-opacity-20`}
+                                    className={`hidden md:inline-flex h-10 w-10 hover:bg-accent/80 ${isSearchOpen ? "bg-accent" : ""} bg-linear-to-r ${palette.accent} bg-opacity-10 hover:bg-opacity-20`}
                                 >
                                     <Search className="h-5 w-5" />
                                 </Button>

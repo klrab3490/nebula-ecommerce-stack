@@ -189,7 +189,7 @@ export default function EditProductPage() {
   if (error) return <div className="py-12 text-center text-red-600">{error}</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       <div className="container mx-auto px-4 py-12 max-w-5xl">
         <div className="mb-8 flex items-center gap-4">
           <Button variant="ghost" onClick={() => router.back()}>

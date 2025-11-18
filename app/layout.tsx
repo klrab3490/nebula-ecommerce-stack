@@ -50,7 +50,7 @@ export default function RootLayout({
             >
               <div className="relative min-h-screen">
                 {/* Modern Background with Gradient Mesh */}
-                <div className="fixed inset-0 bg-gradient-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20 -z-10"></div>
+                <div className="fixed inset-0 bg-linear-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20 -z-10"></div>
                 <div className="fixed top-0 left-1/4 w-96 h-96 bg-purple-300/10 rounded-full blur-3xl animate-pulse -z-10"></div>
                 <div
                   className="fixed bottom-0 right-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse -z-10"
