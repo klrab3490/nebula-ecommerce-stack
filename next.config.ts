@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  // Add an explicit (empty) turbopack config to satisfy Next.js/Turbopack
+  // when a custom `webpack` config is present. This silences the
+  // "webpack config and no turbopack config" build error.
+  turbopack: {},
   images: {
     remotePatterns: [
       {
