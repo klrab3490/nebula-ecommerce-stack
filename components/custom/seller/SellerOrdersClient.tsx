@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from 'react';
 import { formatCurrency } from '@/lib/currency';
 import { Badge } from '@/components/ui/badge';

@@ -27,7 +27,7 @@ export function CartItem({ item }: CartItemProps) {
         <Card className="p-4">
             <div className="flex items-center gap-4">
                 {item.image && (
-                    <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-md">
+                    <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md">
                         <Image src={item.image || "/placeholder.svg"} alt={item.name} fill className="object-cover" />
                     </div>
                 )}

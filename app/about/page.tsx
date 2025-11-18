@@ -65,8 +65,8 @@ export default function About() {
             {/* Modern Background */}
             <div className="absolute inset-0 bg-linear-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20"></div>
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-300/10 rounded-full blur-3xl animate-pulse"></div>
-            <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
-            
+            <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+
             <div className="max-w-4xl mx-auto px-6 py-16 relative z-10">
                 {/* Enhanced Hero Section */}
                 <div className="text-center mb-16">
@@ -115,14 +115,14 @@ export default function About() {
                                 >
                                     {/* Glow Effect */}
                                     <div className="absolute -inset-0.5 bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 rounded-3xl blur opacity-0 group-hover:opacity-20 transition-all duration-500"></div>
-                                    
+
                                     {/* Main Card */}
                                     <div className="relative bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 border border-white/30 dark:border-zinc-700/50 group-hover:bg-white/90 dark:group-hover:bg-zinc-900/90">
                                         {/* Shine Effect */}
                                         <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out rounded-3xl"></div>
-                                        
+
                                         <div className="flex items-start gap-6 relative z-10">
-                                            <div className="flex-shrink-0 relative">
+                                            <div className="shrink-0 relative">
                                                 <div className="absolute -inset-2 bg-linear-to-r from-green-500/20 to-emerald-500/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                                                 <div className="relative w-16 h-16 bg-linear-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center text-white shadow-lg">
                                                     {section.icon}
@@ -154,14 +154,14 @@ export default function About() {
                                 >
                                     {/* Glow Effect */}
                                     <div className="absolute -inset-0.5 bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 rounded-3xl blur opacity-0 group-hover:opacity-20 transition-all duration-500"></div>
-                                    
+
                                     {/* Main Card */}
                                     <div className="relative bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 border border-white/30 dark:border-zinc-700/50 group-hover:bg-white/90 dark:group-hover:bg-zinc-900/90">
                                         {/* Shine Effect */}
                                         <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out rounded-3xl"></div>
-                                        
+
                                         <div className="flex items-start gap-6 relative z-10">
-                                            <div className="flex-shrink-0 relative">
+                                            <div className="shrink-0 relative">
                                                 <div className="absolute -inset-2 bg-linear-to-r from-green-500/20 to-emerald-500/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                                                 <div className="relative w-16 h-16 bg-linear-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center text-white shadow-lg">
                                                     {section.icon}
@@ -187,12 +187,12 @@ export default function About() {
                 <div className="mt-20 text-center relative">
                     {/* Glow Effect */}
                     <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 rounded-3xl blur opacity-20 animate-pulse"></div>
-                    
+
                     {/* Main Card */}
                     <div className="relative bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-3xl p-12 shadow-2xl border border-white/30 dark:border-zinc-700/50">
                         {/* Shine Effect */}
                         <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent rounded-3xl opacity-50"></div>
-                        
+
                         <div className="relative z-10">
                             <h3 className="text-3xl md:text-4xl font-black mb-6 bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
                                 ✨ Experience the Power of Nature
