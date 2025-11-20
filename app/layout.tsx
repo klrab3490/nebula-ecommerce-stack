@@ -1,15 +1,15 @@
 import "./globals.css";
+import Script from "next/script"
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/custom/Navbar";
 import Footer from "@/components/custom/Footer";
 import { Geist, Geist_Mono } from "next/font/google";
-import { AppContextProvider } from "@/contexts/AppContext";
-import { ThemeProvider } from "@/components/theme/theme-provider";
-
-import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
+import { AppContextProvider } from "@/contexts/AppContext";
+import { ThemeProvider } from "@/components/theme/theme-provider";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -79,6 +79,8 @@ export default function RootLayout({
             </ThemeProvider>
           </AppContextProvider>
         </body>
+        {/* Razorpay checkout script */}
+        <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
       </html>
     </ClerkProvider>
   );
