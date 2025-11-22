@@ -13,14 +13,22 @@ export async function POST(
     });
 
     const options = {
-      amount: amount*100,
+      amount: amount,
       currency: currency,
       receipt: "receipt_" + Date.now()+`_${orderID}`,
     };
 
     const order = await razorpay.orders.create(options);
 
-    return Response.json(order);
+    // Return the fields the client expects
+    const publicKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID || '';
+    return NextResponse.json({
+      key: publicKey,
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      raw: order,
+    });
   } catch (error) {
     console.error(error);
     return Response.json({ error: "Order creation failed" }, { status: 500 });

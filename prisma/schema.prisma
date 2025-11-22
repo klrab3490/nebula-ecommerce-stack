@@ -8,36 +8,50 @@ generator client {
 }
 
 model User {
-  id      String  @id @default(auto()) @map("_id") @db.ObjectId
-  email   String  @unique
-  name    String
-  role    String
-  clerkId String  @unique
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  email     String    @unique
+  name      String
+  role      String
+  addresses Address[]
+  clerkId   String    @unique
+}
+
+model Address {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String  @db.ObjectId
+  street    String
+  city      String
+  state     String
+  zipCode   String
+  country   String
+  phone     String
+  isDefault Boolean @default(false)
 }
 
 model Product {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  name           String
-  description    String
-  price          Float
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  description     String
+  price           Float
   discountedPrice Float?
-  sku            String   @unique
-  stock          Int
-  images         String[]
-  categories     String[]
-  featured       Boolean  @default(false)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  sku             String   @unique
+  stock           Int
+  images          String[]
+  categories      String[]
+  featured        Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  OrderProduct   OrderProduct[]
-  ProductFAQ     ProductFAQ[]
-  BundleProduct  BundleProduct[]
+  OrderProduct  OrderProduct[]
+  ProductFAQ    ProductFAQ[]
+  BundleProduct BundleProduct[]
 }
 
 model FAQ {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  question  String
-  answer    String
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  question String
+  answer   String
 
   ProductFAQ ProductFAQ[]
 }
@@ -51,13 +65,13 @@ model ProductFAQ {
 }
 
 model Order {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId     String   @db.ObjectId
-  products   OrderProduct[]
-  total      Float
-  status     String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id        String         @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String         @db.ObjectId
+  products  OrderProduct[]
+  total     Float
+  status    String
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 }
 
 model OrderProduct {
@@ -72,29 +86,29 @@ model OrderProduct {
 }
 
 model Bundle {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String
-  discountType String  // "percentage" | "fixed" | "buy_x_get_y"
-  discountValue Float   // percentage (0-100) or fixed amount
-  minQuantity Int      @default(1)
-  maxQuantity Int?     // null for unlimited
-  isActive    Boolean  @default(true)
-  validFrom   DateTime @default(now())
-  validUntil  DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  description   String
+  discountType  String // "percentage" | "fixed" | "buy_x_get_y"
+  discountValue Float // percentage (0-100) or fixed amount
+  minQuantity   Int       @default(1)
+  maxQuantity   Int? // null for unlimited
+  isActive      Boolean   @default(true)
+  validFrom     DateTime  @default(now())
+  validUntil    DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
   BundleProduct BundleProduct[]
   OrderProduct  OrderProduct[]
 }
 
 model BundleProduct {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  bundle    Bundle  @relation(fields: [bundleId], references: [id])
-  bundleId  String  @db.ObjectId
-  product   Product @relation(fields: [productId], references: [id])
-  productId String  @db.ObjectId
-  quantity  Int     @default(1) // quantity required for this bundle
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  bundle     Bundle  @relation(fields: [bundleId], references: [id])
+  bundleId   String  @db.ObjectId
+  product    Product @relation(fields: [productId], references: [id])
+  productId  String  @db.ObjectId
+  quantity   Int     @default(1) // quantity required for this bundle
   isRequired Boolean @default(true) // false for optional items
 }
