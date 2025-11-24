@@ -12,6 +12,9 @@ export function CartSummary() {
     const shipping = total > 50 ? 0 : 9.99
     const tax = total * 0.08
     const finalTotal = total + shipping + tax
+    localStorage.setItem('finalTotal', finalTotal.toString());
+
+    console.log("Final Total in CartSummary:", finalTotal);
 
     return (
         <Card className="sticky top-4">

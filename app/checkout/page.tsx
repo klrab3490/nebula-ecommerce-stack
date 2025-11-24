@@ -7,6 +7,21 @@ import { useCallback, useEffect, useState } from "react";
 
 export default function CheckoutPage() {
     const { cart } = useAppContext();
+    const [finalTotal, setFinalTotal] = useState<number>(() => {
+        if (typeof window === "undefined") return 0;
+        const v = localStorage.getItem('finalTotal');
+        return v ? parseFloat(v) : 0;
+    });
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+        const v = localStorage.getItem('finalTotal');
+        setFinalTotal(v ? parseFloat(v) : 0);
+
+        if (cart.itemCount === 0) {
+            setFinalTotal(0);
+            router.push("/cart");
+        }
+    }, []);
     const router = useRouter();
     const [address, setAddress] = useState<any>(null);
     const [addresses, setAddresses] = useState<any[]>([]);
@@ -57,10 +72,12 @@ export default function CheckoutPage() {
     }, []);
 
     const handlePayNow = useCallback(async () => {
-        if (!cart || cart.total <= 0) {
+        if (!cart || finalTotal <= 0) {
             alert("Your cart is empty.");
             return;
         }
+
+        // Check user Login
 
         if (!isAddressPresent(address)) {
             alert("Please add your address before making payment.");
@@ -75,7 +92,7 @@ export default function CheckoutPage() {
                 headers: { "Content-Type": "application/json" },
                 // send amount in paise (integer)
                 body: JSON.stringify({
-                    amount: Math.round((cart.total ?? 0) * 100),
+                    amount: Math.round((finalTotal ?? 0) * 100),
                     currency: "INR",
                     receipt: `order_rcptid_${Date.now()}`,
                 }),
@@ -138,7 +155,7 @@ export default function CheckoutPage() {
         } catch (err) {
             console.error(err);
         }
-    }, [cart, address, router]);
+    }, [cart, address, router, finalTotal]);
 
     if (loading) return <p className="p-6 text-gray-700 dark:text-gray-300">Checking address…</p>;
 
@@ -148,7 +165,7 @@ export default function CheckoutPage() {
 
             <div className="mb-6">
                 <p className="text-gray-700 dark:text-gray-300"><strong>Items:</strong> {cart.itemCount}</p>
-                <p className="text-gray-700 dark:text-gray-300"><strong>Total:</strong> ₹{cart.total}</p>
+                <p className="text-gray-700 dark:text-gray-300"><strong>Total:</strong> ₹{finalTotal}</p>
 
                 <div className="mt-4 p-4 border rounded-lg bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200">
                     <h3 className="font-semibold mb-2">Delivery Address</h3>
@@ -235,7 +252,7 @@ export default function CheckoutPage() {
                 className="btn btn-primary"
                 onClick={handlePayNow}
             >
-                Make Payment
+                Make Payment INR {finalTotal}
             </Button>
         </div>
     );
