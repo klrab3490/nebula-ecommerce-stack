@@ -10,7 +10,7 @@ import {
     Settings,
     Users,
     Download,
-    Upload
+    Upload,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -29,29 +29,29 @@ export function QuickActions() {
             description: "List a new product for sale",
             href: "/seller/products/new",
             icon: Plus,
-            variant: "default"
+            variant: "default",
         },
         {
             label: "View All Orders",
             description: "Manage customer orders",
             href: "/seller/orders",
             icon: ShoppingCart,
-            variant: "outline"
+            variant: "outline",
         },
         {
             label: "Product Inventory",
             description: "Manage your product catalog",
             href: "/seller/product-list",
             icon: Package,
-            variant: "outline"
+            variant: "outline",
         },
         {
             label: "Analytics Report",
             description: "View detailed performance metrics",
             href: "/seller/analytics",
             icon: BarChart3,
-            variant: "outline"
-        }
+            variant: "outline",
+        },
     ];
 
     const secondaryActions: QuickAction[] = [
@@ -60,29 +60,29 @@ export function QuickActions() {
             description: "View and manage customers",
             href: "/seller/customers",
             icon: Users,
-            variant: "secondary"
+            variant: "secondary",
         },
         {
             label: "Export Data",
             description: "Download reports and data",
             href: "/seller/exports",
             icon: Download,
-            variant: "secondary"
+            variant: "secondary",
         },
         {
             label: "Import Products",
             description: "Bulk upload products via CSV",
             href: "/seller/import",
             icon: Upload,
-            variant: "secondary"
+            variant: "secondary",
         },
         {
             label: "Settings",
             description: "Configure your store settings",
             href: "/seller/settings",
             icon: Settings,
-            variant: "secondary"
-        }
+            variant: "secondary",
+        },
     ];
 
     return (
@@ -134,7 +134,9 @@ export function QuickActions() {
                                     >
                                         <Icon className="h-4 w-4" />
                                         <div className="text-left">
-                                            <div className="font-medium text-sm">{action.label}</div>
+                                            <div className="font-medium text-sm">
+                                                {action.label}
+                                            </div>
                                             <div className="text-xs text-muted-foreground">
                                                 {action.description}
                                             </div>

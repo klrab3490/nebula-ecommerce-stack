@@ -1,29 +1,29 @@
 "use client";
 
-import React from 'react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { useAppContext } from '@/contexts/AppContext';
-import { Bundle, formatCurrency } from '@/lib/bundles';
-import { Package, Tag, Clock, Gift } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useAppContext } from "@/contexts/AppContext";
+import { Bundle, formatCurrency } from "@/lib/bundles";
+import { Package, Tag, Clock, Gift } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface BundleCardProps {
     bundle: Bundle;
 }
 
 export function BundleCard({ bundle }: BundleCardProps) {
-    const { currency = 'INR', addItem } = useAppContext();
+    const { currency = "INR", addItem } = useAppContext();
 
     const handleAddBundle = () => {
         // Add all required products to cart
-        bundle.BundleProduct.filter(bp => bp.isRequired).forEach(bundleProduct => {
+        bundle.BundleProduct.filter((bp) => bp.isRequired).forEach((bundleProduct) => {
             addItem({
                 id: bundleProduct.product.id,
                 name: bundleProduct.product.name,
                 price: bundleProduct.product.discountedPrice || bundleProduct.product.price,
-                image: bundleProduct.product.images[0] || '',
-                quantity: bundleProduct.quantity
+                image: bundleProduct.product.images[0] || "",
+                quantity: bundleProduct.quantity,
             });
         });
     };
@@ -35,11 +35,11 @@ export function BundleCard({ bundle }: BundleCardProps) {
 
     const calculateBundlePrice = () => {
         switch (bundle.discountType) {
-            case 'percentage':
-                return totalOriginalPrice - (totalOriginalPrice * bundle.discountValue / 100);
-            case 'fixed':
+            case "percentage":
+                return totalOriginalPrice - (totalOriginalPrice * bundle.discountValue) / 100;
+            case "fixed":
                 return Math.max(0, totalOriginalPrice - bundle.discountValue);
-            case 'buy_x_get_y':
+            case "buy_x_get_y":
                 // Simplified calculation for display
                 return totalOriginalPrice * 0.8; // Example: 20% off for buy X get Y
             default:
@@ -52,14 +52,14 @@ export function BundleCard({ bundle }: BundleCardProps) {
 
     const getDiscountText = () => {
         switch (bundle.discountType) {
-            case 'percentage':
+            case "percentage":
                 return `${bundle.discountValue}% OFF`;
-            case 'fixed':
+            case "fixed":
                 return `${formatCurrency(bundle.discountValue, currency)} OFF`;
-            case 'buy_x_get_y':
+            case "buy_x_get_y":
                 return `Buy ${bundle.minQuantity} Get ${bundle.discountValue} Free`;
             default:
-                return 'Special Offer';
+                return "Special Offer";
         }
     };
 
@@ -89,13 +89,24 @@ export function BundleCard({ bundle }: BundleCardProps) {
                     </div>
                     <div className="space-y-1">
                         {bundle.BundleProduct.map((bundleProduct) => (
-                            <div key={bundleProduct.id} className="flex items-center justify-between text-sm">
+                            <div
+                                key={bundleProduct.id}
+                                className="flex items-center justify-between text-sm"
+                            >
                                 <div className="flex items-center space-x-2">
-                                    <span className={bundleProduct.isRequired ? "font-medium" : "text-muted-foreground"}>
+                                    <span
+                                        className={
+                                            bundleProduct.isRequired
+                                                ? "font-medium"
+                                                : "text-muted-foreground"
+                                        }
+                                    >
                                         {bundleProduct.product.name}
                                     </span>
                                     {!bundleProduct.isRequired && (
-                                        <Badge variant="outline" className="text-xs">Optional</Badge>
+                                        <Badge variant="outline" className="text-xs">
+                                            Optional
+                                        </Badge>
                                     )}
                                 </div>
                                 <div className="text-right">
@@ -104,7 +115,9 @@ export function BundleCard({ bundle }: BundleCardProps) {
                                     </span>
                                     <div className="font-medium">
                                         {formatCurrency(
-                                            (bundleProduct.product.discountedPrice || bundleProduct.product.price) * bundleProduct.quantity,
+                                            (bundleProduct.product.discountedPrice ||
+                                                bundleProduct.product.price) *
+                                                bundleProduct.quantity,
                                             currency
                                         )}
                                     </div>
@@ -130,9 +143,7 @@ export function BundleCard({ bundle }: BundleCardProps) {
                     </div>
                     <div className="flex items-center justify-between text-sm text-green-600">
                         <span>You Save:</span>
-                        <span className="font-medium">
-                            {formatCurrency(savings, currency)}
-                        </span>
+                        <span className="font-medium">{formatCurrency(savings, currency)}</span>
                     </div>
                 </div>
 
@@ -140,9 +151,7 @@ export function BundleCard({ bundle }: BundleCardProps) {
                 {bundle.validUntil && (
                     <div className="flex items-center space-x-2 text-xs text-muted-foreground">
                         <Clock className="h-3 w-3" />
-                        <span>
-                            Valid until: {new Date(bundle.validUntil).toLocaleDateString()}
-                        </span>
+                        <span>Valid until: {new Date(bundle.validUntil).toLocaleDateString()}</span>
                     </div>
                 )}
 
@@ -160,7 +169,7 @@ export function BundleCard({ bundle }: BundleCardProps) {
                     className="w-full"
                     disabled={isExpired || !bundle.isActive}
                 >
-                    {isExpired ? 'Offer Expired' : 'Add Bundle to Cart'}
+                    {isExpired ? "Offer Expired" : "Add Bundle to Cart"}
                 </Button>
             </CardContent>
         </Card>
@@ -173,9 +182,9 @@ interface BundleListProps {
 }
 
 export function BundleList({ bundles, className }: BundleListProps) {
-    const activeBundles = bundles.filter(bundle =>
-        bundle.isActive &&
-        (!bundle.validUntil || new Date() <= new Date(bundle.validUntil))
+    const activeBundles = bundles.filter(
+        (bundle) =>
+            bundle.isActive && (!bundle.validUntil || new Date() <= new Date(bundle.validUntil))
     );
 
     if (activeBundles.length === 0) {

@@ -17,7 +17,10 @@ export default function CartPage() {
                 {/* Modern Background */}
                 <div className="absolute inset-0 bg-linear-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20"></div>
                 <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-300/10 rounded-full blur-3xl animate-pulse"></div>
-                <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+                <div
+                    className="absolute bottom-0 right-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse"
+                    style={{ animationDelay: "2s" }}
+                ></div>
 
                 <div className="container mx-auto px-4 py-12 relative z-10">
                     <div className="flex items-center gap-6 mb-12">
@@ -58,7 +61,7 @@ export default function CartPage() {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 
     return (
@@ -66,7 +69,10 @@ export default function CartPage() {
             {/* Modern Background */}
             <div className="absolute inset-0 bg-linear-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20"></div>
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-300/10 rounded-full blur-3xl animate-pulse"></div>
-            <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+            <div
+                className="absolute bottom-0 right-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse"
+                style={{ animationDelay: "2s" }}
+            ></div>
 
             <div className="container mx-auto px-4 py-12 relative z-10">
                 <div className="flex items-center gap-6 mb-12">
@@ -111,5 +117,5 @@ export default function CartPage() {
                 </div>
             </div>
         </div>
-    )
+    );
 }

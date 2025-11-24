@@ -7,11 +7,11 @@ import { createContext, useContext, useEffect, useState, useReducer, ReactNode }
 
 // -------- Types --------
 type Product = {
-    id: string
-    name: string
-    price: number
-    image: string
-    alt: string
+    id: string;
+    name: string;
+    price: number;
+    image: string;
+    alt: string;
 };
 
 type UserData = {
@@ -61,7 +61,7 @@ const calculateCartTotals = (items: CartItem[], bundles: Bundle[]) => {
         itemCount,
         appliedBundleDiscounts: bundleResult.appliedDiscounts,
         bundleDiscount: bundleResult.totalDiscount,
-        finalTotal: bundleResult.finalTotal
+        finalTotal: bundleResult.finalTotal,
     };
 };
 
@@ -87,7 +87,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
             return {
                 ...state,
                 items: newItems,
-                ...totals
+                ...totals,
             };
         }
 
@@ -97,7 +97,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
             return {
                 ...state,
                 items: newItems,
-                ...totals
+                ...totals,
             };
         }
 
@@ -114,7 +114,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
             return {
                 ...state,
                 items: newItems,
-                ...totals
+                ...totals,
             };
         }
 
@@ -126,7 +126,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
                 bundles: state.bundles,
                 appliedBundleDiscounts: [],
                 bundleDiscount: 0,
-                finalTotal: 0
+                finalTotal: 0,
             };
 
         case "LOAD_CART": {
@@ -134,7 +134,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
             return {
                 ...state,
                 items: action.payload,
-                ...totals
+                ...totals,
             };
         }
 
@@ -143,7 +143,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
             return {
                 ...state,
                 bundles: action.payload,
-                ...totals
+                ...totals,
             };
         }
 
@@ -151,7 +151,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
             const totals = calculateCartTotals(state.items, state.bundles);
             return {
                 ...state,
-                ...totals
+                ...totals,
             };
         }
 
@@ -286,13 +286,13 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     // Fetch bundles from API
     const fetchBundles = async () => {
         try {
-            const response = await fetch('/api/bundles');
+            const response = await fetch("/api/bundles");
             if (response.ok) {
                 const data = await response.json();
                 dispatch({ type: "SET_BUNDLES", payload: data.bundles || [] });
             }
         } catch (error) {
-            console.error('Error fetching bundles:', error);
+            console.error("Error fetching bundles:", error);
         }
     };
 

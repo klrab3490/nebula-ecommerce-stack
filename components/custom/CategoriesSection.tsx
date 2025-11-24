@@ -70,21 +70,24 @@ export default function CategoriesSection() {
                             style={{ animationDelay: `${index * 150}ms` }}
                         >
                             {/* Glow Effect */}
-                            <div className={`absolute -inset-0.5 bg-linear-to-r ${palette.gradient} rounded-3xl blur opacity-0 group-hover:opacity-40 transition-all duration-500 ${palette.glowClass}`}></div>
+                            <div
+                                className={`absolute -inset-0.5 bg-linear-to-r ${palette.gradient} rounded-3xl blur opacity-0 group-hover:opacity-40 transition-all duration-500 ${palette.glowClass}`}
+                            ></div>
 
                             {/* Main Card */}
                             <div className="relative bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-3xl p-8 text-center shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-white/30 dark:border-zinc-700/50 overflow-hidden group-hover:bg-white/90 dark:group-hover:bg-zinc-900/90">
-
                                 {/* Shine Effect */}
                                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
 
                                 {/* Icon Container with Enhanced Effects */}
                                 <div className="relative mb-6">
-                                    <div className={`absolute inset-0 bg-linear-to-br ${palette.gradient} rounded-2xl blur-lg opacity-0 group-hover:opacity-30 transition-all duration-500 animate-glow`}></div>
-                                    <div className={`relative bg-linear-to-br ${palette.gradient} rounded-2xl p-6 shadow-lg group-hover:shadow-xl transition-all duration-500 animate-float`}>
-                                        <IconComponent
-                                            className="h-12 w-12 text-white mx-auto drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
-                                        />
+                                    <div
+                                        className={`absolute inset-0 bg-linear-to-br ${palette.gradient} rounded-2xl blur-lg opacity-0 group-hover:opacity-30 transition-all duration-500 animate-glow`}
+                                    ></div>
+                                    <div
+                                        className={`relative bg-linear-to-br ${palette.gradient} rounded-2xl p-6 shadow-lg group-hover:shadow-xl transition-all duration-500 animate-float`}
+                                    >
+                                        <IconComponent className="h-12 w-12 text-white mx-auto drop-shadow-lg group-hover:scale-110 transition-transform duration-300" />
                                     </div>
                                     {/* Emoji Overlay */}
                                     <div className="absolute -top-2 -right-2 text-2xl group-hover:scale-125 transition-transform duration-300">
@@ -105,8 +108,18 @@ export default function CategoriesSection() {
                                 {/* Interactive Arrow */}
                                 <div className="mt-4 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 delay-100">
                                     <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-linear-to-r from-purple-500 to-pink-500 text-white">
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                        <svg
+                                            className="w-4 h-4"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M9 5l7 7-7 7"
+                                            />
                                         </svg>
                                     </div>
                                 </div>

@@ -2,10 +2,10 @@
 // or
 /** @jest-config-loader esbuild-register */
 
-import type { Config } from 'jest';
+import type { Config } from "jest";
 
 const config: Config = {
-  verbose: true,
+    verbose: true,
 };
 
 export default config;

@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function AddAddressPage() {
     const router = useRouter();
@@ -18,53 +19,10 @@ export default function AddAddressPage() {
     });
 
     const [loading, setLoading] = useState(false);
-    const searchParams = useSearchParams();
-    const editId = searchParams?.get("edit");
-    const [initialising, setInitialising] = useState(Boolean(editId));
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         setForm({ ...form, [e.target.name]: e.target.value });
     }
-
-    // If ?edit=<id> is present, load the address and prefill the form
-    useEffect(() => {
-        async function loadForEdit() {
-            if (!editId) return setInitialising(false);
-            try {
-                const res = await fetch("/api/user/address", { cache: "no-store" });
-                if (!res.ok) throw new Error("Failed to fetch addresses");
-                const data = await res.json();
-                const addresses = data?.addresses ?? [];
-                const toEdit = addresses.find((a: any) => a.id === editId);
-                if (!toEdit) {
-                    alert("Address to edit not found");
-                    setInitialising(false);
-                    return;
-                }
-
-                // Try to split street into line1/line2 (simple split on first comma)
-                const street = toEdit.street || "";
-                const [line1, ...rest] = street.split(",");
-                const line2 = rest.join(",").trim();
-
-                setForm({
-                    name: form.name,
-                    phone: toEdit.phone ?? "",
-                    pincode: toEdit.zipCode ?? "",
-                    addressLine1: (line1 || "").trim(),
-                    addressLine2: line2 || "",
-                    city: toEdit.city ?? "",
-                    state: toEdit.state ?? "",
-                });
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setInitialising(false);
-            }
-        }
-        loadForEdit();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [editId]);
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -85,8 +43,8 @@ export default function AddAddressPage() {
         setLoading(true);
 
         try {
-            // Map our form fields to the API's expected address shape
             const payload = {
+                name: form.name,
                 street: form.addressLine1 + (form.addressLine2 ? ", " + form.addressLine2 : ""),
                 city: form.city,
                 state: form.state,
@@ -95,26 +53,15 @@ export default function AddAddressPage() {
                 phone: form.phone,
             };
 
-            let res: Response;
-            if (editId) {
-                // Update existing address
-                res = await fetch("/api/user/address", {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ id: editId, ...payload }),
-                });
-            } else {
-                // Create new address
-                res = await fetch("/api/user/address", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload),
-                });
-            }
+            const res = await fetch("/api/user/address", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
 
             if (res.ok) {
                 alert("Address saved!");
-                router.push("/checkout"); // return to checkout
+                router.push("/checkout");
             } else {
                 const errText = await res.text();
                 console.error("Save failed:", errText);
@@ -129,7 +76,7 @@ export default function AddAddressPage() {
     }
 
     return (
-        <div className="max-w-xl mx-auto py-12">
+        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
             <h1 className="text-2xl font-semibold mb-6">Add Delivery Address</h1>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -189,13 +136,9 @@ export default function AddAddressPage() {
                     className="w-full"
                 />
 
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="btn btn-primary w-full"
-                >
+                <Button type="submit" disabled={loading} className="w-full">
                     {loading ? "Saving..." : "Save Address"}
-                </button>
+                </Button>
             </form>
         </div>
     );

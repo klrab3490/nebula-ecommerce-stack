@@ -9,15 +9,15 @@ export default function CheckoutPage() {
     const { cart } = useAppContext();
     const [finalTotal, setFinalTotal] = useState<number>(() => {
         if (typeof window === "undefined") return 0;
-        const v = localStorage.getItem('finalTotal');
+        const v = localStorage.getItem("finalTotal");
         return v ? parseFloat(v) : 0;
     });
     useEffect(() => {
         if (typeof window === "undefined") return;
-        const v = localStorage.getItem('finalTotal');
+        const v = localStorage.getItem("finalTotal");
         setFinalTotal(v ? parseFloat(v) : 0);
 
-        if (cart.itemCount === 0) {
+        if (cart.itemCount !== 0) {
             setFinalTotal(0);
             router.push("/cart");
         }
@@ -60,7 +60,7 @@ export default function CheckoutPage() {
                 // Prefer the address marked as default, otherwise pick the first
                 const chosen = addresses.find((a) => a?.isDefault) || addresses[0] || null;
                 setAddress(chosen);
-                setSelectedAddressId(chosen?.id ?? (addresses[0]?.id ?? null));
+                setSelectedAddressId(chosen?.id ?? addresses[0]?.id ?? null);
             } catch (err) {
                 console.error("Error fetching addresses:", err);
                 setAddress(null);
@@ -124,7 +124,10 @@ export default function CheckoutPage() {
             }
 
             const options = {
-                key: data.key || (window as any).RAZORPAY_KEY || (process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ?? ""),
+                key:
+                    data.key ||
+                    (window as any).RAZORPAY_KEY ||
+                    (process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ?? ""),
                 amount: data.amount,
                 currency: data.currency,
                 name: "Nebula Shop",
@@ -147,10 +150,11 @@ export default function CheckoutPage() {
                 return;
             }
             const rz = new RazorpayClass(options);
-            rz.on && rz.on("payment.failed", (err: any) => {
-                console.error("payment.failed", err);
-                alert("Payment failed: " + (err?.error?.description || "Unknown"));
-            });
+            rz.on &&
+                rz.on("payment.failed", (err: any) => {
+                    console.error("payment.failed", err);
+                    alert("Payment failed: " + (err?.error?.description || "Unknown"));
+                });
             rz.open();
         } catch (err) {
             console.error(err);
@@ -161,18 +165,26 @@ export default function CheckoutPage() {
 
     return (
         <div className="max-w-3xl mx-auto py-12">
-            <h1 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-100">Checkout</h1>
+            <h1 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-100">
+                Checkout
+            </h1>
 
             <div className="mb-6">
-                <p className="text-gray-700 dark:text-gray-300"><strong>Items:</strong> {cart.itemCount}</p>
-                <p className="text-gray-700 dark:text-gray-300"><strong>Total:</strong> ₹{finalTotal}</p>
+                <p className="text-gray-700 dark:text-gray-300">
+                    <strong>Items:</strong> {cart.itemCount}
+                </p>
+                <p className="text-gray-700 dark:text-gray-300">
+                    <strong>Total:</strong> ₹{finalTotal}
+                </p>
 
                 <div className="mt-4 p-4 border rounded-lg bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200">
                     <h3 className="font-semibold mb-2">Delivery Address</h3>
 
                     {addresses.length > 0 ? (
                         <div className="space-y-3">
-                            <label className="block text-sm text-gray-700 dark:text-gray-300">Select address</label>
+                            <label className="block text-sm text-gray-700 dark:text-gray-300">
+                                Select address
+                            </label>
                             <select
                                 value={selectedAddressId ?? ""}
                                 onChange={(e) => {
@@ -185,7 +197,7 @@ export default function CheckoutPage() {
                             >
                                 {addresses.map((a) => (
                                     <option key={a.id} value={a.id}>
-                                        {`${a.street}, ${a.city} ${a.zipCode}`}
+                                        {`${a.name}`}
                                     </option>
                                 ))}
                             </select>
@@ -194,31 +206,67 @@ export default function CheckoutPage() {
                                 <form className="space-y-3">
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                         <div>
-                                            <label className="block text-xs text-gray-600 dark:text-gray-400">Street</label>
-                                            <input readOnly value={address?.street ?? ""} className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
+                                            <label className="block text-xs text-gray-600 dark:text-gray-400">
+                                                Street
+                                            </label>
+                                            <input
+                                                readOnly
+                                                value={address?.street ?? ""}
+                                                className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                                            />
                                         </div>
                                         <div>
-                                            <label className="block text-xs text-gray-600 dark:text-gray-400">City</label>
-                                            <input readOnly value={address?.city ?? ""} className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
+                                            <label className="block text-xs text-gray-600 dark:text-gray-400">
+                                                City
+                                            </label>
+                                            <input
+                                                readOnly
+                                                value={address?.city ?? ""}
+                                                className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                                            />
                                         </div>
                                         <div>
-                                            <label className="block text-xs text-gray-600 dark:text-gray-400">State</label>
-                                            <input readOnly value={address?.state ?? ""} className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
+                                            <label className="block text-xs text-gray-600 dark:text-gray-400">
+                                                State
+                                            </label>
+                                            <input
+                                                readOnly
+                                                value={address?.state ?? ""}
+                                                className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                                            />
                                         </div>
                                         <div>
-                                            <label className="block text-xs text-gray-600 dark:text-gray-400">Pincode</label>
-                                            <input readOnly value={address?.zipCode ?? ""} className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
+                                            <label className="block text-xs text-gray-600 dark:text-gray-400">
+                                                Pincode
+                                            </label>
+                                            <input
+                                                readOnly
+                                                value={address?.zipCode ?? ""}
+                                                className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                                            />
                                         </div>
                                     </div>
 
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                         <div>
-                                            <label className="block text-xs text-gray-600 dark:text-gray-400">Country</label>
-                                            <input readOnly value={address?.country ?? ""} className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
+                                            <label className="block text-xs text-gray-600 dark:text-gray-400">
+                                                Country
+                                            </label>
+                                            <input
+                                                readOnly
+                                                value={address?.country ?? ""}
+                                                className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                                            />
                                         </div>
                                         <div>
-                                            <label className="block text-xs text-gray-600 dark:text-gray-400">Phone</label>
-                                            <input readOnly value={address?.phone ?? ""} className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
+                                            <label className="block text-xs text-gray-600 dark:text-gray-400">
+                                                Phone
+                                            </label>
+                                            <input
+                                                readOnly
+                                                value={address?.phone ?? ""}
+                                                className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                                            />
                                         </div>
                                     </div>
                                 </form>
@@ -227,13 +275,13 @@ export default function CheckoutPage() {
                             <div className="mt-4">
                                 <Button
                                     className="btn mr-2"
-                                    onClick={() => router.push("/add-address")}
+                                    onClick={() => router.push("/account/address/add")}
                                 >
                                     Add Address
                                 </Button>
                                 <Button
                                     className="btn"
-                                    onClick={() => router.push("/account/addresses")}
+                                    onClick={() => router.push("/account/address")}
                                 >
                                     Manage Addresses
                                 </Button>
@@ -242,16 +290,18 @@ export default function CheckoutPage() {
                     ) : (
                         <div>
                             <p className="text-red-600 dark:text-red-400">No address added.</p>
-                            <Button className="btn mt-2" onClick={() => router.push("/add-address")}>Add Address</Button>
+                            <Button
+                                className="btn mt-2"
+                                onClick={() => router.push("/add-address")}
+                            >
+                                Add Address
+                            </Button>
                         </div>
                     )}
                 </div>
             </div>
 
-            <Button
-                className="btn btn-primary"
-                onClick={handlePayNow}
-            >
+            <Button className="btn btn-primary" onClick={handlePayNow}>
                 Make Payment INR {finalTotal}
             </Button>
         </div>

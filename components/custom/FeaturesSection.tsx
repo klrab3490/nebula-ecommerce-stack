@@ -19,7 +19,7 @@ const features = [
         title: "Free Gifts",
         description: "Free Gift Wrapping with Notes",
     },
-]
+];
 
 export default function FeaturesSection() {
     return (
@@ -28,9 +28,13 @@ export default function FeaturesSection() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {features.map((feature, index) => (
                         <div key={index} className="flex items-center gap-4">
-                            <div className="text-purple-500 text-3xl bg-purple-50 p-3 rounded-lg">{feature.icon}</div>
+                            <div className="text-purple-500 text-3xl bg-purple-50 p-3 rounded-lg">
+                                {feature.icon}
+                            </div>
                             <div>
-                                <h3 className="font-semibold text-gray-800 mb-1">{feature.title}</h3>
+                                <h3 className="font-semibold text-gray-800 mb-1">
+                                    {feature.title}
+                                </h3>
                                 <p className="text-gray-600 text-sm">{feature.description}</p>
                             </div>
                         </div>
@@ -38,5 +42,5 @@ export default function FeaturesSection() {
                 </div>
             </div>
         </div>
-    )
+    );
 }

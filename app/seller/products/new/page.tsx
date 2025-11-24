@@ -22,13 +22,7 @@ interface ProductFormData {
     featured: boolean; // Whether product is featured
 }
 
-const PREDEFINED_CATEGORIES = [
-    "Hair Oils",
-    "Shampoo",
-    "Indigo Powder",
-    "Eyebrow Oil",
-    "Henna",
-];
+const PREDEFINED_CATEGORIES = ["Hair Oils", "Shampoo", "Indigo Powder", "Eyebrow Oil", "Henna"];
 
 export default function AddProductPage() {
     const router = useRouter();
@@ -64,11 +58,7 @@ export default function AddProductPage() {
             newErrors.description = "Product description is required";
         }
 
-        if (
-            !formData.price ||
-            isNaN(Number(formData.price)) ||
-            Number(formData.price) <= 0
-        ) {
+        if (!formData.price || isNaN(Number(formData.price)) || Number(formData.price) <= 0) {
             newErrors.price = "Valid price is required";
         }
 
@@ -82,8 +72,7 @@ export default function AddProductPage() {
                 newErrors.discountedPrice =
                     "Valid discounted price is required for featured products";
             } else if (Number(formData.discountedPrice) >= Number(formData.price)) {
-                newErrors.discountedPrice =
-                    "Discounted price must be less than the original price";
+                newErrors.discountedPrice = "Discounted price must be less than the original price";
             }
         }
 
@@ -91,11 +80,7 @@ export default function AddProductPage() {
             newErrors.sku = "SKU is required";
         }
 
-        if (
-            !formData.stock ||
-            isNaN(Number(formData.stock)) ||
-            Number(formData.stock) < 0
-        ) {
+        if (!formData.stock || isNaN(Number(formData.stock)) || Number(formData.stock) < 0) {
             newErrors.stock = "Valid stock quantity is required";
         }
 
@@ -106,8 +91,7 @@ export default function AddProductPage() {
         // Validate FAQs: ensure any added FAQ has both question and answer
         formData.faqs.forEach((faq, idx) => {
             if (!faq.question.trim() || !faq.answer.trim()) {
-                newErrors[`faq_${idx}`] = `FAQ ${idx + 1
-                    } requires both question and answer`;
+                newErrors[`faq_${idx}`] = `FAQ ${idx + 1} requires both question and answer`;
             }
         });
 
@@ -153,10 +137,7 @@ export default function AddProductPage() {
         if (!question?.trim() || !answer?.trim()) return;
         setFormData((prev) => ({
             ...prev,
-            faqs: [
-                ...prev.faqs,
-                { question: question.trim(), answer: answer.trim() },
-            ],
+            faqs: [...prev.faqs, { question: question.trim(), answer: answer.trim() }],
         }));
         setNewFAQQuestion("");
         setNewFAQAnswer("");
@@ -233,15 +214,12 @@ export default function AddProductPage() {
                         Add New Product
                     </h1>
                     <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                        Create a compelling product listing that showcases your items and
-                        attracts customers to your store
+                        Create a compelling product listing that showcases your items and attracts
+                        customers to your store
                     </p>
                 </div>
 
-                <form
-                    onSubmit={handleSubmit}
-                    className="space-y-8"
-                >
+                <form onSubmit={handleSubmit} className="space-y-8">
                     {/* Basic Information */}
                     <Card className="border-0 shadow-lg bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm">
                         <CardHeader className="pb-6">
@@ -271,10 +249,11 @@ export default function AddProductPage() {
                                         placeholder="e.g., Premium Wireless Headphones"
                                         value={formData.name}
                                         onChange={(e) => handleInputChange("name", e.target.value)}
-                                        className={`h-12 text-base transition-all duration-200 ${errors.name
+                                        className={`h-12 text-base transition-all duration-200 ${
+                                            errors.name
                                                 ? "border-red-500 focus:border-red-500 focus:ring-red-200"
                                                 : "border-slate-200 focus:border-primary focus:ring-primary/20 hover:border-slate-300"
-                                            }`}
+                                        }`}
                                     />
                                     {errors.name && (
                                         <p className="text-sm text-red-500 flex items-center gap-1">
@@ -296,10 +275,11 @@ export default function AddProductPage() {
                                         placeholder="e.g., PWH-001"
                                         value={formData.sku}
                                         onChange={(e) => handleInputChange("sku", e.target.value)}
-                                        className={`h-12 text-base transition-all duration-200 ${errors.sku
+                                        className={`h-12 text-base transition-all duration-200 ${
+                                            errors.sku
                                                 ? "border-red-500 focus:border-red-500 focus:ring-red-200"
                                                 : "border-slate-200 focus:border-primary focus:ring-primary/20 hover:border-slate-300"
-                                            }`}
+                                        }`}
                                     />
                                     {errors.sku && (
                                         <p className="text-sm text-red-500 flex items-center gap-1">
@@ -324,10 +304,11 @@ export default function AddProductPage() {
                                     onChange={(e) =>
                                         handleInputChange("description", e.target.value)
                                     }
-                                    className={`flex min-h-[140px] w-full rounded-lg border bg-white dark:bg-slate-800 px-4 py-3 text-base shadow-sm placeholder:text-slate-400 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none ${errors.description
+                                    className={`flex min-h-[140px] w-full rounded-lg border bg-white dark:bg-slate-800 px-4 py-3 text-base shadow-sm placeholder:text-slate-400 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none ${
+                                        errors.description
                                             ? "border-red-500 focus-visible:border-red-500 focus-visible:ring-red-200"
                                             : "border-slate-200 focus-visible:border-primary focus-visible:ring-primary/20 hover:border-slate-300"
-                                        }`}
+                                    }`}
                                     rows={6}
                                 />
                                 <div className="flex justify-between items-center">
@@ -368,8 +349,9 @@ export default function AddProductPage() {
                         </CardHeader>
                         <CardContent>
                             <div
-                                className={`grid grid-cols-1 gap-8 ${formData.featured ? "md:grid-cols-3" : "md:grid-cols-2"
-                                    }`}
+                                className={`grid grid-cols-1 gap-8 ${
+                                    formData.featured ? "md:grid-cols-3" : "md:grid-cols-2"
+                                }`}
                             >
                                 <div className="space-y-3">
                                     <label
@@ -393,10 +375,11 @@ export default function AddProductPage() {
                                             onChange={(e) =>
                                                 handleInputChange("price", e.target.value)
                                             }
-                                            className={`h-12 pl-8 text-base transition-all duration-200 ${errors.price
+                                            className={`h-12 pl-8 text-base transition-all duration-200 ${
+                                                errors.price
                                                     ? "border-red-500 focus:border-red-500 focus:ring-red-200"
                                                     : "border-slate-200 focus:border-primary focus:ring-primary/20 hover:border-slate-300"
-                                                }`}
+                                            }`}
                                         />
                                     </div>
                                     {errors.price && (
@@ -428,12 +411,16 @@ export default function AddProductPage() {
                                                 placeholder="0.00"
                                                 value={formData.discountedPrice}
                                                 onChange={(e) =>
-                                                    handleInputChange("discountedPrice", e.target.value)
+                                                    handleInputChange(
+                                                        "discountedPrice",
+                                                        e.target.value
+                                                    )
                                                 }
-                                                className={`h-12 pl-8 text-base transition-all duration-200 ${errors.discountedPrice
+                                                className={`h-12 pl-8 text-base transition-all duration-200 ${
+                                                    errors.discountedPrice
                                                         ? "border-red-500 focus:border-red-500 focus:ring-red-200"
                                                         : "border-slate-200 focus:border-primary focus:ring-primary/20 hover:border-slate-300"
-                                                    }`}
+                                                }`}
                                             />
                                         </div>
                                         {errors.discountedPrice && (
@@ -445,14 +432,14 @@ export default function AddProductPage() {
                                         {formData.price &&
                                             formData.discountedPrice &&
                                             Number(formData.discountedPrice) <
-                                            Number(formData.price) && (
+                                                Number(formData.price) && (
                                                 <p className="text-xs text-green-600 flex items-center gap-1">
                                                     <span>💰</span>
                                                     {Math.round(
                                                         ((Number(formData.price) -
                                                             Number(formData.discountedPrice)) /
                                                             Number(formData.price)) *
-                                                        100
+                                                            100
                                                     )}
                                                     % discount
                                                 </p>
@@ -474,10 +461,11 @@ export default function AddProductPage() {
                                         placeholder="Available quantity"
                                         value={formData.stock}
                                         onChange={(e) => handleInputChange("stock", e.target.value)}
-                                        className={`h-12 text-base transition-all duration-200 ${errors.stock
+                                        className={`h-12 text-base transition-all duration-200 ${
+                                            errors.stock
                                                 ? "border-red-500 focus:border-red-500 focus:ring-red-200"
                                                 : "border-slate-200 focus:border-primary focus:ring-primary/20 hover:border-slate-300"
-                                            }`}
+                                        }`}
                                     />
                                     {errors.stock && (
                                         <p className="text-sm text-red-500 flex items-center gap-1">
@@ -518,14 +506,18 @@ export default function AddProductPage() {
                                                     featured: !prev.featured,
                                                 }))
                                             }
-                                            className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${formData.featured
+                                            className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                                                formData.featured
                                                     ? "bg-primary"
                                                     : "bg-slate-200 dark:bg-slate-700"
-                                                }`}
+                                            }`}
                                         >
                                             <span
-                                                className={`inline-block h-6 w-6 transform rounded-full bg-white shadow-lg transition-transform duration-200 ${formData.featured ? "translate-x-7" : "translate-x-1"
-                                                    }`}
+                                                className={`inline-block h-6 w-6 transform rounded-full bg-white shadow-lg transition-transform duration-200 ${
+                                                    formData.featured
+                                                        ? "translate-x-7"
+                                                        : "translate-x-1"
+                                                }`}
                                             />
                                         </button>
                                     </div>
@@ -556,8 +548,7 @@ export default function AddProductPage() {
                                 <UploadButton
                                     endpoint="imageUploader"
                                     appearance={{
-                                        button:
-                                            "ut-upload-button relative flex items-center justify-center gap-2 rounded-lg bg-linear-to-r from-indigo-500 to-purple-500 text-white font-medium px-4 py-2.5 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200",
+                                        button: "ut-upload-button relative flex items-center justify-center gap-2 rounded-lg bg-linear-to-r from-indigo-500 to-purple-500 text-white font-medium px-4 py-2.5 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200",
                                         container: "flex justify-center",
                                         allowedContent: "text-xs text-gray-400 mt-2",
                                     }}
@@ -613,7 +604,9 @@ export default function AddProductPage() {
                                             >
                                                 <div className="flex items-center gap-4 flex-1 min-w-0">
                                                     <div className="w-12 h-12 bg-slate-200 dark:bg-slate-700 rounded-lg flex items-center justify-center shrink-0">
-                                                        <span className="text-slate-500 text-xl">🖼️</span>
+                                                        <span className="text-slate-500 text-xl">
+                                                            🖼️
+                                                        </span>
                                                     </div>
                                                     <div className="flex-1 min-w-0">
                                                         <p className="text-sm font-medium text-slate-900 dark:text-slate-100 truncate">
@@ -685,10 +678,11 @@ export default function AddProductPage() {
                                             type="button"
                                             onClick={() => addCategory(category)}
                                             disabled={formData.categories.includes(category)}
-                                            className={`p-3 text-left rounded-lg border-2 transition-all duration-200 ${formData.categories.includes(category)
+                                            className={`p-3 text-left rounded-lg border-2 transition-all duration-200 ${
+                                                formData.categories.includes(category)
                                                     ? "border-primary bg-primary/10 text-primary cursor-not-allowed"
                                                     : "border-slate-200 dark:border-slate-700 hover:border-primary hover:bg-primary/5 text-slate-700 dark:text-slate-300"
-                                                }`}
+                                            }`}
                                         >
                                             <div className="font-medium text-sm">{category}</div>
                                             <div className="text-xs text-slate-500 mt-1">
@@ -713,8 +707,8 @@ export default function AddProductPage() {
                                         onKeyPress={(e) =>
                                             e.key === "Enter" &&
                                             (e.preventDefault(),
-                                                addCategory(newCategory),
-                                                setNewCategory(""))
+                                            addCategory(newCategory),
+                                            setNewCategory(""))
                                         }
                                         className="h-12 text-base transition-all duration-200 border-slate-200 focus:border-primary focus:ring-primary/20 hover:border-slate-300"
                                     />
@@ -822,7 +816,8 @@ export default function AddProductPage() {
                                         onChange={(e) => setNewFAQAnswer(e.target.value)}
                                         onKeyPress={(e) =>
                                             e.key === "Enter" &&
-                                            (e.preventDefault(), addFAQ(newFAQQuestion, newFAQAnswer))
+                                            (e.preventDefault(),
+                                            addFAQ(newFAQQuestion, newFAQAnswer))
                                         }
                                         className="h-12 text-base transition-all duration-200 border-slate-200 focus:border-primary focus:ring-primary/20 hover:border-slate-300"
                                     />

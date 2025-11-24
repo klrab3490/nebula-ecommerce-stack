@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { requireAuth, validateSessionMatchesUserId } from '@/lib/authSeller';
+import { requireAuth, validateSessionMatchesUserId } from "@/lib/authSeller";
 
 export async function POST(req: NextRequest) {
     try {
@@ -14,7 +14,10 @@ export async function POST(req: NextRequest) {
         // Ensure the session user matches the clerk id being synced
         const sessionValid = await validateSessionMatchesUserId(id);
         if (!sessionValid) {
-            return NextResponse.json({ success: false, error: 'Session mismatch' }, { status: 401 });
+            return NextResponse.json(
+                { success: false, error: "Session mismatch" },
+                { status: 401 }
+            );
         }
         // Check if user exists
         const existing = await prisma.user.findMany({
@@ -33,10 +36,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error("API error syncing user:", error);
-        return NextResponse.json(
-            { success: false, error: error?.toString() },
-            { status: 500 }
-        );
+        return NextResponse.json({ success: false, error: error?.toString() }, { status: 500 });
     }
 }
 
@@ -46,9 +46,6 @@ export async function GET() {
         return NextResponse.json({ users });
     } catch (error) {
         console.error("API error fetching users:", error);
-        return NextResponse.json(
-            { success: false, error: error?.toString() },
-            { status: 500 }
-        );
+        return NextResponse.json({ success: false, error: error?.toString() }, { status: 500 });
     }
 }

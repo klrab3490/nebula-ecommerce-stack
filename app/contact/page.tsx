@@ -18,7 +18,7 @@ export default function ContactUs() {
         console.log("Contact form submitted", data);
 
         // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         setSubmitted(true);
         setIsSubmitting(false);
@@ -32,29 +32,29 @@ export default function ContactUs() {
             title: "Email Us",
             content: "support@nebula.com",
             description: "Send us an email anytime",
-            gradient: "from-blue-500 to-indigo-500"
+            gradient: "from-blue-500 to-indigo-500",
         },
         {
             icon: <Phone className="w-6 h-6" />,
             title: "Call Us",
             content: "+91 98765 43210",
             description: "Mon-Fri from 8am to 5pm",
-            gradient: "from-green-500 to-emerald-500"
+            gradient: "from-green-500 to-emerald-500",
         },
         {
             icon: <MapPin className="w-6 h-6" />,
             title: "Visit Us",
             content: "Kerala, India",
             description: "Come say hello",
-            gradient: "from-purple-500 to-pink-500"
+            gradient: "from-purple-500 to-pink-500",
         },
         {
             icon: <Clock className="w-6 h-6" />,
             title: "Response Time",
             content: "1-2 Business Days",
             description: "We're here to help",
-            gradient: "from-orange-500 to-red-500"
-        }
+            gradient: "from-orange-500 to-red-500",
+        },
     ];
 
     return (
@@ -62,7 +62,10 @@ export default function ContactUs() {
             {/* Modern Background */}
             <div className="absolute inset-0 bg-linear-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20"></div>
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-300/10 rounded-full blur-3xl animate-pulse"></div>
-            <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+            <div
+                className="absolute bottom-0 right-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse"
+                style={{ animationDelay: "2s" }}
+            ></div>
 
             <div className="relative z-10">
                 {/* Hero Section */}
@@ -79,7 +82,8 @@ export default function ContactUs() {
                                 💬 Get In Touch
                             </h1>
                             <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium">
-                                We&#39;d love to hear from you. Send us a message and we&#39;ll respond as soon as possible.
+                                We&#39;d love to hear from you. Send us a message and we&#39;ll
+                                respond as soon as possible.
                             </p>
                             <div className="w-24 h-1 bg-linear-to-r from-purple-500 to-pink-500 mx-auto mt-6 rounded-full"></div>
                         </div>
@@ -93,7 +97,9 @@ export default function ContactUs() {
                                     style={{ animationDelay: `${index * 100}ms` }}
                                 >
                                     {/* Glow Effect */}
-                                    <div className={`absolute -inset-0.5 bg-linear-to-r ${info.gradient} rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-500`}></div>
+                                    <div
+                                        className={`absolute -inset-0.5 bg-linear-to-r ${info.gradient} rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-500`}
+                                    ></div>
 
                                     {/* Main Card */}
                                     <div className="relative bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-2xl p-6 text-center shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-white/30 dark:border-zinc-700/50 group-hover:bg-white/90 dark:group-hover:bg-zinc-900/90">
@@ -102,16 +108,24 @@ export default function ContactUs() {
 
                                         <div className="relative z-10">
                                             <div className="relative inline-flex items-center justify-center w-16 h-16 mb-4">
-                                                <div className={`absolute -inset-2 bg-linear-to-r ${info.gradient} rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500`}></div>
-                                                <div className={`relative bg-linear-to-r ${info.gradient} rounded-2xl p-4 text-white shadow-lg`}>
+                                                <div
+                                                    className={`absolute -inset-2 bg-linear-to-r ${info.gradient} rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500`}
+                                                ></div>
+                                                <div
+                                                    className={`relative bg-linear-to-r ${info.gradient} rounded-2xl p-4 text-white shadow-lg`}
+                                                >
                                                     {info.icon}
                                                 </div>
                                             </div>
                                             <h3 className="font-bold text-lg mb-2 group-hover:bg-linear-to-r group-hover:from-purple-600 group-hover:to-pink-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
                                                 {info.title}
                                             </h3>
-                                            <p className="font-semibold text-foreground mb-1">{info.content}</p>
-                                            <p className="text-sm text-muted-foreground">{info.description}</p>
+                                            <p className="font-semibold text-foreground mb-1">
+                                                {info.content}
+                                            </p>
+                                            <p className="text-sm text-muted-foreground">
+                                                {info.description}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -125,7 +139,10 @@ export default function ContactUs() {
                                 <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 rounded-3xl blur opacity-20 animate-pulse"></div>
 
                                 {/* Main Form Card */}
-                                <form onSubmit={onSubmit} className="relative bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl rounded-3xl p-8 md:p-12 shadow-2xl border border-white/30 dark:border-zinc-700/50 space-y-8">
+                                <form
+                                    onSubmit={onSubmit}
+                                    className="relative bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl rounded-3xl p-8 md:p-12 shadow-2xl border border-white/30 dark:border-zinc-700/50 space-y-8"
+                                >
                                     {/* Shine Effect */}
                                     <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent rounded-3xl opacity-50"></div>
 
@@ -134,12 +151,20 @@ export default function ContactUs() {
                                             <h2 className="text-2xl md:text-3xl font-black mb-2 bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                                                 ✉️ Send us a Message
                                             </h2>
-                                            <p className="text-muted-foreground">Fill out the form below and we&#39;ll get back to you soon</p>
+                                            <p className="text-muted-foreground">
+                                                Fill out the form below and we&#39;ll get back to
+                                                you soon
+                                            </p>
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                             <div className="space-y-2">
-                                                <label htmlFor="name" className="text-sm font-bold text-foreground">Full Name</label>
+                                                <label
+                                                    htmlFor="name"
+                                                    className="text-sm font-bold text-foreground"
+                                                >
+                                                    Full Name
+                                                </label>
                                                 <div className="relative group">
                                                     <Input
                                                         id="name"
@@ -151,7 +176,12 @@ export default function ContactUs() {
                                                 </div>
                                             </div>
                                             <div className="space-y-2">
-                                                <label htmlFor="email" className="text-sm font-bold text-foreground">Email Address</label>
+                                                <label
+                                                    htmlFor="email"
+                                                    className="text-sm font-bold text-foreground"
+                                                >
+                                                    Email Address
+                                                </label>
                                                 <div className="relative group">
                                                     <Input
                                                         id="email"
@@ -166,7 +196,12 @@ export default function ContactUs() {
                                         </div>
 
                                         <div className="space-y-2 mb-6">
-                                            <label htmlFor="subject" className="text-sm font-bold text-foreground">Subject</label>
+                                            <label
+                                                htmlFor="subject"
+                                                className="text-sm font-bold text-foreground"
+                                            >
+                                                Subject
+                                            </label>
                                             <div className="relative group">
                                                 <Input
                                                     id="subject"
@@ -179,7 +214,12 @@ export default function ContactUs() {
                                         </div>
 
                                         <div className="space-y-2 mb-8">
-                                            <label htmlFor="message" className="text-sm font-bold text-foreground">Your Message</label>
+                                            <label
+                                                htmlFor="message"
+                                                className="text-sm font-bold text-foreground"
+                                            >
+                                                Your Message
+                                            </label>
                                             <div className="relative group">
                                                 <textarea
                                                     id="message"
@@ -196,12 +236,17 @@ export default function ContactUs() {
                                             {submitted ? (
                                                 <div className="flex items-center gap-2 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 px-4 py-2 rounded-full">
                                                     <CheckCircle className="w-5 h-5" />
-                                                    <span className="font-semibold">Message sent successfully! We&#39;ll be in touch soon.</span>
+                                                    <span className="font-semibold">
+                                                        Message sent successfully! We&#39;ll be in
+                                                        touch soon.
+                                                    </span>
                                                 </div>
                                             ) : (
                                                 <div className="flex items-center gap-2 text-muted-foreground">
                                                     <Clock className="w-4 h-4" />
-                                                    <span className="text-sm font-medium">We usually respond within 1–2 business days</span>
+                                                    <span className="text-sm font-medium">
+                                                        We usually respond within 1–2 business days
+                                                    </span>
                                                 </div>
                                             )}
 

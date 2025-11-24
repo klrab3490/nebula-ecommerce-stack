@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 import { Droplets, Sparkles, Package, Eye, Leaf } from "lucide-react";
@@ -27,7 +27,7 @@ const animationStyles = `
   .animate-shimmer {
     animation: shimmer 3s infinite;
   }
-`
+`;
 
 const categories = [
     {
@@ -37,7 +37,7 @@ const categories = [
         gradient: "from-green-400 to-emerald-500",
         glowColor: "shadow-green-500/30",
         description: "Natural & Organic",
-        emoji: "💧"
+        emoji: "💧",
     },
     {
         name: "Shampoo",
@@ -46,7 +46,7 @@ const categories = [
         gradient: "from-amber-400 to-orange-500",
         glowColor: "shadow-amber-500/30",
         description: "Premium Care",
-        emoji: "✨"
+        emoji: "✨",
     },
     {
         name: "Indigo Powder",
@@ -55,7 +55,7 @@ const categories = [
         gradient: "from-purple-400 to-indigo-500",
         glowColor: "shadow-purple-500/30",
         description: "Pure & Natural",
-        emoji: "📦"
+        emoji: "📦",
     },
     {
         name: "Eyebrow Oil",
@@ -64,7 +64,7 @@ const categories = [
         gradient: "from-pink-400 to-rose-500",
         glowColor: "shadow-pink-500/30",
         description: "Beauty Essential",
-        emoji: "👁️"
+        emoji: "👁️",
     },
     {
         name: "Henna",
@@ -73,9 +73,9 @@ const categories = [
         gradient: "from-teal-400 to-cyan-500",
         glowColor: "shadow-teal-500/30",
         description: "Traditional Art",
-        emoji: "🍃"
+        emoji: "🍃",
     },
-]
+];
 
 export default function ProductCategories() {
     return (
@@ -85,7 +85,10 @@ export default function ProductCategories() {
             {/* Background Elements */}
             <div className="absolute inset-0 bg-linear-to-br from-purple-50/50 via-pink-50/30 to-blue-50/50 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20"></div>
             <div className="absolute top-0 left-1/4 w-72 h-72 bg-purple-300/20 rounded-full blur-3xl animate-pulse"></div>
-            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-300/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+            <div
+                className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-300/20 rounded-full blur-3xl animate-pulse"
+                style={{ animationDelay: "1s" }}
+            ></div>
 
             <div className="max-w-7xl mx-auto px-4 relative z-10">
                 {/* Enhanced Section Title */}
@@ -111,18 +114,23 @@ export default function ProductCategories() {
                                 style={{ animationDelay: `${index * 150}ms` }}
                             >
                                 {/* Glow Effect */}
-                                <div className={`absolute -inset-0.5 bg-linear-to-r ${category.gradient} rounded-3xl blur opacity-0 group-hover:opacity-40 transition-all duration-500 ${category.glowColor}`}></div>
+                                <div
+                                    className={`absolute -inset-0.5 bg-linear-to-r ${category.gradient} rounded-3xl blur opacity-0 group-hover:opacity-40 transition-all duration-500 ${category.glowColor}`}
+                                ></div>
 
                                 {/* Main Card */}
                                 <div className="relative bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-3xl p-8 text-center shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-white/30 dark:border-zinc-700/50 overflow-hidden group-hover:bg-white/90 dark:group-hover:bg-zinc-900/90">
-
                                     {/* Shine Effect */}
                                     <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
 
                                     {/* Icon Container with Enhanced Effects */}
                                     <div className="relative mb-6">
-                                        <div className={`absolute inset-0 bg-linear-to-br ${category.gradient} rounded-2xl blur-lg opacity-0 group-hover:opacity-30 transition-all duration-500 animate-glow`}></div>
-                                        <div className={`relative bg-linear-to-br ${category.gradient} rounded-2xl p-6 shadow-lg group-hover:shadow-xl transition-all duration-500 animate-float`}>
+                                        <div
+                                            className={`absolute inset-0 bg-linear-to-br ${category.gradient} rounded-2xl blur-lg opacity-0 group-hover:opacity-30 transition-all duration-500 animate-glow`}
+                                        ></div>
+                                        <div
+                                            className={`relative bg-linear-to-br ${category.gradient} rounded-2xl p-6 shadow-lg group-hover:shadow-xl transition-all duration-500 animate-float`}
+                                        >
                                             <IconComponent
                                                 size={48}
                                                 className="text-white mx-auto drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
@@ -147,8 +155,18 @@ export default function ProductCategories() {
                                     {/* Interactive Arrow */}
                                     <div className="mt-4 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 delay-100">
                                         <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-linear-to-r from-purple-500 to-pink-500 text-white">
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                            <svg
+                                                className="w-4 h-4"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M9 5l7 7-7 7"
+                                                />
                                             </svg>
                                         </div>
                                     </div>
@@ -166,5 +184,5 @@ export default function ProductCategories() {
                 </div>
             </div>
         </div>
-    )
+    );
 }

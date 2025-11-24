@@ -7,15 +7,15 @@ import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface SlideData {
-    id: number
-    type: "product" | "image-only"
-    backgroundImage?: string
-    productImage?: string
-    title?: string
-    subtitle?: string
-    description?: string
-    buttonText?: string
-    buttonLink?: string
+    id: number;
+    type: "product" | "image-only";
+    backgroundImage?: string;
+    productImage?: string;
+    title?: string;
+    subtitle?: string;
+    description?: string;
+    buttonText?: string;
+    buttonLink?: string;
 }
 
 const slides: SlideData[] = [
@@ -68,60 +68,60 @@ const slides: SlideData[] = [
         id: 10,
         type: "image-only",
         backgroundImage: "/Saffron Gel.jpg",
-    }
-]
+    },
+];
 
-    // {
-    //     id: 11,
-    //     type: "product",
-    //     productImage: "/placeholder-4cqd6.png",
-    //     title: "Premium Wireless Headphones",
-    //     subtitle: "Crystal Clear Audio Experience",
-    //     description:
-    //         "Immerse yourself in studio-quality sound with our flagship wireless headphones featuring active noise cancellation.",
-    //     buttonText: "Learn More",
-    //     buttonLink: "#",
-    // },
+// {
+//     id: 11,
+//     type: "product",
+//     productImage: "/placeholder-4cqd6.png",
+//     title: "Premium Wireless Headphones",
+//     subtitle: "Crystal Clear Audio Experience",
+//     description:
+//         "Immerse yourself in studio-quality sound with our flagship wireless headphones featuring active noise cancellation.",
+//     buttonText: "Learn More",
+//     buttonLink: "#",
+// },
 
 export default function HeroSlider() {
-    const [currentSlide, setCurrentSlide] = useState(0)
-    const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
     // Auto-advance slides
     useEffect(() => {
-        if (!isAutoPlaying) return
+        if (!isAutoPlaying) return;
 
         const interval = setInterval(() => {
-            setCurrentSlide((prev) => (prev + 1) % slides.length)
-        }, 5000)
+            setCurrentSlide((prev) => (prev + 1) % slides.length);
+        }, 5000);
 
-        return () => clearInterval(interval)
-    }, [isAutoPlaying])
+        return () => clearInterval(interval);
+    }, [isAutoPlaying]);
 
     const goToSlide = (index: number) => {
-        setCurrentSlide(index)
-        setIsAutoPlaying(false)
+        setCurrentSlide(index);
+        setIsAutoPlaying(false);
         // Resume auto-play after 10 seconds
-        setTimeout(() => setIsAutoPlaying(true), 10000)
-    }
+        setTimeout(() => setIsAutoPlaying(true), 10000);
+    };
 
     const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % slides.length)
-        setIsAutoPlaying(false)
-        setTimeout(() => setIsAutoPlaying(true), 10000)
-    }
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+        setIsAutoPlaying(false);
+        setTimeout(() => setIsAutoPlaying(true), 10000);
+    };
 
     const prevSlide = () => {
-        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
-        setIsAutoPlaying(false)
-        setTimeout(() => setIsAutoPlaying(true), 10000)
-    }
+        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+        setIsAutoPlaying(false);
+        setTimeout(() => setIsAutoPlaying(true), 10000);
+    };
 
     return (
         <div className="relative w-full h-fit overflow-hidden rounded-b-3xl shadow-2xl">
             {/* Modern Overlay Gradient */}
             <div className="absolute inset-0 bg-linear-to-t from-black/20 via-transparent to-transparent z-10 pointer-events-none"></div>
-            
+
             {/* Slides Container */}
             <div
                 className="flex transition-transform duration-700 ease-in-out h-full"
@@ -159,11 +159,19 @@ export default function HeroSlider() {
                                         {/* Product Content */}
                                         <div className="text-center md:text-left">
                                             {slide.title && (
-                                                <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">{slide.title}</h1>
+                                                <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
+                                                    {slide.title}
+                                                </h1>
                                             )}
-                                            {slide.subtitle && <p className="text-xl md:text-2xl mb-6 text-gray-600 dark:text-gray-300">{slide.subtitle}</p>}
+                                            {slide.subtitle && (
+                                                <p className="text-xl md:text-2xl mb-6 text-gray-600 dark:text-gray-300">
+                                                    {slide.subtitle}
+                                                </p>
+                                            )}
                                             {slide.description && (
-                                                <p className="text-lg mb-8 text-gray-700 dark:text-gray-200 leading-relaxed">{slide.description}</p>
+                                                <p className="text-lg mb-8 text-gray-700 dark:text-gray-200 leading-relaxed">
+                                                    {slide.description}
+                                                </p>
                                             )}
                                             {slide.buttonText && (
                                                 <Button size="lg" className="text-lg px-8 py-3">
@@ -204,9 +212,9 @@ export default function HeroSlider() {
                         onClick={() => goToSlide(index)}
                         className={cn(
                             "w-4 h-4 rounded-full transition-all duration-300 border border-white/30",
-                            currentSlide === index 
-                                ? "bg-white scale-125 shadow-lg" 
-                                : "bg-white/30 hover:bg-white/60 hover:scale-110",
+                            currentSlide === index
+                                ? "bg-white scale-125 shadow-lg"
+                                : "bg-white/30 hover:bg-white/60 hover:scale-110"
                         )}
                         aria-label={`Go to slide ${index + 1}`}
                     />
@@ -218,10 +226,12 @@ export default function HeroSlider() {
                 <div
                     className="h-full bg-linear-to-r from-purple-500 to-pink-500 transition-all duration-100 ease-linear shadow-lg"
                     style={{
-                        width: isAutoPlaying ? `${((currentSlide + 1) / slides.length) * 100}%` : "0%",
+                        width: isAutoPlaying
+                            ? `${((currentSlide + 1) / slides.length) * 100}%`
+                            : "0%",
                     }}
                 />
             </div>
         </div>
-    )
+    );
 }

@@ -1,11 +1,11 @@
 "use client";
 
-import React from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
     Home,
     Package,
@@ -15,40 +15,40 @@ import {
     Users,
     PlusCircle,
     ArrowLeft,
-    Store
-} from 'lucide-react';
+    Store,
+} from "lucide-react";
 
 const navigationItems = [
     {
         label: "Dashboard",
         href: "/seller",
         icon: Home,
-        description: "Overview & Analytics"
+        description: "Overview & Analytics",
     },
     {
         label: "Products",
         href: "/seller/products",
         icon: Package,
-        description: "Manage inventory"
+        description: "Manage inventory",
     },
     {
         label: "Orders",
         href: "/seller/orders",
         icon: ShoppingCart,
-        description: "Process orders"
+        description: "Process orders",
     },
     {
         label: "Analytics",
         href: "/seller/analytics",
         icon: BarChart3,
-        description: "Performance insights"
+        description: "Performance insights",
     },
     {
         label: "Customers",
         href: "/seller/customers",
         icon: Users,
-        description: "Customer management"
-    }
+        description: "Customer management",
+    },
 ];
 
 const quickActions = [
@@ -61,7 +61,7 @@ const quickActions = [
         label: "Settings",
         href: "/seller/settings",
         icon: Settings,
-    }
+    },
 ];
 
 export default function SellerSideBarClient() {
@@ -75,9 +75,7 @@ export default function SellerSideBarClient() {
                     <Store className="h-6 w-6 text-primary" />
                     <h2 className="text-xl font-bold">Seller Portal</h2>
                 </div>
-                <p className="text-sm text-muted-foreground">
-                    Manage your business
-                </p>
+                <p className="text-sm text-muted-foreground">Manage your business</p>
             </div>
 
             {/* Navigation */}
@@ -121,10 +119,7 @@ export default function SellerSideBarClient() {
 
                         return (
                             <Link key={action.href} href={action.href}>
-                                <Button
-                                    variant="ghost"
-                                    className="w-full justify-start gap-3 h-10"
-                                >
+                                <Button variant="ghost" className="w-full justify-start gap-3 h-10">
                                     <Icon className="h-4 w-4" />
                                     {action.label}
                                 </Button>
@@ -144,5 +139,5 @@ export default function SellerSideBarClient() {
                 </Link>
             </div>
         </aside>
-    )
+    );
 }

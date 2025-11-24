@@ -1,3 +1,5 @@
+"use server";
+
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
@@ -34,11 +36,45 @@ async function getPrismaUserId() {
     return dbUser.id;
 }
 
+function sanitizeString(v: unknown) {
+    if (v === undefined || v === null) return undefined;
+    return String(v).trim();
+}
+
+function validateAddressPayload(body: any, requireAll = false) {
+    const allowed = ["name", "street", "city", "state", "zipCode", "country", "phone", "isDefault"];
+    const errors: string[] = [];
+    const out: Record<string, any> = {};
+
+    for (const key of allowed) {
+        if (body[key] !== undefined) {
+            if (key === "isDefault") {
+                out.isDefault = Boolean(body.isDefault);
+            } else {
+                out[key] = sanitizeString(body[key]) ?? "";
+            }
+        }
+    }
+
+    if (requireAll) {
+        const required = ["name", "street", "city", "state", "zipCode", "country", "phone"];
+        for (const r of required) {
+            if (!out[r]) errors.push(`${r} is required`);
+        }
+    }
+
+    // Basic length checks
+    if (out.phone && out.phone.length < 6) errors.push("phone is too short");
+    if (out.zipCode && out.zipCode.length < 3) errors.push("zipCode is too short");
+
+    return { valid: errors.length === 0, errors, payload: out };
+}
+
 /*
   GET /api/user/address
   Returns all addresses for the logged-in user
 */
-export async function GET() {
+export async function GET(req: Request) {
     try {
         const userId = await getPrismaUserId();
 
@@ -48,7 +84,10 @@ export async function GET() {
         });
 
         return NextResponse.json({ addresses });
-    } catch (err) {
+    } catch (err: any) {
+        if (err?.message === "Unauthorized") {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
         return NextResponse.json({ error: String(err) }, { status: 500 });
     }
 }
@@ -62,22 +101,9 @@ export async function POST(req: Request) {
         const userId = await getPrismaUserId();
         const body = await req.json();
 
-        const requiredFields = [
-            "street",
-            "city",
-            "state",
-            "zipCode",
-            "country",
-            "phone",
-        ];
-
-        for (const f of requiredFields) {
-            if (!body[f]) {
-                return NextResponse.json(
-                    { error: `${f} is required` },
-                    { status: 400 }
-                );
-            }
+        const { valid, errors, payload } = validateAddressPayload(body, true);
+        if (!valid) {
+            return NextResponse.json({ success: false, errors }, { status: 400 });
         }
 
         // How many addresses exist for this user?
@@ -86,82 +112,23 @@ export async function POST(req: Request) {
         const newAddress = await prisma.address.create({
             data: {
                 userId,
-                street: body.street,
-                city: body.city,
-                state: body.state,
-                zipCode: body.zipCode,
-                country: body.country,
-                phone: body.phone,
+                name: payload.name,
+                street: payload.street,
+                city: payload.city,
+                state: payload.state,
+                zipCode: payload.zipCode,
+                country: payload.country,
+                phone: payload.phone,
                 // Mark as default if it's the user's first address
-                isDefault: existingCount === 0,
-            },
+                isDefault: payload.isDefault ?? existingCount === 0,
+            } as any,
         });
 
-        return NextResponse.json({ success: true, address: newAddress });
-    } catch (err) {
-        return NextResponse.json({ error: String(err) }, { status: 500 });
-    }
-}
-
-/*
-  PUT /api/user/address
-  Update address fields or set default
-*/
-export async function PUT(req: Request) {
-    try {
-        const userId = await getPrismaUserId();
-        const { id, ...updateData } = await req.json();
-
-        if (!id)
-            return NextResponse.json({ error: "Address id required" }, { status: 400 });
-
-        // Ensure the address belongs to the user
-        const existing = await prisma.address.findUnique({ where: { id } });
-        if (!existing || existing.userId !== userId) {
-            return NextResponse.json({ error: "Not found or unauthorized" }, { status: 404 });
+        return NextResponse.json({ success: true, address: newAddress }, { status: 201 });
+    } catch (err: any) {
+        if (err?.message === "Unauthorized") {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
-
-        // If the user is setting this as default, remove default from others
-        if (updateData.isDefault) {
-            await prisma.address.updateMany({
-                where: { userId },
-                data: { isDefault: false },
-            });
-        }
-
-        const updated = await prisma.address.update({
-            where: { id },
-            data: updateData,
-        });
-
-        return NextResponse.json({ success: true, address: updated });
-    } catch (err) {
-        return NextResponse.json({ error: String(err) }, { status: 500 });
-    }
-}
-
-/*
-  DELETE /api/user/address?id=123
-*/
-export async function DELETE(req: Request) {
-    try {
-        const userId = await getPrismaUserId();
-        const { searchParams } = new URL(req.url);
-        const id = searchParams.get("id");
-
-        if (!id)
-            return NextResponse.json({ error: "Address id required" }, { status: 400 });
-
-        // Ensure the address belongs to the user
-        const existing = await prisma.address.findUnique({ where: { id } });
-        if (!existing || existing.userId !== userId) {
-            return NextResponse.json({ error: "Not found or unauthorized" }, { status: 404 });
-        }
-
-        await prisma.address.delete({ where: { id } });
-
-        return NextResponse.json({ success: true });
-    } catch (err) {
-        return NextResponse.json({ error: String(err) }, { status: 500 });
+        return NextResponse.json({ success: false, error: String(err) }, { status: 500 });
     }
 }

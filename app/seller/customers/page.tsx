@@ -1,6 +1,6 @@
-import React from 'react';
-import { prisma } from '@/lib/prisma';
-import SellerCustomersClient, { UserData } from '@/components/custom/seller/SellerCustomersClient';
+import React from "react";
+import { prisma } from "@/lib/prisma";
+import SellerCustomersClient, { UserData } from "@/components/custom/seller/SellerCustomersClient";
 
 export default async function UsersPage() {
     // Fetch users from DB
@@ -10,7 +10,7 @@ export default async function UsersPage() {
     if (!users || users.length === 0) return <SellerCustomersClient users={[]} />;
 
     // Aggregate orders per user
-    const userIds = users.map(u => u.id);
+    const userIds = users.map((u) => u.id);
     const orders = await prisma.order.findMany({ where: { userId: { in: userIds } } });
 
     const ordersByUser: Record<string, { count: number; total: number }> = {};
@@ -21,13 +21,15 @@ export default async function UsersPage() {
         ordersByUser[uid].total += o.total || 0;
     }
 
-    const mapped: UserData[] = users.map(u => ({
+    const mapped: UserData[] = users.map((u) => ({
         uuid: u.id,
         name: u.name,
         email: u.email,
         username: undefined,
-        role: (['admin', 'seller', 'customer', 'moderator'].includes(u.role) ? (u.role as 'admin' | 'seller' | 'customer' | 'moderator') : 'customer'),
-        status: 'active',
+        role: ["admin", "seller", "customer", "moderator"].includes(u.role)
+            ? (u.role as "admin" | "seller" | "customer" | "moderator")
+            : "customer",
+        status: "active",
         joinDate: new Date().toISOString(),
         lastLogin: null,
         orderCount: ordersByUser[u.id]?.count || 0,

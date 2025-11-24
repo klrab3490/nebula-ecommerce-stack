@@ -1,18 +1,30 @@
 "use client";
 
-import { Bundle } from '@/lib/bundles';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { formatCurrency } from '@/lib/bundles';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import React, { useState, useEffect } from 'react';
-import { Textarea } from '@/components/ui/textarea';
-import { Plus, Edit, Trash2, Gift, Save, X } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Bundle } from "@/lib/bundles";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { formatCurrency } from "@/lib/bundles";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import React, { useState, useEffect } from "react";
+import { Textarea } from "@/components/ui/textarea";
+import { Plus, Edit, Trash2, Gift, Save, X } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface Product {
     id: string;
@@ -24,7 +36,7 @@ interface Product {
 interface BundleFormData {
     name: string;
     description: string;
-    discountType: 'percentage' | 'fixed' | 'buy_x_get_y';
+    discountType: "percentage" | "fixed" | "buy_x_get_y";
     discountValue: number;
     minQuantity: number;
     maxQuantity?: number;
@@ -37,12 +49,12 @@ interface BundleFormData {
 }
 
 const initialFormData: BundleFormData = {
-    name: '',
-    description: '',
-    discountType: 'percentage',
+    name: "",
+    description: "",
+    discountType: "percentage",
     discountValue: 0,
     minQuantity: 1,
-    products: []
+    products: [],
 };
 
 export function BundleManagement() {
@@ -60,25 +72,25 @@ export function BundleManagement() {
 
     const fetchBundles = async () => {
         try {
-            const response = await fetch('/api/bundles');
+            const response = await fetch("/api/bundles");
             if (response.ok) {
                 const data = await response.json();
                 setBundles(data.bundles || []);
             }
         } catch (error) {
-            console.error('Error fetching bundles:', error);
+            console.error("Error fetching bundles:", error);
         }
     };
 
     const fetchProducts = async () => {
         try {
-            const response = await fetch('/api/products');
+            const response = await fetch("/api/products");
             if (response.ok) {
                 const data = await response.json();
                 setProducts(data.products || []);
             }
         } catch (error) {
-            console.error('Error fetching products:', error);
+            console.error("Error fetching products:", error);
         }
     };
 
@@ -87,13 +99,13 @@ export function BundleManagement() {
         setLoading(true);
 
         try {
-            const url = editingBundle ? `/api/bundles/${editingBundle.id}` : '/api/bundles';
-            const method = editingBundle ? 'PUT' : 'POST';
+            const url = editingBundle ? `/api/bundles/${editingBundle.id}` : "/api/bundles";
+            const method = editingBundle ? "PUT" : "POST";
 
             const response = await fetch(url, {
                 method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
             });
 
             if (response.ok) {
@@ -103,11 +115,11 @@ export function BundleManagement() {
                 setFormData(initialFormData);
             } else {
                 const error = await response.json();
-                alert(error.error || 'Failed to save bundle');
+                alert(error.error || "Failed to save bundle");
             }
         } catch (error) {
-            console.error('Error saving bundle:', error);
-            alert('Failed to save bundle');
+            console.error("Error saving bundle:", error);
+            alert("Failed to save bundle");
         } finally {
             setLoading(false);
         }
@@ -118,59 +130,61 @@ export function BundleManagement() {
         setFormData({
             name: bundle.name,
             description: bundle.description,
-            discountType: bundle.discountType as 'percentage' | 'fixed' | 'buy_x_get_y',
+            discountType: bundle.discountType as "percentage" | "fixed" | "buy_x_get_y",
             discountValue: bundle.discountValue,
             minQuantity: bundle.minQuantity,
             maxQuantity: bundle.maxQuantity || undefined,
-            validUntil: bundle.validUntil ? new Date(bundle.validUntil).toISOString().split('T')[0] : undefined,
-            products: bundle.BundleProduct.map(bp => ({
+            validUntil: bundle.validUntil
+                ? new Date(bundle.validUntil).toISOString().split("T")[0]
+                : undefined,
+            products: bundle.BundleProduct.map((bp) => ({
                 productId: bp.productId,
                 quantity: bp.quantity,
-                isRequired: bp.isRequired
-            }))
+                isRequired: bp.isRequired,
+            })),
         });
         setIsDialogOpen(true);
     };
 
     const handleDelete = async (bundleId: string) => {
-        if (!confirm('Are you sure you want to delete this bundle?')) return;
+        if (!confirm("Are you sure you want to delete this bundle?")) return;
 
         try {
             const response = await fetch(`/api/bundles/${bundleId}`, {
-                method: 'DELETE'
+                method: "DELETE",
             });
 
             if (response.ok) {
                 await fetchBundles();
             } else {
-                alert('Failed to delete bundle');
+                alert("Failed to delete bundle");
             }
         } catch (error) {
-            console.error('Error deleting bundle:', error);
-            alert('Failed to delete bundle');
+            console.error("Error deleting bundle:", error);
+            alert("Failed to delete bundle");
         }
     };
 
     const addProduct = () => {
-        setFormData(prev => ({
+        setFormData((prev) => ({
             ...prev,
-            products: [...prev.products, { productId: '', quantity: 1, isRequired: true }]
+            products: [...prev.products, { productId: "", quantity: 1, isRequired: true }],
         }));
     };
 
     const removeProduct = (index: number) => {
-        setFormData(prev => ({
+        setFormData((prev) => ({
             ...prev,
-            products: prev.products.filter((_, i) => i !== index)
+            products: prev.products.filter((_, i) => i !== index),
         }));
     };
 
     const updateProduct = (index: number, field: string, value: string | number | boolean) => {
-        setFormData(prev => ({
+        setFormData((prev) => ({
             ...prev,
             products: prev.products.map((product, i) =>
                 i === index ? { ...product, [field]: value } : product
-            )
+            ),
         }));
     };
 
@@ -184,10 +198,12 @@ export function BundleManagement() {
 
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <DialogTrigger asChild>
-                        <Button onClick={() => {
-                            setEditingBundle(null);
-                            setFormData(initialFormData);
-                        }}>
+                        <Button
+                            onClick={() => {
+                                setEditingBundle(null);
+                                setFormData(initialFormData);
+                            }}
+                        >
                             <Plus className="h-4 w-4 mr-2" />
                             Create Bundle
                         </Button>
@@ -196,7 +212,7 @@ export function BundleManagement() {
                     <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                         <DialogHeader>
                             <DialogTitle>
-                                {editingBundle ? 'Edit Bundle' : 'Create New Bundle'}
+                                {editingBundle ? "Edit Bundle" : "Create New Bundle"}
                             </DialogTitle>
                         </DialogHeader>
 
@@ -208,7 +224,12 @@ export function BundleManagement() {
                                         id="name"
                                         type="text"
                                         value={formData.name}
-                                        onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                                        onChange={(e) =>
+                                            setFormData((prev) => ({
+                                                ...prev,
+                                                name: e.target.value,
+                                            }))
+                                        }
                                         required
                                     />
                                 </div>
@@ -217,13 +238,23 @@ export function BundleManagement() {
                                     <Label htmlFor="discountType">Discount Type</Label>
                                     <Select
                                         value={formData.discountType}
-                                        onValueChange={(value: string) => setFormData(prev => ({ ...prev, discountType: value as 'percentage' | 'fixed' | 'buy_x_get_y' }))}
+                                        onValueChange={(value: string) =>
+                                            setFormData((prev) => ({
+                                                ...prev,
+                                                discountType: value as
+                                                    | "percentage"
+                                                    | "fixed"
+                                                    | "buy_x_get_y",
+                                            }))
+                                        }
                                     >
                                         <SelectTrigger>
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="percentage">Percentage Off</SelectItem>
+                                            <SelectItem value="percentage">
+                                                Percentage Off
+                                            </SelectItem>
                                             <SelectItem value="fixed">Fixed Amount Off</SelectItem>
                                             <SelectItem value="buy_x_get_y">Buy X Get Y</SelectItem>
                                         </SelectContent>
@@ -236,7 +267,12 @@ export function BundleManagement() {
                                 <Textarea
                                     id="description"
                                     value={formData.description}
-                                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            description: e.target.value,
+                                        }))
+                                    }
                                     required
                                 />
                             </div>
@@ -244,14 +280,22 @@ export function BundleManagement() {
                             <div className="grid grid-cols-3 gap-4">
                                 <div>
                                     <Label htmlFor="discountValue">
-                                        {formData.discountType === 'percentage' ? 'Discount %' :
-                                            formData.discountType === 'fixed' ? 'Discount Amount' : 'Free Items'}
+                                        {formData.discountType === "percentage"
+                                            ? "Discount %"
+                                            : formData.discountType === "fixed"
+                                              ? "Discount Amount"
+                                              : "Free Items"}
                                     </Label>
                                     <Input
                                         id="discountValue"
                                         type="number"
                                         value={formData.discountValue}
-                                        onChange={(e) => setFormData(prev => ({ ...prev, discountValue: Number(e.target.value) }))}
+                                        onChange={(e) =>
+                                            setFormData((prev) => ({
+                                                ...prev,
+                                                discountValue: Number(e.target.value),
+                                            }))
+                                        }
                                         required
                                     />
                                 </div>
@@ -262,7 +306,12 @@ export function BundleManagement() {
                                         id="minQuantity"
                                         type="number"
                                         value={formData.minQuantity}
-                                        onChange={(e) => setFormData(prev => ({ ...prev, minQuantity: Number(e.target.value) }))}
+                                        onChange={(e) =>
+                                            setFormData((prev) => ({
+                                                ...prev,
+                                                minQuantity: Number(e.target.value),
+                                            }))
+                                        }
                                         min="1"
                                         required
                                     />
@@ -273,11 +322,15 @@ export function BundleManagement() {
                                     <Input
                                         id="maxQuantity"
                                         type="number"
-                                        value={formData.maxQuantity || ''}
-                                        onChange={(e) => setFormData(prev => ({
-                                            ...prev,
-                                            maxQuantity: e.target.value ? Number(e.target.value) : undefined
-                                        }))}
+                                        value={formData.maxQuantity || ""}
+                                        onChange={(e) =>
+                                            setFormData((prev) => ({
+                                                ...prev,
+                                                maxQuantity: e.target.value
+                                                    ? Number(e.target.value)
+                                                    : undefined,
+                                            }))
+                                        }
                                         min="1"
                                     />
                                 </div>
@@ -288,25 +341,40 @@ export function BundleManagement() {
                                 <Input
                                     id="validUntil"
                                     type="date"
-                                    value={formData.validUntil || ''}
-                                    onChange={(e) => setFormData(prev => ({ ...prev, validUntil: e.target.value }))}
+                                    value={formData.validUntil || ""}
+                                    onChange={(e) =>
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            validUntil: e.target.value,
+                                        }))
+                                    }
                                 />
                             </div>
 
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between">
                                     <Label>Bundle Products</Label>
-                                    <Button type="button" variant="outline" size="sm" onClick={addProduct}>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={addProduct}
+                                    >
                                         <Plus className="h-4 w-4 mr-1" />
                                         Add Product
                                     </Button>
                                 </div>
 
                                 {formData.products.map((product, index) => (
-                                    <div key={index} className="flex items-center space-x-2 p-3 border rounded">
+                                    <div
+                                        key={index}
+                                        className="flex items-center space-x-2 p-3 border rounded"
+                                    >
                                         <Select
                                             value={product.productId}
-                                            onValueChange={(value: string) => updateProduct(index, 'productId', value)}
+                                            onValueChange={(value: string) =>
+                                                updateProduct(index, "productId", value)
+                                            }
                                         >
                                             <SelectTrigger className="flex-1">
                                                 <SelectValue placeholder="Select Product" />
@@ -314,7 +382,10 @@ export function BundleManagement() {
                                             <SelectContent>
                                                 {products.map((p) => (
                                                     <SelectItem key={p.id} value={p.id}>
-                                                        {p.name} - {formatCurrency(p.discountedPrice || p.price)}
+                                                        {p.name} -{" "}
+                                                        {formatCurrency(
+                                                            p.discountedPrice || p.price
+                                                        )}
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>
@@ -323,7 +394,13 @@ export function BundleManagement() {
                                         <Input
                                             type="number"
                                             value={product.quantity}
-                                            onChange={(e) => updateProduct(index, 'quantity', Number(e.target.value))}
+                                            onChange={(e) =>
+                                                updateProduct(
+                                                    index,
+                                                    "quantity",
+                                                    Number(e.target.value)
+                                                )
+                                            }
                                             min="1"
                                             className="w-20"
                                             placeholder="Qty"
@@ -332,7 +409,9 @@ export function BundleManagement() {
                                         <div className="flex items-center space-x-2">
                                             <Switch
                                                 checked={product.isRequired}
-                                                onCheckedChange={(checked: boolean) => updateProduct(index, 'isRequired', checked)}
+                                                onCheckedChange={(checked: boolean) =>
+                                                    updateProduct(index, "isRequired", checked)
+                                                }
                                             />
                                             <Label className="text-xs">Required</Label>
                                         </div>
@@ -359,7 +438,7 @@ export function BundleManagement() {
                                 </Button>
                                 <Button type="submit" disabled={loading}>
                                     <Save className="h-4 w-4 mr-2" />
-                                    {loading ? 'Saving...' : 'Save Bundle'}
+                                    {loading ? "Saving..." : "Save Bundle"}
                                 </Button>
                             </div>
                         </form>
@@ -376,7 +455,9 @@ export function BundleManagement() {
                                     <Gift className="h-5 w-5 text-primary" />
                                     <div>
                                         <CardTitle className="text-lg">{bundle.name}</CardTitle>
-                                        <p className="text-sm text-muted-foreground">{bundle.description}</p>
+                                        <p className="text-sm text-muted-foreground">
+                                            {bundle.description}
+                                        </p>
                                     </div>
                                 </div>
 
@@ -384,10 +465,18 @@ export function BundleManagement() {
                                     <Badge variant={bundle.isActive ? "default" : "secondary"}>
                                         {bundle.isActive ? "Active" : "Inactive"}
                                     </Badge>
-                                    <Button variant="outline" size="sm" onClick={() => handleEdit(bundle)}>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => handleEdit(bundle)}
+                                    >
                                         <Edit className="h-4 w-4" />
                                     </Button>
-                                    <Button variant="outline" size="sm" onClick={() => handleDelete(bundle.id)}>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => handleDelete(bundle.id)}
+                                    >
                                         <Trash2 className="h-4 w-4" />
                                     </Button>
                                 </div>
@@ -397,11 +486,12 @@ export function BundleManagement() {
                         <CardContent>
                             <div className="grid grid-cols-2 gap-4 text-sm">
                                 <div>
-                                    <strong>Discount:</strong> {
-                                        bundle.discountType === 'percentage' ? `${bundle.discountValue}%` :
-                                            bundle.discountType === 'fixed' ? formatCurrency(bundle.discountValue) :
-                                                `Buy ${bundle.minQuantity} Get ${bundle.discountValue}`
-                                    }
+                                    <strong>Discount:</strong>{" "}
+                                    {bundle.discountType === "percentage"
+                                        ? `${bundle.discountValue}%`
+                                        : bundle.discountType === "fixed"
+                                          ? formatCurrency(bundle.discountValue)
+                                          : `Buy ${bundle.minQuantity} Get ${bundle.discountValue}`}
                                 </div>
                                 <div>
                                     <strong>Min Quantity:</strong> {bundle.minQuantity}
@@ -410,11 +500,10 @@ export function BundleManagement() {
                                     <strong>Products:</strong> {bundle.BundleProduct.length}
                                 </div>
                                 <div>
-                                    <strong>Valid Until:</strong> {
-                                        bundle.validUntil ?
-                                            new Date(bundle.validUntil).toLocaleDateString() :
-                                            'No expiry'
-                                    }
+                                    <strong>Valid Until:</strong>{" "}
+                                    {bundle.validUntil
+                                        ? new Date(bundle.validUntil).toLocaleDateString()
+                                        : "No expiry"}
                                 </div>
                             </div>
                         </CardContent>
@@ -426,7 +515,9 @@ export function BundleManagement() {
                         <CardContent className="text-center py-8">
                             <Gift className="h-12 w-12 mx-auto mb-4 opacity-50" />
                             <p className="text-muted-foreground">No bundles created yet.</p>
-                            <p className="text-sm text-muted-foreground">Create your first bundle to start offering deals!</p>
+                            <p className="text-sm text-muted-foreground">
+                                Create your first bundle to start offering deals!
+                            </p>
                         </CardContent>
                     </Card>
                 )}

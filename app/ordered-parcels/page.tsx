@@ -1,7 +1,5 @@
-import React from 'react'
+import React from "react";
 
 export default function OrderedParcels() {
-    return (
-        <div>Ordered Parcels</div>
-    )
+    return <div>Ordered Parcels</div>;
 }

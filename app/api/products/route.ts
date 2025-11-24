@@ -1,37 +1,35 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { requireAuth } from '@/lib/authSeller';
+import { requireAuth } from "@/lib/authSeller";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
     // require seller/admin role
-    const authCheck = await requireAuth(req, ['seller', 'admin']);
+    const authCheck = await requireAuth(req, ["seller", "admin"]);
     if (authCheck instanceof NextResponse) return authCheck;
     try {
-        const { name, description, price, discountedPrice, sku, stock, images, categories, featured, faqs } =
-            await req.json();
+        const {
+            name,
+            description,
+            price,
+            discountedPrice,
+            sku,
+            stock,
+            images,
+            categories,
+            featured,
+            faqs,
+        } = await req.json();
 
         // Validate required fields
-        if (
-            !name ||
-            !description ||
-            !sku ||
-            price === undefined ||
-            stock === undefined
-        ) {
-            return NextResponse.json(
-                { error: "Missing required fields" },
-                { status: 400 }
-            );
+        if (!name || !description || !sku || price === undefined || stock === undefined) {
+            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
         }
 
         // Validate data types
         if (typeof price !== "number" || price <= 0) {
-            return NextResponse.json(
-                { error: "Price must be a positive number" },
-                { status: 400 }
-            );
+            return NextResponse.json({ error: "Price must be a positive number" }, { status: 400 });
         }
 
         if (typeof stock !== "number" || stock < 0) {
@@ -78,8 +76,17 @@ export async function POST(req: NextRequest) {
         type IncomingFAQ = { question?: unknown; answer?: unknown };
         const faqCreates = Array.isArray(faqs)
             ? (faqs as IncomingFAQ[])
-                .filter((f) => f && typeof f.question === "string" && typeof f.answer === "string")
-                .map((f) => ({ faq: { create: { question: (f.question as string).trim(), answer: (f.answer as string).trim() } } }))
+                  .filter(
+                      (f) => f && typeof f.question === "string" && typeof f.answer === "string"
+                  )
+                  .map((f) => ({
+                      faq: {
+                          create: {
+                              question: (f.question as string).trim(),
+                              answer: (f.answer as string).trim(),
+                          },
+                      },
+                  }))
             : [];
 
         // Create the product (with nested FAQ relations when present)
@@ -145,9 +152,6 @@ export async function GET() {
         return NextResponse.json({ products: products }, { status: 200 });
     } catch (error) {
         console.error("API error fetching products:", error);
-        return NextResponse.json(
-            { error: "Failed to fetch products" },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: "Failed to fetch products" }, { status: 500 });
     }
 }

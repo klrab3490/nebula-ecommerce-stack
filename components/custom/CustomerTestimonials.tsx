@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { StarRating } from "@/components/custom/StarRating"
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { StarRating } from "@/components/custom/StarRating";
 
 const testimonials = [
     {
@@ -34,44 +34,46 @@ const testimonials = [
         product: "Face Pack",
         avatar: "/indian-woman-with-glowing-skin.png",
     },
-]
+];
 
 export default function CustomerTestimonials() {
-    const [currentIndex, setCurrentIndex] = useState(0)
-    const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
     useEffect(() => {
-        if (!isAutoPlaying) return
+        if (!isAutoPlaying) return;
 
         const interval = setInterval(() => {
-            setCurrentIndex((prev) => (prev + 1) % testimonials.length)
-        }, 5000)
+            setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+        }, 5000);
 
-        return () => clearInterval(interval)
-    }, [isAutoPlaying])
+        return () => clearInterval(interval);
+    }, [isAutoPlaying]);
 
     const nextTestimonial = () => {
-        setCurrentIndex((prev) => (prev + 1) % testimonials.length)
-        setIsAutoPlaying(false)
-    }
+        setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+        setIsAutoPlaying(false);
+    };
 
     const prevTestimonial = () => {
-        setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
-        setIsAutoPlaying(false)
-    }
+        setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+        setIsAutoPlaying(false);
+    };
 
     const goToTestimonial = (index: number) => {
-        setCurrentIndex(index)
-        setIsAutoPlaying(false)
-    }
-
+        setCurrentIndex(index);
+        setIsAutoPlaying(false);
+    };
 
     return (
         <section className="py-20 w-full relative overflow-hidden">
             {/* Modern Background */}
             <div className="absolute inset-0 bg-linear-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20"></div>
             <div className="absolute top-0 right-1/4 w-96 h-96 bg-purple-300/10 rounded-full blur-3xl animate-pulse"></div>
-            <div className="absolute bottom-0 left-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+            <div
+                className="absolute bottom-0 left-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse"
+                style={{ animationDelay: "2s" }}
+            ></div>
 
             <div className="max-w-6xl mx-auto px-4 relative z-10">
                 <div className="text-center mb-16">
@@ -79,7 +81,8 @@ export default function CustomerTestimonials() {
                         💬 What Our Customers Say
                     </h2>
                     <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-medium">
-                        Real stories from people who&#39;ve experienced the natural goodness of our premium products
+                        Real stories from people who&#39;ve experienced the natural goodness of our
+                        premium products
                     </p>
                     <div className="w-24 h-1 bg-linear-to-r from-purple-500 to-pink-500 mx-auto mt-4 rounded-full"></div>
                 </div>
@@ -109,7 +112,9 @@ export default function CustomerTestimonials() {
                                 <div className="shrink-0 relative">
                                     <div className="absolute -inset-2 bg-linear-to-r from-purple-500 to-pink-500 rounded-full blur opacity-50 animate-pulse"></div>
                                     <Image
-                                        src={testimonials[currentIndex].avatar || "/placeholder.svg"}
+                                        src={
+                                            testimonials[currentIndex].avatar || "/placeholder.svg"
+                                        }
                                         alt={testimonials[currentIndex].name}
                                         className="relative w-24 h-24 rounded-full object-cover border-4 border-white dark:border-zinc-800 shadow-xl"
                                         width={96}
@@ -130,15 +135,25 @@ export default function CustomerTestimonials() {
 
                                     {/* Enhanced Testimonial text */}
                                     <blockquote className="text-foreground text-lg md:text-xl leading-relaxed mb-6 italic font-medium relative">
-                                        <span className="text-6xl text-purple-300 dark:text-purple-700 absolute -top-4 -left-2 opacity-50">&quot;</span>
-                                        <span className="relative z-10">{testimonials[currentIndex].text}</span>
-                                        <span className="text-6xl text-purple-300 dark:text-purple-700 absolute -bottom-8 -right-2 opacity-50">&quot;</span>
+                                        <span className="text-6xl text-purple-300 dark:text-purple-700 absolute -top-4 -left-2 opacity-50">
+                                            &quot;
+                                        </span>
+                                        <span className="relative z-10">
+                                            {testimonials[currentIndex].text}
+                                        </span>
+                                        <span className="text-6xl text-purple-300 dark:text-purple-700 absolute -bottom-8 -right-2 opacity-50">
+                                            &quot;
+                                        </span>
                                     </blockquote>
 
                                     {/* Enhanced Customer info */}
                                     <div>
-                                        <h4 className="font-black text-lg bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">{testimonials[currentIndex].name}</h4>
-                                        <p className="text-muted-foreground font-medium">📍 {testimonials[currentIndex].location}</p>
+                                        <h4 className="font-black text-lg bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                                            {testimonials[currentIndex].name}
+                                        </h4>
+                                        <p className="text-muted-foreground font-medium">
+                                            📍 {testimonials[currentIndex].location}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -146,9 +161,10 @@ export default function CustomerTestimonials() {
 
                         <div className="flex justify-center gap-3 mt-8">
                             {testimonials.map((_, idx) => {
-                                const activeClass = idx === currentIndex
-                                    ? "w-8 h-3 bg-emerald-500 dark:bg-emerald-400"
-                                    : "w-3 h-3 bg-emerald-200 dark:bg-gray-700 hover:bg-emerald-300 dark:hover:bg-emerald-500";
+                                const activeClass =
+                                    idx === currentIndex
+                                        ? "w-8 h-3 bg-emerald-500 dark:bg-emerald-400"
+                                        : "w-3 h-3 bg-emerald-200 dark:bg-gray-700 hover:bg-emerald-300 dark:hover:bg-emerald-500";
                                 return (
                                     <button
                                         key={idx}
@@ -182,5 +198,5 @@ export default function CustomerTestimonials() {
                 </div>
             </div>
         </section>
-    )
+    );
 }

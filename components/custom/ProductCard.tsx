@@ -1,38 +1,38 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import Image from "next/image"
-import { cn } from "@/lib/utils"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { formatCurrency } from '@/lib/currency';
-import { Heart, ShoppingCart, Sparkles, TrendingUp } from "lucide-react"
+import Link from "next/link";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { formatCurrency } from "@/lib/currency";
+import { Heart, ShoppingCart, Sparkles, TrendingUp } from "lucide-react";
 import { useAppContext } from "@/contexts/AppContext";
-import { Card, CardHeader, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 interface ProductCard {
-    id: string
-    name: string
-    description: string
-    price: number
-    discountedPrice?: number
-    sku: string
-    stock: number
-    images: string[]
-    categories: string[]
-    featured: boolean
-    createdAt: Date
-    updatedAt: Date
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    discountedPrice?: number;
+    sku: string;
+    stock: number;
+    images: string[];
+    categories: string[];
+    featured: boolean;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 interface ProductCardProps {
-    product: ProductCard
+    product: ProductCard;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-    const [isWishlisted, setIsWishlisted] = useState(false)
-    const [imageLoaded, setImageLoaded] = useState(false)
+    const [isWishlisted, setIsWishlisted] = useState(false);
+    const [imageLoaded, setImageLoaded] = useState(false);
     const { addItem, currency } = useAppContext();
 
     const handleAddToCart = () => {
@@ -41,14 +41,14 @@ export function ProductCard({ product }: ProductCardProps) {
             name: product.name,
             price: product.discountedPrice || product.price,
             image: product.images[0] || "/placeholder.svg",
-        })
-    }
+        });
+    };
 
-    const currentPrice = product.discountedPrice || product.price
-    const hasDiscount = product.discountedPrice && product.discountedPrice < product.price
+    const currentPrice = product.discountedPrice || product.price;
+    const hasDiscount = product.discountedPrice && product.discountedPrice < product.price;
     const discountPercentage = hasDiscount
         ? Math.round(((product.price - product.discountedPrice!) / product.price) * 100)
-        : 0
+        : 0;
 
     return (
         <div className="group relative">
@@ -57,14 +57,16 @@ export function ProductCard({ product }: ProductCardProps) {
 
             {/* Main Card */}
             <Card className="relative bg-white dark:bg-zinc-900 backdrop-blur-xl rounded-2xl shadow-2xl hover:shadow-purple-500/20 dark:hover:shadow-purple-500/30 transition-all duration-500 hover:-translate-y-3 border-2 border-white/20 dark:border-zinc-700/50 overflow-hidden group-hover:border-purple-500/30">
-
                 {/* Animated Shimmer Effect */}
                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out pointer-events-none"></div>
 
                 <CardHeader className="p-0 relative">
-                    <Link href={`/products/${product.id}`} tabIndex={-1} aria-label={`View details for ${product.name}`}>
+                    <Link
+                        href={`/products/${product.id}`}
+                        tabIndex={-1}
+                        aria-label={`View details for ${product.name}`}
+                    >
                         <div className="relative aspect-square overflow-hidden bg-linear-to-br from-gray-100 via-gray-50 to-white dark:from-zinc-800 dark:via-zinc-850 dark:to-zinc-900">
-
                             {/* Decorative Background Pattern */}
                             <div className="absolute inset-0 bg-linear-to-br from-purple-500/10 via-pink-500/10 to-blue-500/10 opacity-50"></div>
                             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),rgba(255,255,255,0))]"></div>
@@ -84,7 +86,9 @@ export function ProductCard({ product }: ProductCardProps) {
                             />
 
                             {!product.images[0] && (
-                                <span className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm z-10">No Image</span>
+                                <span className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm z-10">
+                                    No Image
+                                </span>
                             )}
 
                             {/* Badges */}
@@ -123,12 +127,14 @@ export function ProductCard({ product }: ProductCardProps) {
                                     setIsWishlisted(!isWishlisted);
                                 }}
                             >
-                                <Heart className={cn(
-                                    "h-5 w-5 transition-all duration-300",
-                                    isWishlisted
-                                        ? "fill-white text-white scale-110"
-                                        : "text-gray-600 dark:text-gray-300"
-                                )} />
+                                <Heart
+                                    className={cn(
+                                        "h-5 w-5 transition-all duration-300",
+                                        isWishlisted
+                                            ? "fill-white text-white scale-110"
+                                            : "text-gray-600 dark:text-gray-300"
+                                    )}
+                                />
                             </Button>
                         </div>
                     </Link>
@@ -173,7 +179,9 @@ export function ProductCard({ product }: ProductCardProps) {
                         {product.stock < 10 && product.stock > 0 && (
                             <div className="flex items-center gap-2 text-orange-600 dark:text-orange-400">
                                 <div className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></div>
-                                <p className="text-sm font-semibold">Only {product.stock} left in stock!</p>
+                                <p className="text-sm font-semibold">
+                                    Only {product.stock} left in stock!
+                                </p>
                             </div>
                         )}
                         {product.stock === 0 && (
@@ -205,17 +213,20 @@ export function ProductCard({ product }: ProductCardProps) {
                         <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700"></div>
 
                         <div className="relative flex items-center justify-center gap-3">
-                            <ShoppingCart className={cn(
-                                "h-5 w-5 transition-transform duration-300",
-                                product.stock > 0 && "group-hover/btn:rotate-12 group-hover/btn:scale-110"
-                            )} />
+                            <ShoppingCart
+                                className={cn(
+                                    "h-5 w-5 transition-transform duration-300",
+                                    product.stock > 0 &&
+                                        "group-hover/btn:rotate-12 group-hover/btn:scale-110"
+                                )}
+                            />
                             <span className="text-base">
-                                {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                                {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
                             </span>
                         </div>
                     </Button>
                 </CardContent>
             </Card>
         </div>
-    )
+    );
 }

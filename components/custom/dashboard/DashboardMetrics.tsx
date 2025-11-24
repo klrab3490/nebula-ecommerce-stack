@@ -2,10 +2,18 @@
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { formatCurrency } from '@/lib/currency';
+import { formatCurrency } from "@/lib/currency";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DollarSign, ShoppingCart, Package, TrendingUp, Users, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import {
+    DollarSign,
+    ShoppingCart,
+    Package,
+    TrendingUp,
+    Users,
+    ArrowUpRight,
+    ArrowDownRight,
+} from "lucide-react";
 
 interface MetricCardProps {
     title: string;
@@ -15,7 +23,7 @@ interface MetricCardProps {
         label: string;
     };
     icon: React.ElementType;
-    trend?: 'up' | 'down' | 'neutral';
+    trend?: "up" | "down" | "neutral";
     description?: string;
 }
 
@@ -24,25 +32,26 @@ export function MetricCard({
     value,
     change,
     icon: Icon,
-    trend = 'neutral',
-    description
+    trend = "neutral",
+    description,
 }: MetricCardProps) {
     const getTrendColor = () => {
         switch (trend) {
-            case 'up': return 'text-green-600';
-            case 'down': return 'text-red-600';
-            default: return 'text-muted-foreground';
+            case "up":
+                return "text-green-600";
+            case "down":
+                return "text-red-600";
+            default:
+                return "text-muted-foreground";
         }
     };
 
-    const TrendIcon = trend === 'up' ? ArrowUpRight : ArrowDownRight;
+    const TrendIcon = trend === "up" ? ArrowUpRight : ArrowDownRight;
 
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                    {title}
-                </CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
                 <Icon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -54,14 +63,11 @@ export function MetricCard({
                         <span className="ml-1 text-muted-foreground">{change.label}</span>
                     </div>
                 )}
-                {description && (
-                    <p className="text-xs text-muted-foreground mt-1">{description}</p>
-                )}
+                {description && <p className="text-xs text-muted-foreground mt-1">{description}</p>}
             </CardContent>
         </Card>
     );
 }
-
 
 interface DashboardMetricsProps {
     metrics?: {
@@ -82,7 +88,7 @@ export function DashboardMetrics({ metrics }: DashboardMetricsProps) {
         totalProducts: 89,
         totalCustomers: 573,
         conversionRate: 3.2,
-        avgOrderValue: 36.67
+        avgOrderValue: 36.67,
     };
 
     const cards: MetricCardProps[] = [
@@ -91,33 +97,33 @@ export function DashboardMetrics({ metrics }: DashboardMetricsProps) {
             value: formatCurrency(data.totalRevenue),
             change: { value: 20.1, label: "from last month" },
             icon: DollarSign,
-            trend: 'up',
-            description: "Total earnings this month"
+            trend: "up",
+            description: "Total earnings this month",
         },
         {
             title: "Total Orders",
             value: data.totalOrders.toLocaleString(),
             change: { value: 12.5, label: "from last month" },
             icon: ShoppingCart,
-            trend: 'up',
-            description: "Orders processed this month"
+            trend: "up",
+            description: "Orders processed this month",
         },
         {
             title: "Active Products",
             value: data.totalProducts,
             change: { value: 5.2, label: "new this month" },
             icon: Package,
-            trend: 'up',
-            description: "Products currently listed"
+            trend: "up",
+            description: "Products currently listed",
         },
         {
             title: "Total Customers",
             value: data.totalCustomers,
             change: { value: 8.7, label: "from last month" },
             icon: Users,
-            trend: 'up',
-            description: "Unique customers served"
-        }
+            trend: "up",
+            description: "Unique customers served",
+        },
     ];
 
     return (

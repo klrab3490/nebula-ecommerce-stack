@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { getCurrencySymbol } from "@/lib/currency"
-import { Clock, Star, ShoppingCart } from "lucide-react"
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { getCurrencySymbol } from "@/lib/currency";
+import { Clock, Star, ShoppingCart } from "lucide-react";
 
 // Custom animations styles
 const shimmerKeyframes = `
@@ -29,34 +29,34 @@ const shimmerKeyframes = `
   .animate-glow {
     animation: glow 2s ease-in-out infinite;
   }
-`
+`;
 
 interface Product {
-    id: string
-    name: string
-    description: string
-    price: number
-    discountedPrice?: number
-    sku: string
-    stock: number
-    images: string[]
-    categories: string[]
-    featured: boolean
-    createdAt: Date
-    updatedAt: Date
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    discountedPrice?: number;
+    sku: string;
+    stock: number;
+    images: string[];
+    categories: string[];
+    featured: boolean;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 interface TimeLeft {
-    days: number
-    hours: number
-    minutes: number
-    seconds: number
+    days: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
 }
 
 interface FeaturedProductsProps {
-    daysFromNow?: number
-    onAddToCart?: (productId: string) => void
-    onReadMore?: (productId: string) => void
+    daysFromNow?: number;
+    onAddToCart?: (productId: string) => void;
+    onReadMore?: (productId: string) => void;
 }
 
 export default function FeaturedProducts({
@@ -65,84 +65,91 @@ export default function FeaturedProducts({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onReadMore,
 }: FeaturedProductsProps) {
-    const [products, setProducts] = useState<Product[]>([])
-    const [loading, setLoading] = useState(true)
-    const currencySymbol = getCurrencySymbol()
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
+    const currencySymbol = getCurrencySymbol();
     const [timeLeft, setTimeLeft] = useState<TimeLeft>({
         days: 0,
         hours: 0,
         minutes: 0,
         seconds: 0,
-    })
+    });
 
     // Fetch featured products from API
     useEffect(() => {
         const fetchFeaturedProducts = async () => {
             try {
-                const response = await fetch('/api/products')
+                const response = await fetch("/api/products");
                 if (response.ok) {
-                    const data = await response.json()
+                    const data = await response.json();
                     // Filter only featured products
-                    const featuredProducts = data.products.filter((product: Product) => product.featured)
-                    setProducts(featuredProducts)
+                    const featuredProducts = data.products.filter(
+                        (product: Product) => product.featured
+                    );
+                    setProducts(featuredProducts);
                 }
             } catch (error) {
-                console.error('Failed to fetch featured products:', error)
+                console.error("Failed to fetch featured products:", error);
             } finally {
-                setLoading(false)
+                setLoading(false);
             }
-        }
+        };
 
-        fetchFeaturedProducts()
-    }, [])
+        fetchFeaturedProducts();
+    }, []);
 
     useEffect(() => {
-        const targetDate = new Date()
-        targetDate.setDate(targetDate.getDate() + daysFromNow)
+        const targetDate = new Date();
+        targetDate.setDate(targetDate.getDate() + daysFromNow);
 
         const timer = setInterval(() => {
-            const now = new Date().getTime()
-            const distance = targetDate.getTime() - now
+            const now = new Date().getTime();
+            const distance = targetDate.getTime() - now;
 
             if (distance < 0) {
-                clearInterval(timer)
-                setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 })
-                return
+                clearInterval(timer);
+                setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+                return;
             }
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24))
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000)
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            setTimeLeft({ days, hours, minutes, seconds })
-        }, 1000)
+            setTimeLeft({ days, hours, minutes, seconds });
+        }, 1000);
 
-        return () => clearInterval(timer)
-    }, [daysFromNow])
+        return () => clearInterval(timer);
+    }, [daysFromNow]);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const renderStarRating = (rating: number, maxRating = 5) => (
-        <div className="flex items-center gap-0.5" role="img" aria-label={`${rating} out of ${maxRating} stars`}>
+        <div
+            className="flex items-center gap-0.5"
+            role="img"
+            aria-label={`${rating} out of ${maxRating} stars`}
+        >
             {Array.from({ length: maxRating }, (_, i) => (
                 <Star
                     key={i}
-                    className={`w-5 h-5 transition-all duration-300 ${i < rating
-                        ? "text-amber-400 fill-amber-400 hover:text-amber-300 hover:fill-amber-300 drop-shadow-sm transform hover:scale-110"
-                        : "text-gray-300 dark:text-gray-600 hover:text-gray-400"
-                        }`}
+                    className={`w-5 h-5 transition-all duration-300 ${
+                        i < rating
+                            ? "text-amber-400 fill-amber-400 hover:text-amber-300 hover:fill-amber-300 drop-shadow-sm transform hover:scale-110"
+                            : "text-gray-300 dark:text-gray-600 hover:text-gray-400"
+                    }`}
                     aria-hidden="true"
                 />
             ))}
         </div>
-    )
+    );
 
     const timeUnits = [
         { value: timeLeft.days, label: "Days" },
         { value: timeLeft.hours, label: "Hours" },
         { value: timeLeft.minutes, label: "Mins" },
         { value: timeLeft.seconds, label: "Secs" },
-    ]
+    ];
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-12">
@@ -155,7 +162,10 @@ export default function FeaturedProducts({
                     <div className="flex flex-col items-center gap-6">
                         <div className="flex items-center gap-4">
                             <div className="relative">
-                                <Clock className="text-red-500 dark:text-red-400 w-8 h-8 animate-pulse" aria-hidden="true" />
+                                <Clock
+                                    className="text-red-500 dark:text-red-400 w-8 h-8 animate-pulse"
+                                    aria-hidden="true"
+                                />
                                 <div className="absolute -inset-1 bg-red-500/20 rounded-full animate-ping"></div>
                             </div>
                             <h2 className="font-bold text-2xl tracking-wide bg-linear-to-r from-red-600 to-orange-600 dark:from-red-400 dark:to-orange-400 bg-clip-text text-transparent">
@@ -174,7 +184,9 @@ export default function FeaturedProducts({
                                         <div className="font-black text-3xl tabular-nums bg-linear-to-b from-red-600 to-red-800 dark:from-red-400 dark:to-red-600 bg-clip-text text-transparent drop-shadow-sm">
                                             {String(unit.value).padStart(2, "0")}
                                         </div>
-                                        <div className="text-red-500/80 dark:text-red-400/80 text-sm uppercase font-bold tracking-widest mt-1">{unit.label}</div>
+                                        <div className="text-red-500/80 dark:text-red-400/80 text-sm uppercase font-bold tracking-widest mt-1">
+                                            {unit.label}
+                                        </div>
                                     </div>
                                 </div>
                             ))}
@@ -198,7 +210,10 @@ export default function FeaturedProducts({
             {loading && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {[...Array(4)].map((_, index) => (
-                        <div key={index} className="bg-white/95 dark:bg-zinc-900/95 rounded-2xl p-7 shadow-xl animate-pulse">
+                        <div
+                            key={index}
+                            className="bg-white/95 dark:bg-zinc-900/95 rounded-2xl p-7 shadow-xl animate-pulse"
+                        >
                             <div className="bg-gray-200 dark:bg-gray-700 h-52 rounded-2xl mb-6"></div>
                             <div className="bg-gray-200 dark:bg-gray-700 h-4 rounded mb-4"></div>
                             <div className="bg-gray-200 dark:bg-gray-700 h-4 rounded mb-4 w-3/4"></div>
@@ -213,18 +228,21 @@ export default function FeaturedProducts({
             {!loading && products.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {products.map((product, index) => {
-                        const hasDiscount = product.discountedPrice && product.discountedPrice < product.price
+                        const hasDiscount =
+                            product.discountedPrice && product.discountedPrice < product.price;
                         const discountPercentage = hasDiscount
-                            ? Math.round(((product.price - product.discountedPrice!) / product.price) * 100)
-                            : 0
-                        const currentPrice = hasDiscount ? product.discountedPrice! : product.price
-                        const originalPrice = product.price
+                            ? Math.round(
+                                  ((product.price - product.discountedPrice!) / product.price) * 100
+                              )
+                            : 0;
+                        const currentPrice = hasDiscount ? product.discountedPrice! : product.price;
+                        const originalPrice = product.price;
 
                         const handleButtonClick = () => {
                             if (onAddToCart) {
-                                onAddToCart(product.id)
+                                onAddToCart(product.id);
                             }
-                        }
+                        };
 
                         return (
                             <div
@@ -237,14 +255,15 @@ export default function FeaturedProducts({
 
                                 {/* Main Card */}
                                 <div className="relative bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-white/20 dark:border-zinc-700/50 overflow-hidden">
-
                                     {/* Discount Badge with Animation */}
                                     {hasDiscount && (
                                         <div className="absolute top-4 left-4 z-20">
                                             <div className="relative">
                                                 <div className="absolute inset-0 bg-linear-to-r from-purple-600 to-pink-600 rounded-full blur-sm animate-pulse"></div>
                                                 <div className="relative bg-linear-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transform group-hover:scale-110 transition-transform duration-300">
-                                                    <span className="drop-shadow-sm">-{discountPercentage}%</span>
+                                                    <span className="drop-shadow-sm">
+                                                        -{discountPercentage}%
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -258,7 +277,10 @@ export default function FeaturedProducts({
                                         <div className="relative mb-6 bg-linear-to-br from-gray-50 to-gray-100 dark:from-zinc-800 dark:to-zinc-900 rounded-2xl overflow-hidden shadow-inner">
                                             <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5"></div>
                                             <Image
-                                                src={product.images[0] || "/placeholder.svg?height=200&width=200&query=product"}
+                                                src={
+                                                    product.images[0] ||
+                                                    "/placeholder.svg?height=200&width=200&query=product"
+                                                }
                                                 alt={product.name}
                                                 className="w-full h-52 object-contain group-hover:scale-110 transition-all duration-700 ease-out p-4 relative z-10"
                                                 width={200}
@@ -274,7 +296,10 @@ export default function FeaturedProducts({
                                         {/* Category Badge */}
                                         <div className="mb-4 flex flex-wrap gap-1">
                                             {product.categories.slice(0, 2).map((category, idx) => (
-                                                <span key={idx} className="text-xs px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full font-medium">
+                                                <span
+                                                    key={idx}
+                                                    className="text-xs px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full font-medium"
+                                                >
                                                     {category}
                                                 </span>
                                             ))}
@@ -286,10 +311,14 @@ export default function FeaturedProducts({
                                                 {hasDiscount && (
                                                     <>
                                                         <span className="text-muted-foreground line-through text-base font-medium">
-                                                            {currencySymbol}{originalPrice.toLocaleString()}
+                                                            {currencySymbol}
+                                                            {originalPrice.toLocaleString()}
                                                         </span>
                                                         <div className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-1 rounded-lg text-xs font-bold">
-                                                            SAVE {currencySymbol}{(originalPrice - currentPrice).toLocaleString()}
+                                                            SAVE {currencySymbol}
+                                                            {(
+                                                                originalPrice - currentPrice
+                                                            ).toLocaleString()}
                                                         </div>
                                                     </>
                                                 )}
@@ -298,13 +327,18 @@ export default function FeaturedProducts({
 
                                         <div className="mb-6">
                                             <span className="text-2xl font-black bg-linear-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
-                                                {currencySymbol}{currentPrice.toLocaleString()}
+                                                {currencySymbol}
+                                                {currentPrice.toLocaleString()}
                                             </span>
                                             {product.stock < 10 && product.stock > 0 && (
-                                                <p className="text-xs text-orange-600 dark:text-orange-400 mt-1">Only {product.stock} left in stock!</p>
+                                                <p className="text-xs text-orange-600 dark:text-orange-400 mt-1">
+                                                    Only {product.stock} left in stock!
+                                                </p>
                                             )}
                                             {product.stock === 0 && (
-                                                <p className="text-xs text-red-600 dark:text-red-400 mt-1">Out of stock</p>
+                                                <p className="text-xs text-red-600 dark:text-red-400 mt-1">
+                                                    Out of stock
+                                                </p>
                                             )}
                                         </div>
 
@@ -318,13 +352,17 @@ export default function FeaturedProducts({
                                             <div className="absolute inset-0 bg-linear-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
                                             <div className="relative flex items-center justify-center gap-2">
                                                 <ShoppingCart className="w-5 h-5" />
-                                                <span>{product.stock === 0 ? 'Out of Stock' : 'Add To Cart'}</span>
+                                                <span>
+                                                    {product.stock === 0
+                                                        ? "Out of Stock"
+                                                        : "Add To Cart"}
+                                                </span>
                                             </div>
                                         </Button>
                                     </div>
                                 </div>
                             </div>
-                        )
+                        );
                     })}
                 </div>
             )}
@@ -335,10 +373,14 @@ export default function FeaturedProducts({
                     <div className="w-24 h-24 bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-6">
                         <span className="text-slate-500 text-4xl">📦</span>
                     </div>
-                    <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">No Featured Products Yet</h3>
-                    <p className="text-slate-600 dark:text-slate-400 mb-6">Check back later for amazing deals and featured items!</p>
+                    <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+                        No Featured Products Yet
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-400 mb-6">
+                        Check back later for amazing deals and featured items!
+                    </p>
                 </div>
             )}
         </div>
-    )
+    );
 }

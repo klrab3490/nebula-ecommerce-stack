@@ -12,7 +12,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Eye } from "lucide-react";
-import { formatCurrency } from '@/lib/currency';
+import { formatCurrency } from "@/lib/currency";
 import Link from "next/link";
 
 interface Order {
@@ -20,7 +20,7 @@ interface Order {
     customer: string;
     email: string;
     total: number;
-    status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+    status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
     date: string;
     items: number;
 }
@@ -30,24 +30,24 @@ interface RecentOrdersProps {
     showViewAll?: boolean;
 }
 
-const getStatusColor = (status: Order['status']) => {
+const getStatusColor = (status: Order["status"]) => {
     switch (status) {
-        case 'pending':
-            return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-100';
-        case 'processing':
-            return 'bg-blue-100 text-blue-800 hover:bg-blue-100';
-        case 'shipped':
-            return 'bg-purple-100 text-purple-800 hover:bg-purple-100';
-        case 'delivered':
-            return 'bg-green-100 text-green-800 hover:bg-green-100';
-        case 'cancelled':
-            return 'bg-red-100 text-red-800 hover:bg-red-100';
+        case "pending":
+            return "bg-yellow-100 text-yellow-800 hover:bg-yellow-100";
+        case "processing":
+            return "bg-blue-100 text-blue-800 hover:bg-blue-100";
+        case "shipped":
+            return "bg-purple-100 text-purple-800 hover:bg-purple-100";
+        case "delivered":
+            return "bg-green-100 text-green-800 hover:bg-green-100";
+        case "cancelled":
+            return "bg-red-100 text-red-800 hover:bg-red-100";
         default:
-            return 'bg-gray-100 text-gray-800 hover:bg-gray-100';
+            return "bg-gray-100 text-gray-800 hover:bg-gray-100";
     }
 };
 
-const formatStatus = (status: Order['status']) => {
+const formatStatus = (status: Order["status"]) => {
     return status.charAt(0).toUpperCase() + status.slice(1);
 };
 
@@ -61,16 +61,16 @@ export function RecentOrders({ orders, showViewAll = true }: RecentOrdersProps) 
             total: 299.99,
             status: "processing",
             date: "2024-01-15",
-            items: 3
+            items: 3,
         },
         {
             id: "ORD-002",
             customer: "Jane Smith",
             email: "jane@example.com",
-            total: 149.50,
+            total: 149.5,
             status: "shipped",
             date: "2024-01-14",
-            items: 2
+            items: 2,
         },
         {
             id: "ORD-003",
@@ -79,7 +79,7 @@ export function RecentOrders({ orders, showViewAll = true }: RecentOrdersProps) 
             total: 89.99,
             status: "delivered",
             date: "2024-01-13",
-            items: 1
+            items: 1,
         },
         {
             id: "ORD-004",
@@ -88,7 +88,7 @@ export function RecentOrders({ orders, showViewAll = true }: RecentOrdersProps) 
             total: 199.99,
             status: "pending",
             date: "2024-01-12",
-            items: 4
+            items: 4,
         },
         {
             id: "ORD-005",
@@ -97,8 +97,8 @@ export function RecentOrders({ orders, showViewAll = true }: RecentOrdersProps) 
             total: 59.99,
             status: "cancelled",
             date: "2024-01-11",
-            items: 1
-        }
+            items: 1,
+        },
     ];
 
     const displayOrders = orders || mockOrders.slice(0, 5);
@@ -155,7 +155,10 @@ export function RecentOrders({ orders, showViewAll = true }: RecentOrdersProps) 
                                         </div>
                                     </TableCell>
                                     <TableCell>
-                                        <Badge variant="secondary" className={getStatusColor(order.status)}>
+                                        <Badge
+                                            variant="secondary"
+                                            className={getStatusColor(order.status)}
+                                        >
                                             {formatStatus(order.status)}
                                         </Badge>
                                     </TableCell>

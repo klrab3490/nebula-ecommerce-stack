@@ -1,30 +1,52 @@
 "use client";
 
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Plus, Search, Filter, MoreHorizontal, Eye, Edit, Trash2, Package, AlertTriangle } from 'lucide-react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import {
+    Plus,
+    Search,
+    Filter,
+    MoreHorizontal,
+    Eye,
+    Edit,
+    Trash2,
+    Package,
+    AlertTriangle,
+} from "lucide-react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface Product {
-    id: string
-    name: string
-    description: string
-    price: number
-    discountedPrice?: number
-    sku: string
-    stock: number
-    images: string[]
-    categories: string[]
-    featured: boolean
-    createdAt: Date
-    updatedAt: Date
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    discountedPrice?: number;
+    sku: string;
+    stock: number;
+    images: string[];
+    categories: string[];
+    featured: boolean;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export default function SellerProducts() {
@@ -41,18 +63,18 @@ export default function SellerProducts() {
             try {
                 setLoading(true);
                 setError(null);
-                const response = await fetch('/api/products');
+                const response = await fetch("/api/products");
                 const data = await response.json();
 
                 if (!response.ok) {
-                    throw new Error(data.error || 'Failed to fetch products');
+                    throw new Error(data.error || "Failed to fetch products");
                 }
 
-                console.log(data.products)
+                console.log(data.products);
                 setProducts(data.products || []);
             } catch (err) {
-                setError(err instanceof Error ? err.message : 'An error occurred');
-                console.error('Error fetching products:', err);
+                setError(err instanceof Error ? err.message : "An error occurred");
+                console.error("Error fetching products:", err);
             } finally {
                 setLoading(false);
             }
@@ -61,34 +83,38 @@ export default function SellerProducts() {
         fetchProducts();
     }, []);
 
-    const filteredProducts = products.filter(product => {
+    const filteredProducts = products.filter((product) => {
         const matchesSearch =
             product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            product.categories.some(category => category.toLowerCase().includes(searchTerm.toLowerCase()));
+            product.categories.some((category) =>
+                category.toLowerCase().includes(searchTerm.toLowerCase())
+            );
 
         const matchesCategory =
             statusFilter === "all"
                 ? true
-                : product.categories.some(category => category.toLowerCase() === statusFilter.toLowerCase());
+                : product.categories.some(
+                      (category) => category.toLowerCase() === statusFilter.toLowerCase()
+                  );
 
         return matchesSearch && matchesCategory;
     });
 
     const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure you want to delete this product?')) return;
+        if (!confirm("Are you sure you want to delete this product?")) return;
         // Optimistic removal
         const prev = products;
-        setProducts(prev => prev.filter(p => p.id !== id));
+        setProducts((prev) => prev.filter((p) => p.id !== id));
         try {
-            const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+            const res = await fetch(`/api/products/${id}`, { method: "DELETE" });
             if (!res.ok) {
                 const data = await res.json();
-                throw new Error(data.error || 'Failed to delete');
+                throw new Error(data.error || "Failed to delete");
             }
         } catch (err) {
             // rollback
             setProducts(prev);
-            alert(err instanceof Error ? err.message : 'Error deleting product');
+            alert(err instanceof Error ? err.message : "Error deleting product");
         }
     };
 
@@ -103,7 +129,7 @@ export default function SellerProducts() {
             default:
                 return <Badge className="bg-gray-100 text-gray-800">Unknown</Badge>;
         }
-    }
+    };
 
     const getStockWarning = (stock: number) => {
         if (stock === 0) return "text-red-600";
@@ -112,9 +138,11 @@ export default function SellerProducts() {
     };
 
     const totalProducts = loading ? 0 : products.length;
-    const activeProducts = loading ? 0 : products.filter(p => p.stock > 0).length;
-    const outOfStockProducts = loading ? 0 : products.filter(p => p.stock === 0).length;
-    const lowStockProducts = loading ? 0 : products.filter(p => p.stock > 0 && p.stock <= 10).length;
+    const activeProducts = loading ? 0 : products.filter((p) => p.stock > 0).length;
+    const outOfStockProducts = loading ? 0 : products.filter((p) => p.stock === 0).length;
+    const lowStockProducts = loading
+        ? 0
+        : products.filter((p) => p.stock > 0 && p.stock <= 10).length;
 
     return (
         <div className="space-y-6">
@@ -226,7 +254,10 @@ export default function SellerProducts() {
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline">
                                     <Filter className="h-4 w-4 mr-2" />
-                                    Status: {statusFilter === "all" ? "All" : statusFilter.replace("_", " ")}
+                                    Status:{" "}
+                                    {statusFilter === "all"
+                                        ? "All"
+                                        : statusFilter.replace("_", " ")}
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
@@ -258,12 +289,16 @@ export default function SellerProducts() {
                         <div className="text-center py-8">
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
                             <p className="text-lg font-medium">Loading products...</p>
-                            <p className="text-muted-foreground">Please wait while we fetch your products</p>
+                            <p className="text-muted-foreground">
+                                Please wait while we fetch your products
+                            </p>
                         </div>
                     ) : error ? (
                         <div className="text-center py-8">
                             <AlertTriangle className="h-12 w-12 mx-auto text-red-500 mb-4" />
-                            <p className="text-lg font-medium text-red-600">Error loading products</p>
+                            <p className="text-lg font-medium text-red-600">
+                                Error loading products
+                            </p>
                             <p className="text-muted-foreground mb-4">{error}</p>
                             <Button
                                 variant="outline"
@@ -312,26 +347,36 @@ export default function SellerProducts() {
                                                     </div>
                                                 )}
                                                 <div>
-                                                    <div className="font-medium">{product.name}</div>
-                                                    <div className="text-xs text-muted-foreground">{product.id}</div>
+                                                    <div className="font-medium">
+                                                        {product.name}
+                                                    </div>
+                                                    <div className="text-xs text-muted-foreground">
+                                                        {product.id}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </TableCell>
                                         <TableCell>{product.categories.join(", ")}</TableCell>
-                                        <TableCell className="font-medium">{product.price}</TableCell>
+                                        <TableCell className="font-medium">
+                                            {product.price}
+                                        </TableCell>
                                         <TableCell className={getStockWarning(product.stock)}>
                                             {product.stock}
                                             {product.stock <= 10 && product.stock > 0 && (
-                                                <span className="text-xs text-yellow-600 block">Low stock</span>
+                                                <span className="text-xs text-yellow-600 block">
+                                                    Low stock
+                                                </span>
                                             )}
                                         </TableCell>
-                                        <TableCell>{getStatusBadge(
-                                            product.stock === 0
-                                                ? "out_of_stock"
-                                                : product.stock > 0
-                                                    ? "active"
-                                                    : "inactive"
-                                        )}</TableCell>
+                                        <TableCell>
+                                            {getStatusBadge(
+                                                product.stock === 0
+                                                    ? "out_of_stock"
+                                                    : product.stock > 0
+                                                      ? "active"
+                                                      : "inactive"
+                                            )}
+                                        </TableCell>
                                         <TableCell className="text-sm text-muted-foreground">
                                             {new Date(product.createdAt).toLocaleDateString()}
                                         </TableCell>
@@ -343,15 +388,30 @@ export default function SellerProducts() {
                                                     </Button>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end">
-                                                    <DropdownMenuItem onClick={() => router.push(`/seller/products/${product.id}`)}>
+                                                    <DropdownMenuItem
+                                                        onClick={() =>
+                                                            router.push(
+                                                                `/seller/products/${product.id}`
+                                                            )
+                                                        }
+                                                    >
                                                         <Eye className="h-4 w-4 mr-2" />
                                                         View Details
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => router.push(`/seller/products/${product.id}/edit`)}>
+                                                    <DropdownMenuItem
+                                                        onClick={() =>
+                                                            router.push(
+                                                                `/seller/products/${product.id}/edit`
+                                                            )
+                                                        }
+                                                    >
                                                         <Edit className="h-4 w-4 mr-2" />
                                                         Edit Product
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(product.id)}>
+                                                    <DropdownMenuItem
+                                                        className="text-red-600"
+                                                        onClick={() => handleDelete(product.id)}
+                                                    >
                                                         <Trash2 className="h-4 w-4 mr-2" />
                                                         Delete
                                                     </DropdownMenuItem>

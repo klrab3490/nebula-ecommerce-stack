@@ -1,18 +1,18 @@
-import React from 'react';
-import { prisma } from '@/lib/prisma';
-import { Badge } from '@/components/ui/badge';
-import { CalendarDays, AlertCircle } from 'lucide-react';
-import { SalesChart } from '@/components/custom/dashboard/SalesChart';
-import { QuickActions } from '@/components/custom/dashboard/QuickActions';
-import { RecentOrders } from '@/components/custom/dashboard/RecentOrders';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { DashboardMetrics, RevenueGoal } from '@/components/custom/dashboard/DashboardMetrics';
+import React from "react";
+import { prisma } from "@/lib/prisma";
+import { Badge } from "@/components/ui/badge";
+import { CalendarDays, AlertCircle } from "lucide-react";
+import { SalesChart } from "@/components/custom/dashboard/SalesChart";
+import { QuickActions } from "@/components/custom/dashboard/QuickActions";
+import { RecentOrders } from "@/components/custom/dashboard/RecentOrders";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DashboardMetrics, RevenueGoal } from "@/components/custom/dashboard/DashboardMetrics";
 
 type Notification = {
     id: string;
     title: string;
     message: string;
-    type: 'warning' | 'info' | 'success' | 'error';
+    type: "warning" | "info" | "success" | "error";
     time: string;
 };
 
@@ -30,13 +30,14 @@ async function getDashboardData() {
 
     // Recent orders with items and user info
     const recentOrders = await prisma.order.findMany({
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         take: 5,
         include: { products: true },
     });
 
     const userIds = Array.from(new Set(recentOrders.map((o) => o.userId))).filter(Boolean);
-    const users = userIds.length > 0 ? await prisma.user.findMany({ where: { id: { in: userIds } } }) : [];
+    const users =
+        userIds.length > 0 ? await prisma.user.findMany({ where: { id: { in: userIds } } }) : [];
     const usersById = Object.fromEntries(users.map((u) => [u.id, u]));
 
     // Prepare recent orders data shape expected by RecentOrders component
@@ -44,15 +45,23 @@ async function getDashboardData() {
         const items = (o.products || []).reduce((s, p) => s + (p.quantity || 0), 0);
         const user = usersById[o.userId];
 
-        const validStatuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'] as const;
+        const validStatuses = [
+            "pending",
+            "processing",
+            "shipped",
+            "delivered",
+            "cancelled",
+        ] as const;
         type StatusType = (typeof validStatuses)[number];
-        const rawStatus = typeof o.status === 'string' ? o.status : 'pending';
-        const status: StatusType = (validStatuses.includes(rawStatus as StatusType) ? (rawStatus as StatusType) : 'pending');
+        const rawStatus = typeof o.status === "string" ? o.status : "pending";
+        const status: StatusType = validStatuses.includes(rawStatus as StatusType)
+            ? (rawStatus as StatusType)
+            : "pending";
 
         return {
             id: o.id,
-            customer: user?.name || 'Guest',
-            email: user?.email || '',
+            customer: user?.name || "Guest",
+            email: user?.email || "",
             total: o.total || 0,
             status,
             date: o.createdAt ? o.createdAt.toISOString() : new Date().toISOString(),
@@ -66,21 +75,21 @@ async function getDashboardData() {
     const notifications: Notification[] = [];
     if (lowStockCount > 0) {
         notifications.push({
-            id: 'low-stock',
-            title: 'Low Stock Alert',
+            id: "low-stock",
+            title: "Low Stock Alert",
             message: `${lowStockCount} products are running low on stock`,
-            type: 'warning',
-            time: 'recent',
+            type: "warning",
+            time: "recent",
         });
     }
 
     if (recentOrdersForUi.length > 0) {
         notifications.push({
-            id: 'new-order',
-            title: 'New Order',
+            id: "new-order",
+            title: "New Order",
             message: `Order ${recentOrdersForUi[0].id} received`,
-            type: 'info',
-            time: 'just now',
+            type: "info",
+            time: "just now",
         });
     }
 
@@ -105,11 +114,11 @@ async function getDashboardData() {
     for (let i = 0; i < 7; i++) {
         const d = new Date(sevenDaysAgo);
         d.setDate(sevenDaysAgo.getDate() + i);
-        const key = d.toLocaleDateString('en-US', { weekday: 'short' });
+        const key = d.toLocaleDateString("en-US", { weekday: "short" });
         dailyMap[key] = 0;
     }
     for (const o of ordersForCharts) {
-        const key = new Date(o.createdAt).toLocaleDateString('en-US', { weekday: 'short' });
+        const key = new Date(o.createdAt).toLocaleDateString("en-US", { weekday: "short" });
         dailyMap[key] = (dailyMap[key] || 0) + (o.total || 0);
     }
     const daily = Object.keys(dailyMap).map((k) => ({ name: k, value: dailyMap[k] }));
@@ -124,7 +133,7 @@ async function getDashboardData() {
     const weekly: { name: string; value: number }[] = [];
     for (let w = 0; w < 4; w++) {
         const weekStart = new Date(now);
-        weekStart.setDate(now.getDate() - (7 * (3 - w)));
+        weekStart.setDate(now.getDate() - 7 * (3 - w));
         weekStart.setHours(0, 0, 0, 0);
         const weekEnd = new Date(weekStart);
         weekEnd.setDate(weekStart.getDate() + 6);
@@ -143,7 +152,10 @@ async function getDashboardData() {
         const total = ordersForLonger
             .filter((o) => new Date(o.createdAt) >= monthStart && new Date(o.createdAt) <= monthEnd)
             .reduce((s, o) => s + (o.total || 0), 0);
-        monthly.push({ name: monthStart.toLocaleString('en-US', { month: 'short' }), value: total });
+        monthly.push({
+            name: monthStart.toLocaleString("en-US", { month: "short" }),
+            value: total,
+        });
     }
 
     const metrics = {
@@ -179,11 +191,18 @@ export default async function SellerDashboard() {
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-3xl font-bold">Dashboard</h1>
-                        <p className="text-muted-foreground">Welcome back! Here&apos;s what&apos;s happening with your store today.</p>
+                        <p className="text-muted-foreground">
+                            Welcome back! Here&apos;s what&apos;s happening with your store today.
+                        </p>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <CalendarDays className="h-4 w-4" />
-                        {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                        {new Date().toLocaleDateString("en-US", {
+                            weekday: "long",
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                        })}
                     </div>
                 </div>
             </div>
@@ -200,7 +219,10 @@ export default async function SellerDashboard() {
 
                 {/* Revenue Goal - Takes 1 column */}
                 <div>
-                    <RevenueGoal current={data.revenueGoal.current} target={data.revenueGoal.target} />
+                    <RevenueGoal
+                        current={data.revenueGoal.current}
+                        target={data.revenueGoal.target}
+                    />
                 </div>
             </div>
 
@@ -215,14 +237,23 @@ export default async function SellerDashboard() {
                 <CardContent>
                     <div className="space-y-3">
                         {data.notifications.map((notification) => (
-                            <div key={notification.id} className="flex items-start gap-3 p-3 rounded-lg border">
-                                <div className={`h-2 w-2 rounded-full mt-2 ${notification.type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'}`} />
+                            <div
+                                key={notification.id}
+                                className="flex items-start gap-3 p-3 rounded-lg border"
+                            >
+                                <div
+                                    className={`h-2 w-2 rounded-full mt-2 ${notification.type === "warning" ? "bg-yellow-500" : "bg-blue-500"}`}
+                                />
                                 <div className="flex-1">
                                     <div className="flex items-center justify-between">
                                         <h4 className="font-medium">{notification.title}</h4>
-                                        <Badge variant="outline" className="text-xs">{notification.time}</Badge>
+                                        <Badge variant="outline" className="text-xs">
+                                            {notification.time}
+                                        </Badge>
                                     </div>
-                                    <p className="text-sm text-muted-foreground mt-1">{notification.message}</p>
+                                    <p className="text-sm text-muted-foreground mt-1">
+                                        {notification.message}
+                                    </p>
                                 </div>
                             </div>
                         ))}

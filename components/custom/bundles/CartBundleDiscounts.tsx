@@ -1,10 +1,10 @@
 "use client";
 
-import React from 'react';
-import { Gift } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
-import { BundleDiscount, formatCurrency } from '@/lib/bundles';
+import React from "react";
+import { Gift } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { BundleDiscount, formatCurrency } from "@/lib/bundles";
 
 interface CartBundleDiscountsProps {
     appliedDiscounts: BundleDiscount[];
@@ -15,7 +15,7 @@ interface CartBundleDiscountsProps {
 export function CartBundleDiscounts({
     appliedDiscounts,
     totalDiscount,
-    currency = 'INR'
+    currency = "INR",
 }: CartBundleDiscountsProps) {
     if (appliedDiscounts.length === 0) {
         return null;
@@ -31,7 +31,10 @@ export function CartBundleDiscounts({
 
                 <div className="space-y-2">
                     {appliedDiscounts.map((discount) => (
-                        <div key={discount.bundleId} className="flex items-center justify-between text-sm">
+                        <div
+                            key={discount.bundleId}
+                            className="flex items-center justify-between text-sm"
+                        >
                             <div className="flex items-center space-x-2">
                                 <Badge variant="outline" className="text-xs bg-white">
                                     {discount.bundleName}
@@ -66,7 +69,7 @@ export function CartTotalWithBundles({
     subtotal,
     bundleDiscount,
     finalTotal,
-    currency = 'INR'
+    currency = "INR",
 }: CartTotalWithBundlesProps) {
     return (
         <div className="space-y-2 p-4 bg-muted/20 rounded-lg">

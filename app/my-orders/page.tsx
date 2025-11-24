@@ -1,7 +1,5 @@
-import React from 'react'
+import React from "react";
 
 export default function MyOrders() {
-    return (
-        <div>My Orders</div>
-    )
+    return <div>My Orders</div>;
 }

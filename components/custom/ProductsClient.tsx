@@ -8,18 +8,18 @@ import { ProductCard } from "@/components/custom/ProductCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Product {
-    id: string
-    name: string
-    description: string
-    price: number
-    discountedPrice?: number
-    sku: string
-    stock: number
-    images: string[]
-    categories: string[]
-    featured: boolean
-    createdAt: Date
-    updatedAt: Date
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    discountedPrice?: number;
+    sku: string;
+    stock: number;
+    images: string[];
+    categories: string[];
+    featured: boolean;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export default function ProductsClient() {
@@ -31,7 +31,7 @@ export default function ProductsClient() {
     const clientSearchParams = useSearchParams();
 
     // Initialize activeCategory from URL search params like ?category=Hair%20Oils
-    const urlCategory = clientSearchParams?.get('category') || 'All';
+    const urlCategory = clientSearchParams?.get("category") || "All";
     const [activeCategory, setActiveCategory] = useState<string>(urlCategory);
 
     // Keep state synced with URL changes (like back/forward navigation)
@@ -45,25 +45,32 @@ export default function ProductsClient() {
     // Update the URL when the user selects a category
     const updateCategoryInUrl = (value: string) => {
         try {
-            const params = new URLSearchParams(clientSearchParams?.toString() || '');
+            const params = new URLSearchParams(clientSearchParams?.toString() || "");
 
             // Remove Next/React debug/internal query keys if accidentally present
             // (e.g. keys like 'status','value','reason','_children','_debugChunk','_debugInfo')
-            const internalKeys = ['status', 'value', 'reason', '_children', '_debugChunk', '_debugInfo'];
+            const internalKeys = [
+                "status",
+                "value",
+                "reason",
+                "_children",
+                "_debugChunk",
+                "_debugInfo",
+            ];
             for (const k of internalKeys) params.delete(k);
             // also drop any keys starting with underscore
             for (const [k] of Array.from(params.entries())) {
-                if (k.startsWith('_')) params.delete(k);
+                if (k.startsWith("_")) params.delete(k);
             }
 
-            if (!value || value === 'All') {
-                params.delete('category');
+            if (!value || value === "All") {
+                params.delete("category");
             } else {
-                params.set('category', value);
+                params.set("category", value);
             }
 
-            router.replace(`/products${params.toString() ? `?${params.toString()}` : ''}`);
-        } catch { }
+            router.replace(`/products${params.toString() ? `?${params.toString()}` : ""}`);
+        } catch {}
     };
 
     // When the user changes category via UI
@@ -72,17 +79,16 @@ export default function ProductsClient() {
         updateCategoryInUrl(value);
     };
 
-
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await fetch('/api/products');
+                const response = await fetch("/api/products");
                 if (response.ok) {
                     const data = await response.json();
                     setProducts(data.products);
                 }
             } catch (error) {
-                console.error('Failed to fetch products:', error);
+                console.error("Failed to fetch products:", error);
             } finally {
                 setLoading(false);
             }
@@ -95,31 +101,37 @@ export default function ProductsClient() {
 
     // Get unique categories from products
     const categories = useMemo(() => {
-        const allCategories = products.flatMap(product => product.categories);
+        const allCategories = products.flatMap((product) => product.categories);
         return ["All", ...Array.from(new Set(allCategories))];
     }, [products]);
 
     const filtered = useMemo(() => {
-        let items = products.filter(p =>
+        let items = products.filter((p) =>
             p.name.toLowerCase().includes(query.trim().toLowerCase())
         );
 
         if (activeCategory !== "All") {
-            items = items.filter(p => p.categories.includes(activeCategory));
+            items = items.filter((p) => p.categories.includes(activeCategory));
         }
 
         switch (sort) {
             case "price-asc":
-                items = [...items].sort((a, b) => (a.discountedPrice || a.price) - (b.discountedPrice || b.price));
+                items = [...items].sort(
+                    (a, b) => (a.discountedPrice || a.price) - (b.discountedPrice || b.price)
+                );
                 break;
             case "price-desc":
-                items = [...items].sort((a, b) => (b.discountedPrice || b.price) - (a.discountedPrice || a.price));
+                items = [...items].sort(
+                    (a, b) => (b.discountedPrice || b.price) - (a.discountedPrice || a.price)
+                );
                 break;
             case "name":
                 items = [...items].sort((a, b) => a.name.localeCompare(b.name));
                 break;
             case "newest":
-                items = [...items].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+                items = [...items].sort(
+                    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                );
                 break;
             default:
                 break;
@@ -135,7 +147,10 @@ export default function ProductsClient() {
                 {/* Modern Background */}
                 <div className="absolute inset-0 bg-linear-to-br from-purple-50/80 via-pink-50/60 to-blue-50/80 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-blue-950/20"></div>
                 <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-300/10 rounded-full blur-3xl animate-pulse"></div>
-                <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+                <div
+                    className="absolute bottom-0 right-1/4 w-72 h-72 bg-pink-300/10 rounded-full blur-3xl animate-pulse"
+                    style={{ animationDelay: "2s" }}
+                ></div>
 
                 <div className="max-w-7xl mx-auto px-4 relative z-10">
                     <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
@@ -144,7 +159,8 @@ export default function ProductsClient() {
                                 🛍️ All Products
                             </h1>
                             <p className="text-lg text-muted-foreground max-w-2xl font-medium">
-                                Explore our complete collection of premium beauty and wellness products
+                                Explore our complete collection of premium beauty and wellness
+                                products
                             </p>
                             <div className="w-24 h-1 bg-linear-to-r from-purple-500 to-pink-500 mx-auto md:mx-0 mt-4 rounded-full"></div>
                         </div>
@@ -168,7 +184,9 @@ export default function ProductsClient() {
 
                     <div className="mt-8 flex items-center gap-4 bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 rounded-2xl px-6 py-4">
                         <SlidersHorizontal className="h-5 w-5 text-muted-foreground" />
-                        <span className="text-sm font-medium text-muted-foreground">Showing {filtered.length} premium items</span>
+                        <span className="text-sm font-medium text-muted-foreground">
+                            Showing {filtered.length} premium items
+                        </span>
                     </div>
 
                     <div className="mt-8">
@@ -179,7 +197,7 @@ export default function ProductsClient() {
                         >
                             <div className="bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 rounded-2xl p-2">
                                 <TabsList className="flex flex-wrap gap-2 bg-transparent">
-                                    {categories.map(cat => (
+                                    {categories.map((cat) => (
                                         <TabsTrigger
                                             key={cat}
                                             value={cat}
@@ -191,11 +209,12 @@ export default function ProductsClient() {
                                 </TabsList>
                             </div>
 
-
                             <TabsContent value={activeCategory}>
                                 <div className="flex items-center justify-end mt-6">
                                     <div className="bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 rounded-xl px-4 py-2 flex items-center gap-3">
-                                        <label className="text-sm font-medium text-muted-foreground">Sort by</label>
+                                        <label className="text-sm font-medium text-muted-foreground">
+                                            Sort by
+                                        </label>
                                         <select
                                             className="bg-transparent border-0 text-sm font-medium focus:outline-none cursor-pointer"
                                             value={sort}
@@ -215,7 +234,10 @@ export default function ProductsClient() {
                                 {loading && (
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-8">
                                         {[...Array(12)].map((_, index) => (
-                                            <div key={index} className="bg-white/90 dark:bg-zinc-900/90 rounded-2xl p-6 shadow-xl animate-pulse">
+                                            <div
+                                                key={index}
+                                                className="bg-white/90 dark:bg-zinc-900/90 rounded-2xl p-6 shadow-xl animate-pulse"
+                                            >
                                                 <div className="aspect-square bg-gray-200 dark:bg-gray-700 rounded-xl mb-4"></div>
                                                 <div className="bg-gray-200 dark:bg-gray-700 h-6 rounded mb-2"></div>
                                                 <div className="bg-gray-200 dark:bg-gray-700 h-4 rounded mb-4 w-3/4"></div>
@@ -244,8 +266,12 @@ export default function ProductsClient() {
                                     <div className="text-center py-20">
                                         <div className="bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 rounded-2xl p-12 inline-block">
                                             <div className="text-6xl mb-4">🔍</div>
-                                            <h3 className="text-xl font-bold text-foreground mb-2">No products found</h3>
-                                            <p className="text-muted-foreground">Try adjusting your search or filter criteria</p>
+                                            <h3 className="text-xl font-bold text-foreground mb-2">
+                                                No products found
+                                            </h3>
+                                            <p className="text-muted-foreground">
+                                                Try adjusting your search or filter criteria
+                                            </p>
                                         </div>
                                     </div>
                                 )}

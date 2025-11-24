@@ -5,58 +5,63 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { formatCurrency } from '@/lib/currency';
+import { formatCurrency } from "@/lib/currency";
 import { useState, useEffect, useRef } from "react";
 import { useAppContext } from "@/contexts/AppContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Heart, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface Product {
-    id: string
-    name: string
-    price: number
-    originalPrice?: number
-    images: string[]
-    alt?: string
-    description: string
-    features: string[]
-    specifications: { [key: string]: string }
-    faq: { question: string; answer: string }[]
+    id: string;
+    name: string;
+    price: number;
+    originalPrice?: number;
+    images: string[];
+    alt?: string;
+    description: string;
+    features: string[];
+    specifications: { [key: string]: string };
+    faq: { question: string; answer: string }[];
 }
 
 export default function ProductPage() {
     const params = useParams();
     const id = params?.id as string;
 
-    const [product, setProduct] = useState<Product | null>(null)
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
-    const [currentImageIndex, setCurrentImageIndex] = useState(0)
-    const [isWishlisted, setIsWishlisted] = useState(false)
+    const [product, setProduct] = useState<Product | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [isWishlisted, setIsWishlisted] = useState(false);
     const { addItem } = useAppContext();
 
     // Slider refs/state
-    const trackRef = useRef<HTMLDivElement | null>(null)
-    const touchStartX = useRef<number | null>(null)
-    const touchDeltaX = useRef<number>(0)
+    const trackRef = useRef<HTMLDivElement | null>(null);
+    const touchStartX = useRef<number | null>(null);
+    const touchDeltaX = useRef<number>(0);
 
     useEffect(() => {
         if (!id) return;
 
         const fetchProduct = async () => {
             try {
-                setLoading(true)
-                setError(null)
-                const res = await fetch(`/api/products/${id}`)
-                const data = await res.json()
+                setLoading(true);
+                setError(null);
+                const res = await fetch(`/api/products/${id}`);
+                const data = await res.json();
                 if (!res.ok) {
-                    setError(data.error || 'Failed to load product')
-                    setProduct(null)
-                    return
+                    setError(data.error || "Failed to load product");
+                    setProduct(null);
+                    return;
                 }
 
-                const p = data.product
+                const p = data.product;
 
                 // Map DB product shape to UI shape (with fallbacks)
                 const mapped: Product = {
@@ -65,86 +70,94 @@ export default function ProductPage() {
                     // If discountedPrice exists and >0, show it as price and originalPrice as price
                     price: p.discountedPrice && p.discountedPrice > 0 ? p.discountedPrice : p.price,
                     originalPrice: p.discountedPrice && p.discountedPrice > 0 ? p.price : undefined,
-                    images: Array.isArray(p.images) && p.images.length > 0 ? p.images : ['/placeholder.svg'],
+                    images:
+                        Array.isArray(p.images) && p.images.length > 0
+                            ? p.images
+                            : ["/placeholder.svg"],
                     alt: p.name,
-                    description: p.description || '',
+                    description: p.description || "",
                     features: Array.isArray(p.features) ? p.features : [],
                     specifications: p.specifications || {},
                     faq: Array.isArray(p.faq) ? p.faq : [],
-                }
+                };
 
-                setProduct(mapped)
+                setProduct(mapped);
             } catch (err) {
-                setError(err instanceof Error ? err.message : 'An error occurred')
-                setProduct(null)
+                setError(err instanceof Error ? err.message : "An error occurred");
+                setProduct(null);
             } finally {
-                setLoading(false)
+                setLoading(false);
             }
-        }
+        };
 
-        fetchProduct()
-    }, [id])
+        fetchProduct();
+    }, [id]);
 
-    if (loading) return (
-        <div className="fixed inset-0 flex items-center justify-center bg-background z-50">
-            <div className="flex flex-col items-center gap-4">
-                <div className="relative w-16 h-16">
-                    <div className="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin" />
-                    <div className="absolute inset-2 rounded-full border-2 border-primary/30 border-t-transparent animate-spin-slow" />
+    if (loading)
+        return (
+            <div className="fixed inset-0 flex items-center justify-center bg-background z-50">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="relative w-16 h-16">
+                        <div className="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+                        <div className="absolute inset-2 rounded-full border-2 border-primary/30 border-t-transparent animate-spin-slow" />
+                    </div>
+                    <span className="text-lg font-medium text-muted-foreground animate-pulse">
+                        Loading product...
+                    </span>
                 </div>
-                <span className="text-lg font-medium text-muted-foreground animate-pulse">Loading product...</span>
+                <style jsx>{`
+                    @keyframes spin-slow {
+                        to {
+                            transform: rotate(360deg);
+                        }
+                    }
+                    .animate-spin-slow {
+                        animation: spin-slow 2s linear infinite;
+                    }
+                `}</style>
             </div>
-            <style jsx>{`
-                @keyframes spin-slow {
-                    to { transform: rotate(360deg); }
-                }
-                .animate-spin-slow {
-                    animation: spin-slow 2s linear infinite;
-                }
-            `}</style>
-        </div>
-    );
-    if (error) return <div className="py-12 text-center text-red-600">{error}</div>
-    if (!product) return <div className="py-12 text-center">Product not found</div>
+        );
+    if (error) return <div className="py-12 text-center text-red-600">{error}</div>;
+    if (!product) return <div className="py-12 text-center">Product not found</div>;
     const nextImage = () => {
-        setCurrentImageIndex((prev) => (prev === (product.images.length - 1) ? 0 : prev + 1))
-    }
+        setCurrentImageIndex((prev) => (prev === product.images.length - 1 ? 0 : prev + 1));
+    };
 
     const prevImage = () => {
-        setCurrentImageIndex((prev) => (prev === 0 ? product.images.length - 1 : prev - 1))
-    }
+        setCurrentImageIndex((prev) => (prev === 0 ? product.images.length - 1 : prev - 1));
+    };
 
     // No autoplay - manual navigation only
 
     const onTouchStart = (e: React.TouchEvent) => {
-        touchStartX.current = e.touches[0].clientX
-        touchDeltaX.current = 0
-    }
+        touchStartX.current = e.touches[0].clientX;
+        touchDeltaX.current = 0;
+    };
 
     const onTouchMove = (e: React.TouchEvent) => {
-        if (touchStartX.current === null) return
-        const delta = e.touches[0].clientX - touchStartX.current
-        touchDeltaX.current = delta
+        if (touchStartX.current === null) return;
+        const delta = e.touches[0].clientX - touchStartX.current;
+        touchDeltaX.current = delta;
         if (trackRef.current) {
-            trackRef.current.style.transition = 'none'
-            trackRef.current.style.transform = `translateX(calc(${-currentImageIndex * 100}% + ${delta}px))`
+            trackRef.current.style.transition = "none";
+            trackRef.current.style.transform = `translateX(calc(${-currentImageIndex * 100}% + ${delta}px))`;
         }
-    }
+    };
 
     const onTouchEnd = () => {
-        if (touchStartX.current === null) return
-        const delta = touchDeltaX.current
-        touchStartX.current = null
-        touchDeltaX.current = 0
+        if (touchStartX.current === null) return;
+        const delta = touchDeltaX.current;
+        touchStartX.current = null;
+        touchDeltaX.current = 0;
         if (trackRef.current) {
-            trackRef.current.style.transition = ''
-            trackRef.current.style.transform = ''
+            trackRef.current.style.transition = "";
+            trackRef.current.style.transform = "";
         }
         if (Math.abs(delta) > 50) {
-            if (delta < 0) nextImage()
-            else prevImage()
+            if (delta < 0) nextImage();
+            else prevImage();
         }
-    }
+    };
 
     const handleAddToCart = () => {
         addItem({
@@ -152,8 +165,8 @@ export default function ProductPage() {
             name: product.name,
             price: product.price,
             image: product.images[0],
-        })
-    }
+        });
+    };
 
     return (
         <div className="min-h-screen">
@@ -179,7 +192,9 @@ export default function ProductPage() {
                                     <div
                                         ref={trackRef}
                                         className="flex h-full transition-transform duration-300"
-                                        style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
+                                        style={{
+                                            transform: `translateX(-${currentImageIndex * 100}%)`,
+                                        }}
                                     >
                                         {product.images.map((image, idx) => (
                                             <div key={idx} className="min-w-full h-full relative">
@@ -242,17 +257,26 @@ export default function ProductPage() {
                         <div>
                             <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
                             <div className="flex items-center gap-2 mb-4">
-                                <span className="text-3xl font-bold">{formatCurrency(product.price)}</span>
+                                <span className="text-3xl font-bold">
+                                    {formatCurrency(product.price)}
+                                </span>
                                 {product.originalPrice && (
                                     <>
-                                        <span className="text-lg text-muted-foreground line-through">{formatCurrency(product.originalPrice)}</span>
-                                        <Badge variant="destructive">Save {formatCurrency(product.originalPrice - product.price)}</Badge>
+                                        <span className="text-lg text-muted-foreground line-through">
+                                            {formatCurrency(product.originalPrice)}
+                                        </span>
+                                        <Badge variant="destructive">
+                                            Save{" "}
+                                            {formatCurrency(product.originalPrice - product.price)}
+                                        </Badge>
                                     </>
                                 )}
                             </div>
                         </div>
 
-                        <p className="text-muted-foreground leading-relaxed">{product.description}</p>
+                        <p className="text-muted-foreground leading-relaxed">
+                            {product.description}
+                        </p>
 
                         <div>
                             <h3 className="font-semibold mb-3">Key Features</h3>
@@ -276,7 +300,9 @@ export default function ProductPage() {
                                 size="lg"
                                 onClick={() => setIsWishlisted(!isWishlisted)}
                             >
-                                <Heart className={`h-4 w-4 ${isWishlisted ? "fill-current" : ""}`} />
+                                <Heart
+                                    className={`h-4 w-4 ${isWishlisted ? "fill-current" : ""}`}
+                                />
                             </Button>
                         </div>
 
@@ -285,7 +311,10 @@ export default function ProductPage() {
                                 <h3 className="font-semibold mb-4">Specifications</h3>
                                 <div className="space-y-3">
                                     {Object.entries(product.specifications).map(([key, value]) => (
-                                        <div key={key} className="flex justify-between py-2 border-b border-border last:border-0">
+                                        <div
+                                            key={key}
+                                            className="flex justify-between py-2 border-b border-border last:border-0"
+                                        >
                                             <span className="text-muted-foreground">{key}</span>
                                             <span className="font-medium">{value}</span>
                                         </div>
@@ -297,17 +326,23 @@ export default function ProductPage() {
                 </div>
 
                 <div className="mt-12 flex flex-col items-center justify-center">
-                    <h2 className="text-2xl font-bold mb-6 text-center">Frequently Asked Questions</h2>
+                    <h2 className="text-2xl font-bold mb-6 text-center">
+                        Frequently Asked Questions
+                    </h2>
                     <Accordion type="single" collapsible className="max-w-7xl w-full">
                         {product.faq.map((item, index) => (
                             <AccordionItem key={index} value={`item-${index}`}>
-                                <AccordionTrigger className="text-left">{item.question}</AccordionTrigger>
-                                <AccordionContent className="text-muted-foreground">{item.answer}</AccordionContent>
+                                <AccordionTrigger className="text-left">
+                                    {item.question}
+                                </AccordionTrigger>
+                                <AccordionContent className="text-muted-foreground">
+                                    {item.answer}
+                                </AccordionContent>
                             </AccordionItem>
                         ))}
                     </Accordion>
                 </div>
             </div>
         </div>
-    )
+    );
 }

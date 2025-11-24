@@ -25,7 +25,7 @@ export default function Navbar() {
     const palette = getPalette(0); // using the first palette (violet-pink-blue)
 
     if (pathname.startsWith("/seller")) {
-        return null
+        return null;
     }
 
     return (
@@ -75,15 +75,29 @@ export default function Navbar() {
                                 className="lg:hidden ml-2 h-10 w-10 hover:bg-accent/80"
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                             >
-                                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                                {isMenuOpen ? (
+                                    <X className="h-6 w-6" />
+                                ) : (
+                                    <Menu className="h-6 w-6" />
+                                )}
                             </Button>
                         </div>
 
                         {/* Center section - Logo */}
                         <div className="flex items-center justify-center">
                             <Link href="/" className="flex items-center gap-2 shrink-0">
-                                <div className={`rounded-full p-0.5 bg-linear-to-r ${palette.gradient}`}>
-                                    <Image src="/Nebula.png" alt="Nebula Logo" width={32} height={32} className="rounded-full bg-white" priority unoptimized />
+                                <div
+                                    className={`rounded-full p-0.5 bg-linear-to-r ${palette.gradient}`}
+                                >
+                                    <Image
+                                        src="/Nebula.png"
+                                        alt="Nebula Logo"
+                                        width={32}
+                                        height={32}
+                                        className="rounded-full bg-white"
+                                        priority
+                                        unoptimized
+                                    />
                                 </div>
                             </Link>
                         </div>
@@ -111,7 +125,11 @@ export default function Navbar() {
                                     <Search className="h-5 w-5" />
                                 </Button>
 
-                                <Button variant="ghost" size="icon" className={`hidden md:inline-flex relative h-10 w-10 hover:bg-accent/80 rounded-md border border-border/50`}>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className={`hidden md:inline-flex relative h-10 w-10 hover:bg-accent/80 rounded-md border border-border/50`}
+                                >
                                     <CartIcon />
                                 </Button>
 
@@ -119,15 +137,44 @@ export default function Navbar() {
                                     <div className="relative h-10 w-10 hover:bg-accent/80 flex items-center justify-center rounded-md">
                                         <UserButton>
                                             <UserButton.MenuItems>
-                                                <UserButton.Action label="Home" labelIcon={<House className='h-5 w-5' />} onClick={() => { router.push('/') }} />
-                                                {/* <UserButton.Action label="Profile" labelIcon={<User className='h-5 w-5' />} onClick={() => { router.push('/profile') }} /> */}
-                                                <UserButton.Action label="Cart" labelIcon={<ShoppingCart className='h-5 w-5' />} onClick={() => { router.push('/cart') }} />
-                                                <UserButton.Action label="Orders" labelIcon={<ShoppingBag className='h-5 w-5' />} onClick={() => { router.push('/my-orders') }} />
+                                                <UserButton.Action
+                                                    label="Home"
+                                                    labelIcon={<House className="h-5 w-5" />}
+                                                    onClick={() => {
+                                                        router.push("/");
+                                                    }}
+                                                />
+                                                <UserButton.Action
+                                                    label="Profile"
+                                                    labelIcon={<User className="h-5 w-5" />}
+                                                    onClick={() => {
+                                                        router.push("/account");
+                                                    }}
+                                                />
+                                                <UserButton.Action
+                                                    label="Cart"
+                                                    labelIcon={<ShoppingCart className="h-5 w-5" />}
+                                                    onClick={() => {
+                                                        router.push("/cart");
+                                                    }}
+                                                />
+                                                <UserButton.Action
+                                                    label="Orders"
+                                                    labelIcon={<ShoppingBag className="h-5 w-5" />}
+                                                    onClick={() => {
+                                                        router.push("/my-orders");
+                                                    }}
+                                                />
                                             </UserButton.MenuItems>
                                         </UserButton>
                                     </div>
                                 ) : (
-                                    <Button variant="ghost" size="icon" className="relative h-10 w-10 hover:bg-accent/80 flex items-center justify-center" onClick={() => openSignIn()}>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="relative h-10 w-10 hover:bg-accent/80 flex items-center justify-center"
+                                        onClick={() => openSignIn()}
+                                    >
                                         <User className="h-5 w-5" />
                                     </Button>
                                 )}
@@ -166,7 +213,11 @@ export default function Navbar() {
                                         <Search className="h-5 w-5" />
                                     </Button>
 
-                                    <Button variant="ghost" size="icon" className="relative h-12 w-12 hover:bg-accent/80 rounded-xl">
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="relative h-12 w-12 hover:bg-accent/80 rounded-xl"
+                                    >
                                         <CartIcon />
                                     </Button>
                                 </div>
@@ -243,5 +294,5 @@ export default function Navbar() {
                 )}
             </div>
         </nav>
-    )
+    );
 }
