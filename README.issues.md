@@ -24,10 +24,10 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Impact**: Payment flow works but no real shipping integration
 - **Files**: `lib/shiprocket.ts`, checkout API routes
 - **TODO**:
-    - [ ] Implement real Shiprocket authentication (token exchange)
-    - [ ] Create actual shipment orders via Shiprocket API
-    - [ ] Add tracking number storage in Order model
-    - [ ] Handle shipment status webhooks
+  - [ ] Implement real Shiprocket authentication (token exchange)
+  - [ ] Create actual shipment orders via Shiprocket API
+  - [ ] Add tracking number storage in Order model
+  - [ ] Handle shipment status webhooks
 - **Estimated Time**: 2-3 days
 
 ### 2. **Missing Bundle Product API**
@@ -36,9 +36,9 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Description**: BundleManagement component tries to fetch `/api/products` but this endpoint doesn't exist
 - **Impact**: Bundle creation UI will fail
 - **TODO**:
-    - [ ] Create `/api/products` GET endpoint
-    - [ ] Return products with proper pagination
-    - [ ] Add search/filter capabilities
+  - [ ] Create `/api/products` GET endpoint
+  - [ ] Return products with proper pagination
+  - [ ] Add search/filter capabilities
 - **Estimated Time**: 4-6 hours
 
 ### 3. **Database Migrations**
@@ -46,9 +46,9 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🔴 Critical
 - **Description**: New Bundle schema changes need to be applied to database
 - **TODO**:
-    - [ ] Run `npx prisma generate` after bundle schema changes
-    - [ ] Update database with new models
-    - [ ] Test bundle creation in development
+  - [ ] Run `npx prisma generate` after bundle schema changes
+  - [ ] Update database with new models
+  - [ ] Test bundle creation in development
 - **Estimated Time**: 1-2 hours
 
 ---
@@ -60,10 +60,10 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟡 High Priority
 - **Description**: Better role management system for buyers/sellers/admins
 - **TODO**:
-    - [ ] Create role management API endpoints
-    - [ ] Add role-based UI components
-    - [ ] Implement seller application workflow
-    - [ ] Add admin dashboard for role approvals
+  - [ ] Create role management API endpoints
+  - [ ] Add role-based UI components
+  - [ ] Implement seller application workflow
+  - [ ] Add admin dashboard for role approvals
 - **Estimated Time**: 1-2 weeks
 
 ### 5. **Product Management UI**
@@ -71,11 +71,11 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟡 High Priority
 - **Description**: Sellers need a complete product management interface
 - **TODO**:
-    - [ ] Create product CRUD operations UI
-    - [ ] Add image upload for products
-    - [ ] Implement inventory management
-    - [ ] Add product categories management
-    - [ ] Create product import/export functionality
+  - [ ] Create product CRUD operations UI
+  - [ ] Add image upload for products
+  - [ ] Implement inventory management
+  - [ ] Add product categories management
+  - [ ] Create product import/export functionality
 - **Estimated Time**: 1-2 weeks
 
 ### 6. **Order Management System**
@@ -83,11 +83,11 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟡 High Priority
 - **Description**: Complete order lifecycle management
 - **TODO**:
-    - [ ] Create seller order management dashboard
-    - [ ] Add order status updates (processing, shipped, delivered)
-    - [ ] Implement order cancellation workflow
-    - [ ] Add order search and filtering
-    - [ ] Create customer order tracking page
+  - [ ] Create seller order management dashboard
+  - [ ] Add order status updates (processing, shipped, delivered)
+  - [ ] Implement order cancellation workflow
+  - [ ] Add order search and filtering
+  - [ ] Create customer order tracking page
 - **Estimated Time**: 1-2 weeks
 
 ### 7. **Payment Webhooks**
@@ -95,11 +95,11 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟡 High Priority
 - **Description**: Handle asynchronous payment events from Razorpay
 - **TODO**:
-    - [ ] Create webhook endpoint `/api/webhooks/razorpay`
-    - [ ] Handle payment success/failure events
-    - [ ] Implement automatic order status updates
-    - [ ] Add payment retry mechanisms
-    - [ ] Create refund handling system
+  - [ ] Create webhook endpoint `/api/webhooks/razorpay`
+  - [ ] Handle payment success/failure events
+  - [ ] Implement automatic order status updates
+  - [ ] Add payment retry mechanisms
+  - [ ] Create refund handling system
 - **Estimated Time**: 3-5 days
 
 ---
@@ -111,10 +111,10 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟢 Medium Priority
 - **Description**: Product search and advanced filtering capabilities
 - **TODO**:
-    - [ ] Add search API with full-text search
-    - [ ] Create filter UI (price, category, rating, etc.)
-    - [ ] Implement sort options (price, popularity, newest)
-    - [ ] Add search suggestions/autocomplete
+  - [ ] Add search API with full-text search
+  - [ ] Create filter UI (price, category, rating, etc.)
+  - [ ] Implement sort options (price, popularity, newest)
+  - [ ] Add search suggestions/autocomplete
 - **Estimated Time**: 1 week
 
 ### 9. **Reviews & Ratings System**
@@ -122,11 +122,11 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟢 Medium Priority
 - **Description**: Customer review and rating functionality
 - **TODO**:
-    - [ ] Create Review model in Prisma schema
-    - [ ] Add review API endpoints
-    - [ ] Create review submission UI
-    - [ ] Add rating display on products
-    - [ ] Implement review moderation
+  - [ ] Create Review model in Prisma schema
+  - [ ] Add review API endpoints
+  - [ ] Create review submission UI
+  - [ ] Add rating display on products
+  - [ ] Implement review moderation
 - **Estimated Time**: 1 week
 
 ### 10. **Wishlist Feature**
@@ -134,10 +134,10 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟢 Medium Priority
 - **Description**: Allow customers to save products for later
 - **TODO**:
-    - [ ] Create Wishlist model and API
-    - [ ] Add wishlist UI components
-    - [ ] Implement wishlist sharing
-    - [ ] Add move-to-cart functionality
+  - [ ] Create Wishlist model and API
+  - [ ] Add wishlist UI components
+  - [ ] Implement wishlist sharing
+  - [ ] Add move-to-cart functionality
 - **Estimated Time**: 3-5 days
 
 ### 11. **Inventory Management**
@@ -145,10 +145,10 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟢 Medium Priority
 - **Description**: Advanced inventory tracking and alerts
 - **TODO**:
-    - [ ] Add low stock alerts
-    - [ ] Create stock movement tracking
-    - [ ] Implement automatic reorder points
-    - [ ] Add bulk inventory updates
+  - [ ] Add low stock alerts
+  - [ ] Create stock movement tracking
+  - [ ] Implement automatic reorder points
+  - [ ] Add bulk inventory updates
 - **Estimated Time**: 1 week
 
 ### 12. **Email Notifications**
@@ -156,11 +156,11 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟢 Medium Priority
 - **Description**: Automated email system for orders, updates, marketing
 - **TODO**:
-    - [ ] Set up email service (SendGrid/SES)
-    - [ ] Create email templates
-    - [ ] Add order confirmation emails
-    - [ ] Implement shipping notification emails
-    - [ ] Add promotional email campaigns
+  - [ ] Set up email service (SendGrid/SES)
+  - [ ] Create email templates
+  - [ ] Add order confirmation emails
+  - [ ] Implement shipping notification emails
+  - [ ] Add promotional email campaigns
 - **Estimated Time**: 3-5 days
 
 ---
@@ -172,10 +172,10 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟢 Medium Priority
 - **Description**: Optimize mobile experience across all pages
 - **TODO**:
-    - [ ] Audit mobile layouts
-    - [ ] Fix navigation on mobile
-    - [ ] Optimize checkout flow for mobile
-    - [ ] Add mobile-specific components
+  - [ ] Audit mobile layouts
+  - [ ] Fix navigation on mobile
+  - [ ] Optimize checkout flow for mobile
+  - [ ] Add mobile-specific components
 - **Estimated Time**: 1 week
 
 ### 14. **Loading States & Skeletons**
@@ -183,10 +183,10 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟢 Medium Priority
 - **Description**: Better loading experiences
 - **TODO**:
-    - [ ] Add skeleton loading components
-    - [ ] Implement proper loading states
-    - [ ] Add progress indicators for long operations
-    - [ ] Create error boundary components
+  - [ ] Add skeleton loading components
+  - [ ] Implement proper loading states
+  - [ ] Add progress indicators for long operations
+  - [ ] Create error boundary components
 - **Estimated Time**: 2-3 days
 
 ### 15. **Dark Mode Improvements**
@@ -194,10 +194,10 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟢 Medium Priority
 - **Description**: Polish dark mode implementation
 - **TODO**:
-    - [ ] Audit all components in dark mode
-    - [ ] Fix contrast issues
-    - [ ] Add system theme detection
-    - [ ] Improve theme switching animation
+  - [ ] Audit all components in dark mode
+  - [ ] Fix contrast issues
+  - [ ] Add system theme detection
+  - [ ] Improve theme switching animation
 - **Estimated Time**: 2-3 days
 
 ---
@@ -209,9 +209,9 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟢 Medium Priority
 - **Description**: Prevent API abuse and improve security
 - **TODO**:
-    - [ ] Implement rate limiting middleware
-    - [ ] Add API key authentication for external services
-    - [ ] Set up monitoring and alerts
+  - [ ] Implement rate limiting middleware
+  - [ ] Add API key authentication for external services
+  - [ ] Set up monitoring and alerts
 - **Estimated Time**: 2-3 days
 
 ### 17. **Image Optimization**
@@ -219,10 +219,10 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟢 Medium Priority
 - **Description**: Optimize image loading and storage
 - **TODO**:
-    - [ ] Add image compression on upload
-    - [ ] Implement lazy loading for product images
-    - [ ] Add multiple image sizes (thumbnails, full-size)
-    - [ ] Set up CDN for image delivery
+  - [ ] Add image compression on upload
+  - [ ] Implement lazy loading for product images
+  - [ ] Add multiple image sizes (thumbnails, full-size)
+  - [ ] Set up CDN for image delivery
 - **Estimated Time**: 3-5 days
 
 ### 18. **Caching Strategy**
@@ -230,10 +230,10 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟢 Medium Priority
 - **Description**: Implement caching for better performance
 - **TODO**:
-    - [ ] Add Redis for session storage
-    - [ ] Cache frequently accessed data
-    - [ ] Implement API response caching
-    - [ ] Add browser caching headers
+  - [ ] Add Redis for session storage
+  - [ ] Cache frequently accessed data
+  - [ ] Implement API response caching
+  - [ ] Add browser caching headers
 - **Estimated Time**: 3-5 days
 
 ---
@@ -245,10 +245,10 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟡 High Priority
 - **Description**: Add comprehensive test suite
 - **TODO**:
-    - [ ] Write unit tests for utility functions
-    - [ ] Add integration tests for API routes
-    - [ ] Create E2E tests for critical user flows
-    - [ ] Set up CI/CD pipeline with testing
+  - [ ] Write unit tests for utility functions
+  - [ ] Add integration tests for API routes
+  - [ ] Create E2E tests for critical user flows
+  - [ ] Set up CI/CD pipeline with testing
 - **Estimated Time**: 2-3 weeks
 
 ### 20. **Error Handling**
@@ -256,10 +256,10 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟡 High Priority
 - **Description**: Improve error handling across the application
 - **TODO**:
-    - [ ] Add proper error boundaries
-    - [ ] Implement user-friendly error messages
-    - [ ] Add error logging and monitoring
-    - [ ] Create error recovery mechanisms
+  - [ ] Add proper error boundaries
+  - [ ] Implement user-friendly error messages
+  - [ ] Add error logging and monitoring
+  - [ ] Create error recovery mechanisms
 - **Estimated Time**: 1 week
 
 ---
@@ -271,10 +271,10 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟢 Medium Priority
 - **Description**: Comprehensive analytics for sellers and admins
 - **TODO**:
-    - [ ] Add Google Analytics integration
-    - [ ] Create custom analytics dashboard
-    - [ ] Track conversion rates and user behavior
-    - [ ] Add sales reporting
+  - [ ] Add Google Analytics integration
+  - [ ] Create custom analytics dashboard
+  - [ ] Track conversion rates and user behavior
+  - [ ] Add sales reporting
 - **Estimated Time**: 1-2 weeks
 
 ### 22. **Application Monitoring**
@@ -282,10 +282,10 @@ This document tracks all pending features, improvements, bugs, and technical deb
 - **Status**: 🟢 Medium Priority
 - **Description**: Monitor application health and performance
 - **TODO**:
-    - [ ] Set up application monitoring (Sentry/LogRocket)
-    - [ ] Add performance metrics
-    - [ ] Create uptime monitoring
-    - [ ] Set up alerting system
+  - [ ] Set up application monitoring (Sentry/LogRocket)
+  - [ ] Add performance metrics
+  - [ ] Create uptime monitoring
+  - [ ] Set up alerting system
 - **Estimated Time**: 3-5 days
 
 ---

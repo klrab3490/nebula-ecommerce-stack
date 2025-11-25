@@ -33,14 +33,14 @@ Note: `mongoose` is listed in `package.json` but the application code uses Prism
 
 1. Clone the repo
 
-    git clone https://github.com/klrab3490/nebula-ecommerce-stack.git
-    cd nebula-ecommerce-stack
+   git clone https://github.com/klrab3490/nebula-ecommerce-stack.git
+   cd nebula-ecommerce-stack
 
 2. Install dependencies
 
-    npm install
+   npm install
 
-    Note: `prisma generate` runs automatically after install because of the `postinstall` script.
+   Note: `prisma generate` runs automatically after install because of the `postinstall` script.
 
 3. Create environment variables
 
@@ -69,7 +69,7 @@ You can also copy from `.env.example` and fill in your values. The Prisma client
 
 4. Run the dev server
 
-    npm run dev
+   npm run dev
 
 Open http://localhost:3000 to view the app.
 
@@ -153,14 +153,14 @@ These are already included in the main environment variables section above, but 
 ### Endpoints added in this repo
 
 - `POST /api/checkout/create-order`
-    - Body: `{ cart, userId? }`
-    - Creates an Order in the database (`status: pending`) and returns `{ orderId, shipment? }`
+  - Body: `{ cart, userId? }`
+  - Creates an Order in the database (`status: pending`) and returns `{ orderId, shipment? }`
 - `POST /api/checkout/razorpay/create-order`
-    - No body expected (current implementation finds the first pending order)
-    - Creates a Razorpay order (server-side) and returns `{ key, orderId, amount, currency }`
+  - No body expected (current implementation finds the first pending order)
+  - Creates a Razorpay order (server-side) and returns `{ key, orderId, amount, currency }`
 - `POST /api/checkout/razorpay/verify`
-    - Body: `{ razorpay_payment_id, razorpay_order_id, razorpay_signature }`
-    - Verifies the signature and marks the order as paid
+  - Body: `{ razorpay_payment_id, razorpay_order_id, razorpay_signature }`
+  - Verifies the signature and marks the order as paid
 
 ### Frontend pages
 
@@ -171,9 +171,9 @@ These are already included in the main environment variables section above, but 
 ### Testing the flow locally
 
 1. Start the dev server:
-    ```cmd
-    npm run dev
-    ```
+   ```cmd
+   npm run dev
+   ```
 2. Add items to the cart in the UI and click "Proceed to Checkout".
 3. Complete payment through the Razorpay popup (in test mode use Razorpay test cards or UPI test flows).
 4. After payment completes, the client posts to `/api/checkout/razorpay/verify` which updates order status to `paid`.
@@ -181,11 +181,11 @@ These are already included in the main environment variables section above, but 
 ### Notes, caveats and next steps
 
 - Shiprocket integration in `lib/shiprocket.ts` is a placeholder that returns a fake shipment id. To use Shiprocket:
-    - Implement authentication (token exchange) with Shiprocket API and call the create shipment endpoint.
-    - Extend `prisma/schema.prisma` to store shipment/tracking on the `Order` model and run prisma migrations.
+  - Implement authentication (token exchange) with Shiprocket API and call the create shipment endpoint.
+  - Extend `prisma/schema.prisma` to store shipment/tracking on the `Order` model and run prisma migrations.
 - Current Razorpay endpoints assume a single pending order (they use `findFirst({ status: 'pending' })`). For production use:
-    - Create the order explicitly and pass the `orderId` to the Razorpay create-order endpoint to avoid race conditions and to handle multiple concurrent users.
-    - Add server-side validation of cart items, prices and stock before creating orders.
+  - Create the order explicitly and pass the `orderId` to the Razorpay create-order endpoint to avoid race conditions and to handle multiple concurrent users.
+  - Add server-side validation of cart items, prices and stock before creating orders.
 - Add webhooks for Razorpay to handle asynchronous events (captures, refunds). This repo does not yet implement webhooks.
 
 If you want, I can next:

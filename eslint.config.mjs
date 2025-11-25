@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 // compatibility (or try `compat.extends("next/core-web-vitals")` again).
 
 export default [
-    {
-        ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"],
-    },
+  {
+    ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"],
+  },
 ];
