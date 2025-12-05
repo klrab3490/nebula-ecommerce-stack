@@ -26,17 +26,26 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("upi");
   const [processingOrder, setProcessingOrder] = useState(false);
+  const [cartLoaded, setCartLoaded] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const v = localStorage.getItem("finalTotal");
     setFinalTotal(v ? parseFloat(v) : 0);
 
-    if (cart.itemCount !== 0) {
-      setFinalTotal(0);
+    // Mark cart as loaded after a brief delay to allow context to initialize
+    const timer = setTimeout(() => setCartLoaded(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    // Only check cart after it's loaded to avoid race condition
+    if (!cartLoaded) return;
+
+    if (cart.itemCount === 0) {
       router.push("/cart");
     }
-  }, [cart.itemCount, router]);
+  }, [cart.itemCount, cartLoaded, router]);
 
   const isAddressPresent = (addr: any) => {
     if (!addr) return false;
