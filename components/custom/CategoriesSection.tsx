@@ -13,34 +13,22 @@ type Category = {
 
 const categories: Category[] = [
   {
+    name: "Makeup",
+    description: "Premium beauty essentials for every look",
+    icon: Star,
+    emoji: "💄",
+  },
+  {
+    name: "Face Care",
+    description: "Cleansers, serums and moisturizers for radiant skin",
+    icon: Sun,
+    emoji: "✨",
+  },
+  {
     name: "Hair Care",
     description: "Oils, serums and treatments for healthy hair",
-    icon: Star,
-    emoji: "💇‍♀️",
-  },
-  {
-    name: "Skincare",
-    description: "Cleansers, serums and moisturizers for glowing skin",
-    icon: Sun,
-    emoji: "🌞",
-  },
-  {
-    name: "Wellness",
-    description: "Supplements and self-care essentials",
-    icon: Leaf,
-    emoji: "🌿",
-  },
-  {
-    name: "Gifts",
-    description: "Curated gift sets for every occasion",
-    icon: Gift,
-    emoji: "🎁",
-  },
-  {
-    name: "Favorites",
-    description: "Top rated and fan-favorite products",
     icon: Heart,
-    emoji: "❤️",
+    emoji: "💇‍♀️",
   },
 ];
 
@@ -59,7 +47,7 @@ export default function CategoriesSection() {
       </div>
 
       {/* Enhanced Categories Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
         {categories.map((category, index) => {
           const IconComponent = category.icon;
           const palette = getPalette(index);

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Droplets, Sparkles, Package, Eye, Leaf } from "lucide-react";
+import { Sparkles, Sun, Wind } from "lucide-react";
 import path from "path";
 
 // Custom animations styles
@@ -31,49 +31,31 @@ const animationStyles = `
 
 const categories = [
   {
-    name: "Hair Oils",
-    path: "/products?category=Hair+Oils",
-    icon: Droplets,
-    gradient: "from-green-400 to-emerald-500",
-    glowColor: "shadow-green-500/30",
-    description: "Natural & Organic",
-    emoji: "💧",
+    name: "Makeup",
+    path: "/products?category=Makeup",
+    icon: Sparkles,
+    gradient: "from-pink-400 to-rose-500",
+    glowColor: "shadow-pink-500/30",
+    description: "Beauty Essentials",
+    emoji: "💄",
   },
   {
-    name: "Shampoo",
-    path: "/products?category=Shampoo",
-    icon: Sparkles,
+    name: "Face Care",
+    path: "/products?category=Face+Care",
+    icon: Sun,
     gradient: "from-amber-400 to-orange-500",
     glowColor: "shadow-amber-500/30",
-    description: "Premium Care",
+    description: "Radiant Skin",
     emoji: "✨",
   },
   {
-    name: "Indigo Powder",
-    path: "/products?category=Indigo+Powder",
-    icon: Package,
+    name: "Hair Care",
+    path: "/products?category=Hair+Care",
+    icon: Wind,
     gradient: "from-purple-400 to-indigo-500",
     glowColor: "shadow-purple-500/30",
-    description: "Pure & Natural",
-    emoji: "📦",
-  },
-  {
-    name: "Eyebrow Oil",
-    path: "/products?category=Eyebrow+Oil",
-    icon: Eye,
-    gradient: "from-pink-400 to-rose-500",
-    glowColor: "shadow-pink-500/30",
-    description: "Beauty Essential",
-    emoji: "👁️",
-  },
-  {
-    name: "Henna",
-    path: "/products?category=Henna",
-    icon: Leaf,
-    gradient: "from-teal-400 to-cyan-500",
-    glowColor: "shadow-teal-500/30",
-    description: "Traditional Art",
-    emoji: "🍃",
+    description: "Healthy & Strong",
+    emoji: "💇‍♀️",
   },
 ];
 
@@ -103,7 +85,7 @@ export default function ProductCategories() {
         </div>
 
         {/* Enhanced Categories Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
           {categories.map((category, index) => {
             const IconComponent = category.icon;
             return (

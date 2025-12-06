@@ -36,6 +36,10 @@ export default function Navbar() {
           href: "/my-orders",
         },
         {
+          label: "Locate Store",
+          href: "/locate-store",
+        },
+        {
           label: "Cart",
           href: "/cart",
         },
@@ -60,6 +64,10 @@ export default function Navbar() {
         {
           label: "About",
           href: "/about",
+        },
+        {
+          label: "Locate Store",
+          href: "/locate-store",
         },
         {
           label: "Contact",

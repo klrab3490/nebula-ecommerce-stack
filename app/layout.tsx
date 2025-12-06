@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/custom/Navbar";
 import Footer from "@/components/custom/Footer";
+import WhatsAppFloatingButton from "@/components/custom/WhatsAppFloatingButton";
 import { Geist, Geist_Mono } from "next/font/google";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
@@ -70,6 +71,7 @@ export default function RootLayout({
                   {children}
                 </main>
                 <Footer />
+                <WhatsAppFloatingButton />
               </div>
             </ThemeProvider>
           </AppContextProvider>

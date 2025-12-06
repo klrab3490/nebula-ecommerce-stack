@@ -16,6 +16,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import ReviewForm from "@/components/custom/reviews/ReviewForm";
+import ReviewList from "@/components/custom/reviews/ReviewList";
+import ProductDisclaimer from "@/components/custom/ProductDisclaimer";
 
 interface Product {
   id: string;
@@ -39,6 +42,7 @@ export default function ProductPage() {
   const [error, setError] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [reviewRefreshTrigger, setReviewRefreshTrigger] = useState(0);
   const { addItem } = useAppContext();
 
   // Slider refs/state
@@ -315,16 +319,46 @@ export default function ProductPage() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-center">
-          <h2 className="text-2xl font-bold mb-6 text-center">Frequently Asked Questions</h2>
-          <Accordion type="single" collapsible className="max-w-7xl w-full">
-            {product.faq.map((item, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-left">{item.question}</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">{item.answer}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+        {/* Disclaimer Section */}
+        <div className="mt-12 max-w-4xl mx-auto">
+          <ProductDisclaimer />
+        </div>
+
+        {/* FAQ Section */}
+        {product.faq && product.faq.length > 0 && (
+          <div className="mt-12 flex flex-col items-center justify-center">
+            <h2 className="text-2xl font-bold mb-6 text-center">Frequently Asked Questions</h2>
+            <Accordion type="single" collapsible className="max-w-7xl w-full">
+              {product.faq.map((item, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger className="text-left">{item.question}</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">{item.answer}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        )}
+
+        {/* Reviews Section */}
+        <div className="mt-12">
+          <h2 className="text-3xl font-bold mb-8 text-center bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+            Customer Reviews
+          </h2>
+
+          <div className="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+            {/* Review Form */}
+            <div>
+              <ReviewForm
+                productId={product.id}
+                onReviewSubmitted={() => setReviewRefreshTrigger((prev) => prev + 1)}
+              />
+            </div>
+
+            {/* Review List */}
+            <div>
+              <ReviewList productId={product.id} refreshTrigger={reviewRefreshTrigger} />
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import SocialLinks from "@/components/custom/SocialLinks";
 
 export default function Footer() {
   const pathname = usePathname();
@@ -37,6 +38,10 @@ export default function Footer() {
                 Premium beauty & wellness platform delivering natural, high-quality products for
                 your lifestyle.
               </p>
+              <div>
+                <h4 className="font-bold text-white text-sm mb-3">Follow Us</h4>
+                <SocialLinks variant="footer" />
+              </div>
             </div>
 
             {/* Enhanced Product Links */}
@@ -96,6 +101,14 @@ export default function Footer() {
                     className="text-purple-200/80 hover:text-white transition-all duration-300 hover:translate-x-1 inline-block"
                   >
                     About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/locate-store"
+                    className="text-purple-200/80 hover:text-white transition-all duration-300 hover:translate-x-1 inline-block"
+                  >
+                    Locate Store
                   </Link>
                 </li>
                 <li>
