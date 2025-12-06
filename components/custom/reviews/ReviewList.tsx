@@ -131,7 +131,7 @@ export default function ReviewList({ productId, refreshTrigger = 0 }: ReviewList
             <div className="flex items-start gap-4 mb-4">
               {/* User Avatar */}
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-linear-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
                   {review.user.name.charAt(0).toUpperCase()}
                 </div>
               </div>
