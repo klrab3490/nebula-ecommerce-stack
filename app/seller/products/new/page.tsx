@@ -22,7 +22,7 @@ interface ProductFormData {
   featured: boolean; // Whether product is featured
 }
 
-const PREDEFINED_CATEGORIES = ["Hair Oils", "Shampoo", "Indigo Powder", "Eyebrow Oil", "Henna"];
+const PREDEFINED_CATEGORIES = ["Makeup", "Face Care", "Hair Care"];
 
 export default function AddProductPage() {
   const router = useRouter();
