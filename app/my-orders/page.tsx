@@ -118,7 +118,7 @@ export default function MyOrdersPage() {
 
                       {order.items.map((item) => (
                         <div key={item.id} className="flex gap-4 items-start">
-                          <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border border-muted">
+                          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-md border border-muted">
                             <Image src={item.image} alt={item.name} fill className="object-cover" />
                           </div>
                           <div className="flex-1">

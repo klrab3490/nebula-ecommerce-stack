@@ -129,7 +129,7 @@ export default function OrderDetails({ order_id }: OrderDetailsProps) {
             <CardContent className="space-y-6">
               {order.items.map((item) => (
                 <div key={item.id} className="flex gap-4 items-start">
-                  <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-muted bg-muted/50">
+                  <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-md border border-muted bg-muted/50">
                     <Image src={item.image} alt={item.name} fill className="object-cover" />
                   </div>
                   <div className="flex-1 min-w-0">
