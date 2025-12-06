@@ -151,14 +151,38 @@ export default function CheckoutPage() {
     setProcessingOrder(true);
 
     try {
-      // Create Razorpay order
+      // Step 1: Create order in database first
+      const createOrderRes = await fetch("/api/checkout/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          cart: {
+            items: cart.items,
+            total: finalTotal,
+            itemCount: cart.itemCount,
+          },
+          userId: "current-user-id", // Replace with actual user ID from Clerk
+          paymentMethod: "upi",
+          addressId: selectedAddressId,
+        }),
+      });
+
+      if (!createOrderRes.ok) {
+        const data = await createOrderRes.json();
+        throw new Error(data.error || "Failed to create order");
+      }
+
+      const orderData = await createOrderRes.json();
+      const dbOrderId = orderData.orderId; // Save this to pass to verify endpoint
+
+      // Step 2: Create Razorpay order
       const res = await fetch("/api/checkout/razorpay/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           amount: Math.round((finalTotal ?? 0) * 100),
           currency: "INR",
-          orderID: `order_${Date.now()}`,
+          orderID: dbOrderId, // Use our database orderId
         }),
       });
 
@@ -169,6 +193,17 @@ export default function CheckoutPage() {
       }
 
       const data = await res.json();
+      const razorpayOrderId = data.orderId; // Razorpay's order_id
+
+      // Step 3: Update our database order with Razorpay order ID
+      await fetch("/api/checkout/update-razorpay-id", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderId: dbOrderId,
+          razorpayOrderId: razorpayOrderId,
+        }),
+      });
 
       // Load Razorpay script
       const loadScript = (src: string) =>
@@ -202,6 +237,7 @@ export default function CheckoutPage() {
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 ...response,
+                orderId: dbOrderId, // Pass our database orderId
                 cart: {
                   items: cart.items,
                   total: finalTotal,
