@@ -123,7 +123,7 @@ export default function CheckoutPage() {
       }
 
       const data = await res.json();
-      
+
       // Clear cart and redirect to success
       clearCart();
       localStorage.removeItem("finalTotal");
@@ -349,7 +349,10 @@ export default function CheckoutPage() {
             <CardDescription>Choose how you want to pay for your order</CardDescription>
           </CardHeader>
           <CardContent>
-            <RadioGroup value={paymentMethod} onValueChange={(value) => setPaymentMethod(value as PaymentMethod)}>
+            <RadioGroup
+              value={paymentMethod}
+              onValueChange={(value) => setPaymentMethod(value as PaymentMethod)}
+            >
               <div className="space-y-3">
                 {/* UPI Payment Option */}
                 <Label
@@ -389,7 +392,9 @@ export default function CheckoutPage() {
                       <Package className="h-5 w-5 text-green-600 dark:text-green-400" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-gray-100">Cash on Delivery</p>
+                      <p className="font-medium text-gray-900 dark:text-gray-100">
+                        Cash on Delivery
+                      </p>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         Pay with cash when your order arrives
                       </p>

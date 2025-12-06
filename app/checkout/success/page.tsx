@@ -121,9 +121,7 @@ function SuccessContent() {
               </>
             ) : (
               <div className="text-center py-8">
-                <p className="text-muted-foreground">
-                  Your order has been placed successfully!
-                </p>
+                <p className="text-muted-foreground">Your order has been placed successfully!</p>
               </div>
             )}
 

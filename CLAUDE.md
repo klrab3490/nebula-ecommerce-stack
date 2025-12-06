@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Commands
 
 ### Running the Application
+
 ```bash
 npm run dev          # Start Next.js dev server (http://localhost:3000)
 npm run build        # Build for production (runs prisma generate first)
@@ -12,6 +13,7 @@ npm start            # Start production server
 ```
 
 ### Code Quality
+
 ```bash
 npm run lint         # Run ESLint
 npm run format       # Format code with Prettier
@@ -19,11 +21,13 @@ npm test             # Run Jest tests (use --passWithNoTests flag)
 ```
 
 ### Database
+
 ```bash
 npx prisma generate  # Regenerate Prisma client after schema changes
 ```
 
 ### Testing
+
 ```bash
 npm test                           # Run all tests
 npx jest path/to/file.test.ts     # Run a specific test file
@@ -33,6 +37,7 @@ npx jest --watch                   # Run tests in watch mode
 ## Architecture Overview
 
 ### Tech Stack
+
 - **Framework**: Next.js 16 (App Router) with React 19
 - **Database**: MongoDB via Prisma ORM v6.19+ (NOT mongoose - despite it being in package.json)
   - **IMPORTANT**: This project uses Prisma 6, not Prisma 7. Prisma 7 has breaking changes in schema configuration that are incompatible with the current setup.
@@ -46,12 +51,14 @@ npx jest --watch                   # Run tests in watch mode
 ### Key Architecture Patterns
 
 #### Database Access
+
 - Single Prisma client instance exported from `lib/prisma.ts`
 - Singleton pattern prevents multiple instances in development hot reload
 - All database operations use Prisma Client (MongoDB provider)
 - **Never use mongoose** - it's an unused dependency
 
 #### Authentication Flow
+
 - Clerk manages auth sessions via cookies and server components
 - User sync happens in `AppContext` (client) and via `/api/user` route (server)
 - Server-side auth helpers in `lib/authSeller.ts`:
@@ -62,6 +69,7 @@ npx jest --watch                   # Run tests in watch mode
 - Role-based access: seller role required for `/app/seller/*` pages and admin features
 
 #### State Management
+
 - Global app state in `contexts/AppContext.tsx` using React Context
 - Cart state uses `useReducer` for complex state logic with bundle discount calculations
 - Cart persists to localStorage automatically
@@ -69,6 +77,7 @@ npx jest --watch                   # Run tests in watch mode
 - Context provides: user data, cart operations, bundle management, currency, router
 
 #### Cart & Bundle System
+
 - Cart items stored as `CartItem[]` with id, name, price, quantity, image, variant
 - Bundle discount engine in `lib/bundles.ts`:
   - `calculateBundleDiscounts()` - find all applicable bundle discounts
@@ -80,7 +89,9 @@ npx jest --watch                   # Run tests in watch mode
 - Discounts auto-recalculate when cart or bundles change
 
 #### API Routes Structure
+
 All API routes follow Next.js App Router conventions in `app/api/`:
+
 - `POST /api/user` - sync Clerk user to database
 - `GET /api/products` - fetch all products with optional filters
 - `GET /api/products/[id]` - fetch single product
@@ -92,6 +103,7 @@ All API routes follow Next.js App Router conventions in `app/api/`:
 - `POST /api/uploadthing` - UploadThing file upload handler
 
 #### Checkout & Payment Flow
+
 1. **Cart** → `/cart` page displays cart items and bundle discounts
 2. **Checkout** → `/checkout` page collects shipping info and creates order
    - Calls `POST /api/checkout/create-order` with cart data
@@ -106,6 +118,7 @@ All API routes follow Next.js App Router conventions in `app/api/`:
 5. **Success** → Redirect to `/checkout/success`
 
 **Important Payment Notes**:
+
 - Current implementation uses `findFirst({ status: 'pending' })` - NOT production ready
 - For production: pass explicit orderId through flow to avoid race conditions
 - Add server-side cart validation before order creation
@@ -113,6 +126,7 @@ All API routes follow Next.js App Router conventions in `app/api/`:
 - Shiprocket integration is a placeholder - needs real API implementation
 
 #### Component Organization
+
 - `components/ui/` - Base shadcn/ui components (Button, Card, Dialog, etc.)
 - `components/custom/` - App-specific components
   - `cart/` - Cart display components (cart-icon, cart-items, cart-summery)
@@ -123,6 +137,7 @@ All API routes follow Next.js App Router conventions in `app/api/`:
 - `components/theme/` - Dark mode toggle and theme provider
 
 #### Route Structure
+
 - `/` - Home page with hero, featured products, categories
 - `/products` - Product listing with filters
 - `/products/[id]` - Product detail page
@@ -140,36 +155,45 @@ All API routes follow Next.js App Router conventions in `app/api/`:
   - `/seller/analytics` - Analytics dashboard
 
 ### Database Schema (Prisma)
+
 Located at `prisma/schema.prisma`. Key models:
 
 **User** - Synced from Clerk, stores role and addresses
+
 - Links to Clerk via `clerkId` (unique)
 - Has many `Address` records
 
 **Product** - E-commerce products
+
 - Fields: name, description, price, discountedPrice, sku, stock, images[], categories[], featured
 - Relations: OrderProduct, ProductFAQ, BundleProduct
 
 **Bundle** - Product bundles with discounts
+
 - Discount types: percentage, fixed, buy_x_get_y
 - Fields: name, description, discountType, discountValue, minQuantity, maxQuantity
 - Validity: isActive, validFrom, validUntil
 - Relations: BundleProduct (products in bundle), OrderProduct
 
 **Order** - Purchase orders
+
 - Fields: userId, total, status, products (OrderProduct[])
 - Status values: "pending", "paid", etc.
 
 **OrderProduct** - Join table for Order ↔ Product many-to-many
+
 - Includes quantity and optional bundleId reference
 
 **Address** - User shipping addresses
+
 - Fields: name, street, city, state, zipCode, country, phone, isDefault
 
 **FAQ & ProductFAQ** - Product FAQs via join table
 
 ### Environment Variables
+
 Required in `.env.local`:
+
 ```bash
 # Currency
 NEXT_PUBLIC_CURRENCY=INR
@@ -190,9 +214,11 @@ RAZORPAY_KEY_SECRET=...
 ```
 
 ### TypeScript Path Aliases
+
 `@/*` maps to project root - use `@/components/...`, `@/lib/...`, `@/contexts/...` in imports
 
 ### Testing Strategy
+
 - Tests located in `__tests__/` directory
 - Mirrors source structure: `__tests__/lib/`, `__tests__/api/`
 - Test files use `.test.ts` or `.test.tsx` extension
@@ -223,14 +249,16 @@ RAZORPAY_KEY_SECRET=...
 9. **API Route Protection**: Use `requireAuth(req, ['seller'])` at the start of API routes that need role protection. Returns NextResponse error if unauthorized, or user object if valid.
 
 10. **Database Queries**: Always use Prisma Client from `lib/prisma.ts`. Common pattern:
+
 ```typescript
-import { prisma } from '@/lib/prisma'
-const products = await prisma.product.findMany({ where: { featured: true } })
+import { prisma } from "@/lib/prisma";
+const products = await prisma.product.findMany({ where: { featured: true } });
 ```
 
 ## Common Workflows
 
 ### Adding a New Product via Seller Dashboard
+
 1. Navigate to `/seller/products/new`
 2. Form uses react-hook-form + Zod validation
 3. Images uploaded via UploadThing (returns URLs)
@@ -238,6 +266,7 @@ const products = await prisma.product.findMany({ where: { featured: true } })
 5. Prisma creates product with generated ObjectId
 
 ### Creating a Bundle Discount
+
 1. Use `POST /api/bundles` endpoint (seller only)
 2. Specify products via BundleProduct array (productId, quantity, isRequired)
 3. Set discount type (percentage/fixed/buy_x_get_y) and value
@@ -245,6 +274,7 @@ const products = await prisma.product.findMany({ where: { featured: true } })
 5. Cart automatically applies discount when conditions met
 
 ### User Registration Flow
+
 1. User signs up via Clerk UI components
 2. Clerk creates user session
 3. `AppContext` detects user via `useUser()` hook
@@ -252,6 +282,7 @@ const products = await prisma.product.findMany({ where: { featured: true } })
 5. User can now place orders (userId linked to Order model)
 
 ### Running Tests After Code Changes
+
 1. Make changes to source files
 2. Run `npm test` to verify all tests pass
 3. For specific file: `npx jest __tests__/path/to/file.test.ts`

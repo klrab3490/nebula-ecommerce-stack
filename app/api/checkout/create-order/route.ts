@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     let dbUser = null;
     if (clerkUser) {
       dbUser = await prisma.user.findUnique({ where: { clerkId: clerkUser.id } });
-      
+
       if (!dbUser) {
         dbUser = await prisma.user.create({
           data: {
