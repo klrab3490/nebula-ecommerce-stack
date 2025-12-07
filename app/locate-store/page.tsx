@@ -25,7 +25,9 @@ export default function LocateStorePage() {
 
   const handleGetDirections = () => {
     // Open Google Maps with the address
-    const query = encodeURIComponent(`${storeAddress}, ${storeCity}, ${storeState} ${storeZipCode}`);
+    const query = encodeURIComponent(
+      `${storeAddress}, ${storeCity}, ${storeState} ${storeZipCode}`
+    );
     window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, "_blank");
   };
 
@@ -86,7 +88,7 @@ export default function LocateStorePage() {
                   <div className="absolute -inset-1 bg-linear-to-r from-purple-500 to-pink-500 rounded-2xl blur opacity-20"></div>
                   <div className="relative bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/30 dark:border-zinc-700/50">
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0">
+                      <div className="shrink-0">
                         <div className="bg-linear-to-br from-purple-500 to-pink-500 rounded-xl p-3 shadow-lg">
                           <MapPin className="w-6 h-6 text-white" />
                         </div>
@@ -145,7 +147,7 @@ export default function LocateStorePage() {
                   <div className="absolute -inset-1 bg-linear-to-r from-green-500 to-emerald-500 rounded-2xl blur opacity-20"></div>
                   <div className="relative bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/30 dark:border-zinc-700/50">
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0">
+                      <div className="shrink-0">
                         <div className="bg-linear-to-br from-green-500 to-emerald-500 rounded-xl p-3 shadow-lg">
                           <Clock className="w-6 h-6 text-white" />
                         </div>
@@ -194,11 +196,19 @@ export default function LocateStorePage() {
                   <div className="grid md:grid-cols-2 gap-6 text-sm text-muted-foreground">
                     <div>
                       <h4 className="font-semibold text-foreground mb-2">✨ Product Testing</h4>
-                      <p>Try our products before you buy. Our team will help you find the perfect match for your needs.</p>
+                      <p>
+                        Try our products before you buy. Our team will help you find the perfect
+                        match for your needs.
+                      </p>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-2">🎁 Exclusive In-Store Offers</h4>
-                      <p>Enjoy special discounts and promotions available only at our physical location.</p>
+                      <h4 className="font-semibold text-foreground mb-2">
+                        🎁 Exclusive In-Store Offers
+                      </h4>
+                      <p>
+                        Enjoy special discounts and promotions available only at our physical
+                        location.
+                      </p>
                     </div>
                     <div>
                       <h4 className="font-semibold text-foreground mb-2">👥 Expert Consultation</h4>
