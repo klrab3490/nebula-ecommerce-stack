@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     const order = await razorpay.orders.create(options);
 
     // Return the fields the client expects
-    const publicKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID || "";
+    const publicKey = process.env.RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID || "";
     return NextResponse.json({
       key: publicKey,
       orderId: order.id,

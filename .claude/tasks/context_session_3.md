@@ -12,7 +12,8 @@ Addressing critical security vulnerabilities and code quality issues identified 
 ## Issues to Address
 
 ### 1. CRITICAL: Razorpay Secret Key Exposure (Security Vulnerability)
-- **Issue**: `NEXT_PUBLIC_RAZORPAY_KEY_SECRET` prefix exposes secret to client-side
+
+- **Issue**: `RAZORPAY_KEY_SECRET` prefix exposes secret to client-side
 - **Impact**: Critical security vulnerability - API secret visible in browser
 - **Files affected**:
   - `app/api/checkout/razorpay/create-order/route.ts:19`
@@ -21,16 +22,19 @@ Addressing critical security vulnerabilities and code quality issues identified 
 - **Fix**: Remove `NEXT_PUBLIC_` prefix, use `RAZORPAY_KEY_SECRET` only
 
 ### 2. Hardcoded User ID Placeholder
+
 - **Issue**: `"current-user-id"` placeholder not replaced with actual user ID
 - **File**: `app/checkout/page.tsx:164`
 - **Fix**: Replace with actual Clerk user ID from auth context
 
 ### 3. Memory Leak in Rate Limiting
+
 - **Issue**: Module-level `setInterval` causes memory leaks in serverless
 - **File**: `lib/rateLimit.ts:75`
 - **Fix**: Add note about production Redis migration requirement
 
 ### 4. Unused Variables
+
 - **Issue**: ESLint warnings for unused variables
 - **Files**:
   - `app/api/checkout/razorpay/verify/route.ts:29` - unused `cart` and `addressId`
@@ -38,6 +42,7 @@ Addressing critical security vulnerabilities and code quality issues identified 
 - **Fix**: Remove unused variable declarations
 
 ### 5. Comment Enhancement (Resolved, but good practice)
+
 - **Issue**: Raw body consumption pattern could be fragile
 - **File**: `app/api/webhooks/razorpay/route.ts:43`
 - **Status**: Already resolved in review thread
@@ -70,6 +75,7 @@ Addressing critical security vulnerabilities and code quality issues identified 
 ### ✅ All Critical Security Issues Fixed
 
 **1. CRITICAL Security Fix: Razorpay Secret Key Exposure**
+
 - ✅ Removed `NEXT_PUBLIC_` prefix from `RAZORPAY_KEY_SECRET` in all files
 - ✅ Updated `app/api/checkout/razorpay/create-order/route.ts` line 19
 - ✅ Updated `app/api/checkout/razorpay/verify/route.ts` line 41
@@ -79,22 +85,26 @@ Addressing critical security vulnerabilities and code quality issues identified 
 **Impact**: This was a critical security vulnerability that would have exposed the API secret to anyone viewing the browser's page source or DevTools. Now the secret is properly kept server-side only.
 
 **2. Fixed Hardcoded User ID**
+
 - ✅ Removed hardcoded `"current-user-id"` placeholder from `app/checkout/page.tsx`
 - ✅ Removed the `userId` field entirely from the create-order request
 - Server-side auth via `currentUser()` from Clerk already handles user identification properly
 
 **3. Added Production Warning for Rate Limiting Memory Leak**
+
 - ✅ Added comprehensive warning comment in `lib/rateLimit.ts` line 74-83
 - Documents the setInterval memory leak issue in serverless environments
 - Provides migration path to Redis-based rate limiting
 - Clarifies when in-memory solution is appropriate
 
 **4. Removed Unused Variables**
+
 - ✅ Removed unused `cart` and `addressId` from `app/api/checkout/razorpay/verify/route.ts` line 29
 - ✅ Removed unused `startTime` from `app/api/health/route.ts` line 25
 - Cleans up ESLint warnings
 
 **5. Enhanced Webhook Body Reading Comment**
+
 - ✅ Added detailed comment in `app/api/webhooks/razorpay/route.ts` line 43-46
 - Explains why req.text() must be used instead of req.json()
 - Warns against reading the body multiple times
@@ -113,6 +123,7 @@ Addressing critical security vulnerabilities and code quality issues identified 
 ## Summary
 
 All code review feedback has been addressed:
+
 - ✅ Critical security vulnerability fixed (secret exposure)
 - ✅ Hardcoded placeholder removed (user ID)
 - ✅ Production considerations documented (memory leak)
@@ -124,7 +135,7 @@ Ready for review and security scan.
 ## Verification
 
 - ✅ Code review completed - No issues found
-- ✅ Security scan completed - No alerts found  
+- ✅ Security scan completed - No alerts found
 - ✅ All changes syntactically correct
 - ✅ User notified via comment reply (comment_id: 3621634549)
 

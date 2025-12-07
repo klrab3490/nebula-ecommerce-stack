@@ -62,7 +62,7 @@ UPLOADTHING_TOKEN=your_uploadthing_token
 
 # Razorpay (Payment processing) - Optional, required only for checkout functionality
 RAZORPAY_KEY_ID=your_razorpay_key_id
-NEXT_PUBLIC_RAZORPAY_KEY_SECRET=your_NEXT_PUBLIC_RAZORPAY_KEY_SECRET
+RAZORPAY_KEY_SECRET=your_RAZORPAY_KEY_SECRET
 ```
 
 You can also copy from `.env.example` and fill in your values. The Prisma client is configured to use `DATABASE_URL` (see `prisma/schema.prisma`).
@@ -144,7 +144,7 @@ This project includes a basic checkout flow wired to Razorpay for payments and a
 Add these to your `.env.local` file at the project root (in addition to the basic environment variables):
 
 - `RAZORPAY_KEY_ID` — Razorpay API Key ID
-- `NEXT_PUBLIC_RAZORPAY_KEY_SECRET` — Razorpay API Key Secret
+- `RAZORPAY_KEY_SECRET` — Razorpay API Key Secret
 - (optional) `SHIPROCKET_EMAIL` — Shiprocket account email (if you implement Shiprocket token flow)
 - (optional) `SHIPROCKET_PASSWORD` — Shiprocket password (if you implement Shiprocket token flow)
 
