@@ -12,43 +12,34 @@ export default function WhatsAppFloatingButton() {
 
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
 
-  // Don't show on seller dashboard
-  if (pathname.startsWith("/seller")) {
-    return null;
-  }
-
-  // Show button after a short delay for better UX
+  // ❗ HOOKS MUST BE ABOVE ANY RETURN
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 1000);
     return () => clearTimeout(timer);
   }, []);
 
-  // Show tooltip after 3 seconds on initial load
   useEffect(() => {
     if (isVisible) {
       const timer = setTimeout(() => {
         setShowTooltip(true);
-        // Hide tooltip after 5 seconds
         setTimeout(() => setShowTooltip(false), 5000);
       }, 3000);
       return () => clearTimeout(timer);
     }
   }, [isVisible]);
 
+  // ✔️ Safe early return AFTER hooks
+  if (!pathname || pathname.startsWith("/seller") || !whatsappNumber) {
+    return null;
+  }
+
   const handleClick = () => {
-    // Generate context-aware message
     const message = generateWhatsAppMessage({ pathname });
-
-    // Generate WhatsApp URL
     const whatsappUrl = generateWhatsAppUrl(whatsappNumber, message);
-
-    // Open WhatsApp in new tab
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   };
 
-  if (!whatsappNumber) {
-    return null; // Don't show if WhatsApp number is not configured
-  }
+  if (!whatsappNumber) return null;
 
   return (
     <>

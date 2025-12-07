@@ -26,8 +26,7 @@ export async function POST(req: NextRequest) {
       addressId?: string;
     };
 
-    const { razorpay_payment_id, razorpay_order_id, razorpay_signature, orderId } =
-      body;
+    const { razorpay_payment_id, razorpay_order_id, razorpay_signature, orderId } = body;
 
     if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature) {
       return NextResponse.json({ error: "Missing payment fields" }, { status: 400 });
@@ -66,6 +65,7 @@ export async function POST(req: NextRequest) {
       where: { id: orderId },
       data: {
         status: "paid",
+        paymentStatus: "PAID", // Update PaymentStatus enum
         razorpayPaymentId: razorpay_payment_id,
         razorpayOrderId: razorpay_order_id,
       },

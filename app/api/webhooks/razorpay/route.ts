@@ -167,6 +167,7 @@ async function handlePaymentCaptured(payload: any) {
     where: { id: order.id },
     data: {
       status: "paid",
+      paymentStatus: "PAID", // Update PaymentStatus enum
       razorpayPaymentId: paymentId,
       razorpayOrderId: razorpayOrderId || order.razorpayOrderId,
     },
@@ -203,7 +204,10 @@ async function handlePaymentFailed(payload: any) {
   if (order) {
     await prisma.order.update({
       where: { id: order.id },
-      data: { status: "failed" },
+      data: {
+        status: "failed",
+        paymentStatus: "FAILED", // Update PaymentStatus enum
+      },
     });
 
     // console.log(`Order ${order.id} marked as failed`);
@@ -258,7 +262,10 @@ async function handleRefundCreated(payload: any) {
   if (order) {
     await prisma.order.update({
       where: { id: order.id },
-      data: { status: "refund_pending" },
+      data: {
+        status: "refund_pending",
+        paymentStatus: "REFUNDED", // Update PaymentStatus enum
+      },
     });
 
     // console.log(`Order ${order.id} marked as refund_pending`);
@@ -295,7 +302,10 @@ async function handleRefundProcessed(payload: any) {
   if (order) {
     await prisma.order.update({
       where: { id: order.id },
-      data: { status: "refunded" },
+      data: {
+        status: "refunded",
+        paymentStatus: "REFUNDED", // Update PaymentStatus enum
+      },
     });
 
     // console.log(`Order ${order.id} marked as refunded`);

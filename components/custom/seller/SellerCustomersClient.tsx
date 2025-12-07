@@ -341,10 +341,20 @@ export default function SellerCustomersClient({ users }: { users: UserData[] }) 
                     <TableCell className="text-center">{user.orderCount}</TableCell>
                     <TableCell className="font-medium">{formatCurrency(user.totalSpent)}</TableCell>
                     <TableCell className="text-sm text-muted-foreground">
-                      {new Date(user.joinDate).toLocaleDateString()}
+                      {new Date(user.joinDate).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                      })}
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
-                      {user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : "Never"}
+                      {user.lastLogin
+                        ? new Date(user.lastLogin).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                          })
+                        : "Never"}
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>

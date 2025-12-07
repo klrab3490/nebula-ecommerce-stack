@@ -42,11 +42,11 @@ export function BundleDetector() {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3 mb-4">
-        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-300 to-transparent dark:via-purple-800"></div>
-        <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+        <div className="h-px flex-1 bg-linear-to-r from-transparent via-purple-300 to-transparent dark:via-purple-800"></div>
+        <h2 className="text-xl font-bold bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
           🎁 Bundle Offers Available
         </h2>
-        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-pink-300 to-transparent dark:via-pink-800"></div>
+        <div className="h-px flex-1 bg-linear-to-r from-transparent via-pink-300 to-transparent dark:via-pink-800"></div>
       </div>
 
       {applicableBundles.map((bundle) => {

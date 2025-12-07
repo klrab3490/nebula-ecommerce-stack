@@ -7,6 +7,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum PaymentStatus {
+  PENDING      // COD orders start as pending, UPI orders waiting for Razorpay response
+  PAID         // Successfully paid via UPI/Card
+  FAILED       // Payment failed (UPI/Card rejected by Razorpay)
+  REFUNDED     // Payment refunded
+}
+
 model User {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   email     String    @unique
@@ -29,6 +36,7 @@ model Address {
   country   String
   phone     String
   isDefault Boolean @default(false)
+  orders    Order[]
 }
 
 model Product {
@@ -71,12 +79,15 @@ model ProductFAQ {
 model Order {
   id               String         @id @default(auto()) @map("_id") @db.ObjectId
   userId           String         @db.ObjectId
+  shippingAddressId String?       @db.ObjectId
+  shippingAddress  Address?       @relation(fields: [shippingAddressId], references: [id])
   products         OrderProduct[]
   total            Float
-  status           String // "pending" | "paid" | "confirmed" | "failed" | "refund_pending" | "refunded" | "cancelled"
+  status           String // "pending" | "paid" | "confirmed" | "failed" | "refund_pending" | "refunded" | "cancelled" | "processing" | "shipped" | "delivered"
   razorpayOrderId  String? // Razorpay order_id for tracking
   razorpayPaymentId String? // Razorpay payment_id after successful payment
   paymentMethod    String? // "upi" | "cod" | "card" | "netbanking"
+  paymentStatus    PaymentStatus @default(PENDING) // COD starts PENDING, UPI updates based on Razorpay response
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
 

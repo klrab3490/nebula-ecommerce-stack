@@ -142,7 +142,11 @@ export function RecentOrders({ orders, showViewAll = true }: RecentOrdersProps) 
                     <div>
                       <div className="font-semibold">{order.id}</div>
                       <div className="text-xs text-muted-foreground">
-                        {new Date(order.date).toLocaleDateString()}
+                        {new Date(order.date).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                        })}
                       </div>
                     </div>
                   </TableCell>

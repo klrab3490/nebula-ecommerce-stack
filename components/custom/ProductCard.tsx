@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/currency";
-import { Heart, ShoppingCart, Sparkles, TrendingUp } from "lucide-react";
+import { Heart, ShoppingCart, Sparkles, TrendingUp, Plus, Minus } from "lucide-react";
 import { useAppContext } from "@/contexts/AppContext";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -33,7 +33,10 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
-  const { addItem, currency } = useAppContext();
+  const { addItem, currency, cart, updateQuantity, removeItem } = useAppContext();
+
+  // Check if item exists in cart
+  const cartItem = cart.items.find((item) => item.id === product.id);
 
   const handleAddToCart = () => {
     addItem({
@@ -44,6 +47,14 @@ export function ProductCard({ product }: ProductCardProps) {
     });
   };
 
+  const handleQuantityChange = (newQuantity: number) => {
+    if (newQuantity <= 0) {
+      removeItem(product.id);
+    } else {
+      updateQuantity(product.id, newQuantity);
+    }
+  };
+
   const currentPrice = product.discountedPrice || product.price;
   const hasDiscount = product.discountedPrice && product.discountedPrice < product.price;
   const discountPercentage = hasDiscount
@@ -51,12 +62,12 @@ export function ProductCard({ product }: ProductCardProps) {
     : 0;
 
   return (
-    <div className="group relative">
+    <div className="group relative h-full">
       {/* Animated Glow Effect */}
       <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 rounded-3xl blur-xl opacity-0 group-hover:opacity-40 transition-all duration-700 animate-pulse"></div>
 
       {/* Main Card */}
-      <Card className="relative bg-white dark:bg-zinc-900 backdrop-blur-xl rounded-2xl shadow-2xl hover:shadow-purple-500/20 dark:hover:shadow-purple-500/30 transition-all duration-500 hover:-translate-y-3 border-2 border-white/20 dark:border-zinc-700/50 overflow-hidden group-hover:border-purple-500/30">
+      <Card className="relative bg-white dark:bg-zinc-900 backdrop-blur-xl rounded-2xl shadow-2xl hover:shadow-purple-500/20 dark:hover:shadow-purple-500/30 transition-all duration-500 hover:-translate-y-3 border-2 border-white/20 dark:border-zinc-700/50 overflow-hidden group-hover:border-purple-500/30 h-full flex flex-col">
         {/* Animated Shimmer Effect */}
         <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out pointer-events-none"></div>
 
@@ -140,31 +151,33 @@ export function ProductCard({ product }: ProductCardProps) {
           </Link>
         </CardHeader>
 
-        <CardContent className="p-6 relative z-10 space-y-4">
+        <CardContent className="p-6 relative z-10 flex-1 flex flex-col">
           {/* Category Pills */}
-          {product.categories && product.categories.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {product.categories.slice(0, 2).map((category, index) => (
-                <span
-                  key={index}
-                  className="text-xs px-3 py-1 rounded-full bg-linear-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 text-purple-700 dark:text-purple-300 font-medium"
-                >
-                  {category}
-                </span>
-              ))}
-            </div>
-          )}
+          <div className="flex flex-wrap gap-2 min-h-7 mb-4">
+            {product.categories && product.categories.length > 0 && (
+              <>
+                {product.categories.slice(0, 2).map((category, index) => (
+                  <span
+                    key={index}
+                    className="text-xs px-3 py-1 rounded-full bg-linear-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 text-purple-700 dark:text-purple-300 font-medium"
+                  >
+                    {category}
+                  </span>
+                ))}
+              </>
+            )}
+          </div>
 
           {/* Product Name */}
           <Link href={`/products/${product.id}`}>
-            <h3 className="font-bold text-xl mb-2 line-clamp-2 text-gray-900 dark:text-white hover:bg-linear-to-r hover:from-purple-600 hover:via-pink-600 hover:to-blue-600 hover:bg-clip-text hover:text-transparent transition-all duration-300 cursor-pointer leading-tight">
+            <h3 className="font-bold text-xl mb-2 line-clamp-2 text-gray-900 dark:text-white hover:bg-linear-to-r hover:from-purple-600 hover:via-pink-600 hover:to-blue-600 hover:bg-clip-text hover:text-transparent transition-all duration-300 cursor-pointer leading-tight min-h-14">
               {product.name}
             </h3>
           </Link>
 
           {/* Enhanced Price Section */}
-          <div className="space-y-2">
-            <div className="flex items-baseline gap-3">
+          <div className="space-y-2 mb-4">
+            <div className="flex items-baseline gap-3 min-h-10">
               <p className="text-3xl font-black bg-linear-to-r from-green-600 via-emerald-600 to-teal-600 dark:from-green-400 dark:via-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
                 {formatCurrency(currentPrice, currency)}
               </p>
@@ -175,53 +188,84 @@ export function ProductCard({ product }: ProductCardProps) {
               )}
             </div>
 
-            {/* Stock Status */}
-            {product.stock < 10 && product.stock > 0 && (
-              <div className="flex items-center gap-2 text-orange-600 dark:text-orange-400">
-                <div className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></div>
-                <p className="text-sm font-semibold">Only {product.stock} left in stock!</p>
-              </div>
-            )}
-            {product.stock === 0 && (
-              <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
-                <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                <p className="text-sm font-semibold">Out of stock</p>
-              </div>
-            )}
-            {product.stock >= 10 && (
-              <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
-                <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                <p className="text-sm font-semibold">In stock</p>
-              </div>
-            )}
+            {/* Stock Status - Fixed height */}
+            <div className="min-h-6">
+              {product.stock < 10 && product.stock > 0 && (
+                <div className="flex items-center gap-2 text-orange-600 dark:text-orange-400">
+                  <div className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></div>
+                  <p className="text-sm font-semibold">Only {product.stock} left in stock!</p>
+                </div>
+              )}
+              {product.stock === 0 && (
+                <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
+                  <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                  <p className="text-sm font-semibold">Out of stock</p>
+                </div>
+              )}
+              {product.stock >= 10 && (
+                <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                  <p className="text-sm font-semibold">In stock</p>
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Enhanced Action Button */}
-          <Button
-            className={cn(
-              "w-full relative overflow-hidden text-white border-0 rounded-xl py-6 font-bold shadow-xl transform transition-all duration-300 group/btn",
-              product.stock === 0
-                ? "bg-gray-400 dark:bg-gray-600 cursor-not-allowed"
-                : "bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 hover:from-purple-700 hover:via-pink-700 hover:to-blue-700 hover:shadow-2xl hover:shadow-purple-500/50 hover:scale-[1.03] active:scale-[0.98]"
-            )}
-            onClick={handleAddToCart}
-            disabled={product.stock === 0}
-          >
-            {/* Button Shine Effect */}
-            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700"></div>
+          {/* Enhanced Action Button - Push to bottom */}
+          <div className="mt-auto">
+            {cartItem ? (
+              <div className="flex items-center gap-2 w-full">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-12 w-12 bg-transparent border-2 border-purple-600 hover:bg-purple-600/10 transition-all duration-300"
+                  onClick={() => handleQuantityChange(cartItem.quantity - 1)}
+                >
+                  <Minus className="h-4 w-4 text-purple-600" />
+                </Button>
 
-            <div className="relative flex items-center justify-center gap-3">
-              <ShoppingCart
+                <div className="flex-1 text-center py-3 px-2 bg-purple-50 dark:bg-purple-950/30 rounded-xl border border-purple-200 dark:border-purple-800">
+                  <span className="text-lg font-bold text-purple-700 dark:text-purple-300">
+                    {cartItem.quantity}
+                  </span>
+                </div>
+
+                <Button
+                  size="icon"
+                  className="h-12 w-12 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl shadow-lg transition-all duration-300 group/add"
+                  onClick={() => handleQuantityChange(cartItem.quantity + 1)}
+                >
+                  <Plus className="h-4 w-4 transition-transform group-hover/add:scale-110" />
+                </Button>
+              </div>
+            ) : (
+              <Button
                 className={cn(
-                  "h-5 w-5 transition-transform duration-300",
-                  product.stock > 0 && "group-hover/btn:rotate-12 group-hover/btn:scale-110"
+                  "w-full relative overflow-hidden text-white border-0 rounded-xl py-6 font-bold shadow-xl transform transition-all duration-300 group/btn",
+                  product.stock === 0
+                    ? "bg-gray-400 dark:bg-gray-600 cursor-not-allowed"
+                    : "bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 hover:from-purple-700 hover:via-pink-700 hover:to-blue-700 hover:shadow-2xl hover:shadow-purple-500/50 hover:scale-[1.03] active:scale-[0.98]"
                 )}
-              />
-              <span className="text-base">
-                {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
-              </span>
-            </div>
-          </Button>
+                onClick={handleAddToCart}
+                disabled={product.stock === 0}
+              >
+                {/* Button Shine Effect */}
+                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700"></div>
+
+                <div className="relative flex items-center justify-center gap-3">
+                  <ShoppingCart
+                    className={cn(
+                      "h-5 w-5 transition-transform duration-300",
+                      product.stock > 0 && "group-hover/btn:rotate-12 group-hover/btn:scale-110"
+                    )}
+                  />
+                  <span className="text-base">
+                    {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
+                  </span>
+                </div>
+              </Button>
+            )}
+          </div>
         </CardContent>
       </Card>
     </div>

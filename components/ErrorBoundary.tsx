@@ -77,7 +77,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           <div className="max-w-2xl w-full">
             <div className="relative">
               {/* Glow Effect */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-red-500 to-orange-500 rounded-3xl blur opacity-20"></div>
+              <div className="absolute -inset-1 bg-linear-to-r from-red-500 to-orange-500 rounded-3xl blur opacity-20"></div>
 
               {/* Error Card */}
               <div className="relative bg-white dark:bg-zinc-900 rounded-3xl p-8 md:p-12 shadow-2xl border border-white/30 dark:border-zinc-700/50">
@@ -85,14 +85,14 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 <div className="flex justify-center mb-6">
                   <div className="relative">
                     <div className="absolute -inset-4 bg-red-500/20 rounded-full blur-2xl"></div>
-                    <div className="relative bg-gradient-to-br from-red-500 to-orange-500 rounded-full p-6 shadow-lg">
+                    <div className="relative bg-linear-to-br from-red-500 to-orange-500 rounded-full p-6 shadow-lg">
                       <AlertCircle size={48} className="text-white" />
                     </div>
                   </div>
                 </div>
 
                 {/* Title */}
-                <h1 className="text-3xl font-black text-center mb-4 bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
+                <h1 className="text-3xl font-black text-center mb-4 bg-linear-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
                   Oops! Something went wrong
                 </h1>
 
@@ -133,7 +133,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
                     onClick={this.handleReset}
-                    className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl px-6 py-3 font-bold shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl px-6 py-3 font-bold shadow-lg hover:shadow-xl transition-all duration-300"
                   >
                     <RefreshCw className="w-4 h-4 mr-2" />
                     Try Again
