@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { getCurrencySymbol } from "@/lib/currency";
+import { formatNumber } from "@/lib/utils";
 import { Clock, Star, ShoppingCart } from "lucide-react";
 
 // Custom animations styles
@@ -304,11 +305,11 @@ export default function FeaturedProducts({
                           <>
                             <span className="text-muted-foreground line-through text-base font-medium">
                               {currencySymbol}
-                              {originalPrice.toLocaleString()}
+                              {formatNumber(originalPrice)}
                             </span>
                             <div className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-1 rounded-lg text-xs font-bold">
                               SAVE {currencySymbol}
-                              {(originalPrice - currentPrice).toLocaleString()}
+                              {formatNumber(originalPrice - currentPrice)}
                             </div>
                           </>
                         )}
@@ -318,7 +319,7 @@ export default function FeaturedProducts({
                     <div className="mb-6">
                       <span className="text-2xl font-black bg-linear-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
                         {currencySymbol}
-                        {currentPrice.toLocaleString()}
+                        {formatNumber(currentPrice)}
                       </span>
                       {product.stock < 10 && product.stock > 0 && (
                         <p className="text-xs text-orange-600 dark:text-orange-400 mt-1">

@@ -3,6 +3,7 @@
 import { Bundle } from "@/lib/bundles";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { formatDate } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { formatCurrency } from "@/lib/bundles";
 import { Button } from "@/components/ui/button";
@@ -459,9 +460,7 @@ export function BundleManagement() {
                 </div>
                 <div>
                   <strong>Valid Until:</strong>{" "}
-                  {bundle.validUntil
-                    ? new Date(bundle.validUntil).toLocaleDateString()
-                    : "No expiry"}
+                  {bundle.validUntil ? formatDate(bundle.validUntil) : "No expiry"}
                 </div>
               </div>
             </CardContent>

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { formatDate, formatDateTime } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -341,10 +342,10 @@ export default function SellerCustomersClient({ users }: { users: UserData[] }) 
                     <TableCell className="text-center">{user.orderCount}</TableCell>
                     <TableCell className="font-medium">{formatCurrency(user.totalSpent)}</TableCell>
                     <TableCell className="text-sm text-muted-foreground">
-                      {new Date(user.joinDate).toLocaleDateString()}
+                      {formatDate(user.joinDate)}
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
-                      {user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : "Never"}
+                      {user.lastLogin ? formatDate(user.lastLogin) : "Never"}
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
@@ -454,16 +455,12 @@ export default function SellerCustomersClient({ users }: { users: UserData[] }) 
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <p className="text-muted-foreground">Join Date</p>
-                    <p className="font-medium">
-                      {new Date(selectedUser.joinDate).toLocaleString()}
-                    </p>
+                    <p className="font-medium">{formatDateTime(selectedUser.joinDate)}</p>
                   </div>
                   <div>
                     <p className="text-muted-foreground">Last Login</p>
                     <p className="font-medium">
-                      {selectedUser.lastLogin
-                        ? new Date(selectedUser.lastLogin).toLocaleString()
-                        : "Never"}
+                      {selectedUser.lastLogin ? formatDateTime(selectedUser.lastLogin) : "Never"}
                     </p>
                   </div>
                   <div>

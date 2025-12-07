@@ -33,6 +33,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { formatDate } from "@/lib/utils";
 
 interface Product {
   id: string;
@@ -357,7 +358,7 @@ export default function SellerProducts() {
                       )}
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
-                      {new Date(product.createdAt).toLocaleDateString()}
+                      {formatDate(product.createdAt)}
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>

@@ -12,11 +12,6 @@ export default function WhatsAppFloatingButton() {
 
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
 
-  // Don't show on seller dashboard
-  if (pathname.startsWith("/seller")) {
-    return null;
-  }
-
   // Show button after a short delay for better UX
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 1000);
@@ -46,8 +41,9 @@ export default function WhatsAppFloatingButton() {
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   };
 
-  if (!whatsappNumber) {
-    return null; // Don't show if WhatsApp number is not configured
+  // Don't show on seller dashboard or if WhatsApp number is not configured
+  if (pathname.startsWith("/seller") || !whatsappNumber) {
+    return null;
   }
 
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, formatNumber } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/currency";
 import { Progress } from "@/components/ui/progress";
@@ -102,7 +102,7 @@ export function DashboardMetrics({ metrics }: DashboardMetricsProps) {
     },
     {
       title: "Total Orders",
-      value: data.totalOrders.toLocaleString(),
+      value: formatNumber(data.totalOrders),
       change: { value: 12.5, label: "from last month" },
       icon: ShoppingCart,
       trend: "up",

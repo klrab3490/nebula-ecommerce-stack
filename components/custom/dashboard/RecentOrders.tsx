@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Eye } from "lucide-react";
 import { formatCurrency } from "@/lib/currency";
+import { formatDate } from "@/lib/utils";
 import Link from "next/link";
 
 interface Order {
@@ -141,9 +142,7 @@ export function RecentOrders({ orders, showViewAll = true }: RecentOrdersProps) 
                   <TableCell className="font-medium">
                     <div>
                       <div className="font-semibold">{order.id}</div>
-                      <div className="text-xs text-muted-foreground">
-                        {new Date(order.date).toLocaleDateString()}
-                      </div>
+                      <div className="text-xs text-muted-foreground">{formatDate(order.date)}</div>
                     </div>
                   </TableCell>
                   <TableCell>

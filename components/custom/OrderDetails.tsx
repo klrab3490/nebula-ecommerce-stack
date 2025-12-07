@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { orders } from "@/lib/mock-data";
+import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -18,7 +18,45 @@ import {
   ArrowLeft,
   Download,
   HelpCircle,
+  Loader2,
 } from "lucide-react";
+import { formatCurrency } from "@/lib/currency";
+import { formatDate } from "@/lib/utils";
+
+interface OrderItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+}
+
+interface Address {
+  id: string;
+  name: string;
+  street: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+  phone: string;
+}
+
+interface Order {
+  id: string;
+  date: string;
+  total: number;
+  status: string;
+  items: OrderItem[];
+  razorpayOrderId?: string;
+  razorpayPaymentId?: string;
+  paymentMethod?: string;
+  user?: {
+    name: string;
+    email: string;
+  };
+  shippingAddress?: Address;
+}
 
 type OrderDetailsProps = {
   order_id: string;
@@ -55,27 +93,71 @@ const getStatusColor = (status: string) => {
 };
 
 export default function OrderDetails({ order_id }: OrderDetailsProps) {
-  const order = orders.find((o) => o.id === order_id);
+  const [order, setOrder] = useState<Order | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!order) {
+  useEffect(() => {
+    const fetchOrder = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/orders/${order_id}`);
+
+        if (!response.ok) {
+          if (response.status === 404) {
+            setError("Order not found");
+          } else {
+            setError("Failed to load order");
+          }
+          return;
+        }
+
+        const data = await response.json();
+        setOrder(data.order);
+      } catch (err) {
+        console.error("Error fetching order:", err);
+        setError("Failed to load order. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrder();
+  }, [order_id]);
+
+  if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-12">
-        <h2 className="text-2xl font-bold text-gray-900">Order not found</h2>
-        <p className="text-gray-500 mt-2">The order you are looking for does not exist.</p>
-        <Button asChild className="mt-6">
-          <Link href="/my-orders">Back to Orders</Link>
-        </Button>
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !order) {
+    return (
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="flex flex-col items-center justify-center py-12">
+          <XCircle className="h-12 w-12 text-destructive mb-4 opacity-50" />
+          <h2 className="text-2xl font-bold">{error || "Order not found"}</h2>
+          <p className="text-muted-foreground mt-2">
+            {error === "Order not found"
+              ? "The order you are looking for does not exist."
+              : "Unable to load order details. Please try again later."}
+          </p>
+          <Button asChild className="mt-6">
+            <Link href="/my-orders">Back to Orders</Link>
+          </Button>
+        </div>
       </div>
     );
   }
 
   // Mock calculations for demo purposes
   const subtotal = order.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const shipping = order.total > 100 ? 0 : 15.0;
   const tax = subtotal * 0.08;
-  // Adjust total to match the mock data total (or recalculate if we prefer correctness over strict adherence to the mock total field)
-  // For this display, let's trust the mock total and show the breakdown as estimates or just calculate them to sum up to total if possible.
-  // To be safe and consistent with the mock data, let's just use the total from the object and mock the rest to look reasonable.
+  const shipping = order.total - subtotal - tax > 0 ? order.total - subtotal - tax : 0;
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -105,7 +187,7 @@ export default function OrderDetails({ order_id }: OrderDetailsProps) {
             </Badge>
           </h1>
           <p className="text-muted-foreground mt-2 flex items-center gap-2">
-            Placed on <span className="font-medium text-foreground">{order.date}</span>
+            Placed on <span className="font-medium text-foreground">{formatDate(order.date)}</span>
           </p>
         </div>
         <div className="flex gap-3">
@@ -141,7 +223,7 @@ export default function OrderDetails({ order_id }: OrderDetailsProps) {
                         </p>
                       </div>
                       <p className="font-semibold whitespace-nowrap">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        {formatCurrency(item.price * item.quantity)}
                       </p>
                     </div>
                     <div className="mt-4 flex gap-3">
@@ -165,24 +247,72 @@ export default function OrderDetails({ order_id }: OrderDetailsProps) {
             </CardHeader>
             <CardContent>
               <div className="relative pl-6 border-l-2 border-muted space-y-8">
-                <div className="relative">
-                  <span className="absolute -left-[29px] top-0 h-4 w-4 rounded-full bg-primary ring-4 ring-background" />
-                  <p className="font-medium text-sm">Order Delivered</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{order.date} - 2:30 PM</p>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Package was handed directly to a resident.
-                  </p>
-                </div>
-                <div className="relative">
-                  <span className="absolute -left-[29px] top-0 h-4 w-4 rounded-full bg-muted-foreground/30 ring-4 ring-background" />
-                  <p className="font-medium text-sm">Out for Delivery</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{order.date} - 8:45 AM</p>
-                </div>
-                <div className="relative">
-                  <span className="absolute -left-[29px] top-0 h-4 w-4 rounded-full bg-muted-foreground/30 ring-4 ring-background" />
-                  <p className="font-medium text-sm">Shipped</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{order.date} - 5:20 AM</p>
-                </div>
+                {order.status === "Delivered" && (
+                  <>
+                    <div className="relative">
+                      <span className="absolute -left-[29px] top-0 h-4 w-4 rounded-full bg-primary ring-4 ring-background" />
+                      <p className="font-medium text-sm">Order Delivered</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {formatDate(order.date)}
+                      </p>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        Package was successfully delivered.
+                      </p>
+                    </div>
+                    <div className="relative">
+                      <span className="absolute -left-[29px] top-0 h-4 w-4 rounded-full bg-muted-foreground/30 ring-4 ring-background" />
+                      <p className="font-medium text-sm">Out for Delivery</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {formatDate(order.date)}
+                      </p>
+                    </div>
+                    <div className="relative">
+                      <span className="absolute -left-[29px] top-0 h-4 w-4 rounded-full bg-muted-foreground/30 ring-4 ring-background" />
+                      <p className="font-medium text-sm">Shipped</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {formatDate(order.date)}
+                      </p>
+                    </div>
+                  </>
+                )}
+                {order.status === "Shipped" && (
+                  <>
+                    <div className="relative">
+                      <span className="absolute -left-[29px] top-0 h-4 w-4 rounded-full bg-primary ring-4 ring-background" />
+                      <p className="font-medium text-sm">Out for Delivery</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {formatDate(order.date)}
+                      </p>
+                    </div>
+                    <div className="relative">
+                      <span className="absolute -left-[29px] top-0 h-4 w-4 rounded-full bg-muted-foreground/30 ring-4 ring-background" />
+                      <p className="font-medium text-sm">Shipped</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {formatDate(order.date)}
+                      </p>
+                    </div>
+                  </>
+                )}
+                {order.status === "Processing" && (
+                  <div className="relative">
+                    <span className="absolute -left-[29px] top-0 h-4 w-4 rounded-full bg-primary ring-4 ring-background" />
+                    <p className="font-medium text-sm">Order Confirmed</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{formatDate(order.date)}</p>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Your order is being processed.
+                    </p>
+                  </div>
+                )}
+                {order.status === "Cancelled" && (
+                  <div className="relative">
+                    <span className="absolute -left-[29px] top-0 h-4 w-4 rounded-full bg-destructive ring-4 ring-background" />
+                    <p className="font-medium text-sm">Order Cancelled</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{formatDate(order.date)}</p>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      This order has been cancelled.
+                    </p>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -196,20 +326,20 @@ export default function OrderDetails({ order_id }: OrderDetailsProps) {
             <CardContent className="space-y-4">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>{formatCurrency(subtotal)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Shipping</span>
-                <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+                <span>{shipping === 0 ? "Free" : formatCurrency(shipping)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Tax</span>
-                <span>${tax.toFixed(2)}</span>
+                <span>{formatCurrency(tax)}</span>
               </div>
               <Separator />
               <div className="flex justify-between font-bold text-lg">
                 <span>Total</span>
-                <span>${order.total.toFixed(2)}</span>
+                <span>{formatCurrency(order.total)}</span>
               </div>
             </CardContent>
           </Card>
@@ -225,12 +355,26 @@ export default function OrderDetails({ order_id }: OrderDetailsProps) {
                   Shipping Address
                 </h4>
                 <address className="text-sm text-muted-foreground not-italic pl-6">
-                  Rahul Sharma
-                  <br />
-                  123 Tech Park, Sector 4<br />
-                  Bangalore, KA 560103
-                  <br />
-                  India
+                  {order.shippingAddress ? (
+                    <>
+                      {order.shippingAddress.name}
+                      <br />
+                      {order.shippingAddress.street}
+                      <br />
+                      {order.shippingAddress.city}, {order.shippingAddress.state}{" "}
+                      {order.shippingAddress.zipCode}
+                      <br />
+                      {order.shippingAddress.country}
+                      <br />
+                      {order.shippingAddress.phone}
+                    </>
+                  ) : (
+                    <>
+                      {order.user?.name}
+                      <br />
+                      No address available
+                    </>
+                  )}
                 </address>
               </div>
               <Separator />
@@ -239,7 +383,14 @@ export default function OrderDetails({ order_id }: OrderDetailsProps) {
                   <CreditCard className="h-4 w-4 text-muted-foreground" />
                   Payment Method
                 </h4>
-                <p className="text-sm text-muted-foreground pl-6">Visa ending in 4242</p>
+                <p className="text-sm text-muted-foreground pl-6 capitalize">
+                  {order.paymentMethod || "Not specified"}
+                  {order.razorpayPaymentId && (
+                    <span className="block text-xs mt-1">
+                      ID: {order.razorpayPaymentId.slice(-8)}
+                    </span>
+                  )}
+                </p>
               </div>
             </CardContent>
           </Card>
