@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       addressId?: string;
     };
 
-    const { razorpay_payment_id, razorpay_order_id, razorpay_signature, orderId, cart, addressId } =
+    const { razorpay_payment_id, razorpay_order_id, razorpay_signature, orderId, addressId } =
       body;
 
     if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature) {
