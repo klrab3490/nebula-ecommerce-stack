@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useAppContext } from "@/contexts/AppContext";
 import { Bundle, formatCurrency } from "@/lib/bundles";
-import { Package, Tag, Clock, Gift } from "lucide-react";
+import { Package, Tag, Clock, Gift, Plus, Minus } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface BundleCardProps {
@@ -13,7 +13,13 @@ interface BundleCardProps {
 }
 
 export function BundleCard({ bundle }: BundleCardProps) {
-  const { currency = "INR", addItem } = useAppContext();
+  const { currency = "INR", addItem, cart, updateQuantity, removeItem } = useAppContext();
+
+  // Check if any bundle item is already in cart (for simplicity, we'll track first item)
+  const bundleCartItem =
+    bundle.items.length > 0 && bundle.items[0].product
+      ? cart.items.find((item) => item.id === bundle.items[0].product!.id)
+      : undefined;
 
   const handleAddBundle = () => {
     // Add all required products to cart
@@ -137,18 +143,66 @@ export function BundleCard({ bundle }: BundleCardProps) {
         {bundle.validUntil && (
           <div className="flex items-center space-x-2 text-xs text-muted-foreground">
             <Clock className="h-3 w-3" />
-            <span>Valid until: {new Date(bundle.validUntil).toLocaleDateString()}</span>
+            <span>
+              Valid until:{" "}
+              {new Date(bundle.validUntil).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })}
+            </span>
           </div>
         )}
 
         {/* Add to Cart Button */}
-        <Button
-          onClick={handleAddBundle}
-          className="w-full"
-          disabled={isExpired || !bundle.isActive}
-        >
-          {isExpired ? "Offer Expired" : "Add Bundle to Cart"}
-        </Button>
+        {bundleCartItem ? (
+          <div className="flex items-center gap-2 w-full">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-10 w-10 bg-transparent border-2 border-primary hover:bg-primary/10 transition-all duration-300"
+              onClick={() => {
+                // Update all bundle items
+                bundle.items
+                  .filter((item) => item.isRequired && item.product)
+                  .forEach((bundleItem) => {
+                    if (!bundleItem.product) return;
+                    updateQuantity(bundleItem.product.id, bundleCartItem.quantity - 1);
+                  });
+              }}
+            >
+              <Minus className="h-3 w-3 text-primary" />
+            </Button>
+
+            <div className="flex-1 text-center py-2 px-2 bg-primary/5 rounded-xl border border-primary/20">
+              <span className="text-sm font-bold text-primary">{bundleCartItem.quantity}</span>
+            </div>
+
+            <Button
+              size="icon"
+              className="h-10 w-10 bg-primary hover:bg-primary/90 text-white border-0 rounded-xl shadow-lg transition-all duration-300 group/add"
+              onClick={() => {
+                // Update all bundle items
+                bundle.items
+                  .filter((item) => item.isRequired && item.product)
+                  .forEach((bundleItem) => {
+                    if (!bundleItem.product) return;
+                    updateQuantity(bundleItem.product.id, bundleCartItem.quantity + 1);
+                  });
+              }}
+            >
+              <Plus className="h-3 w-3 transition-transform group-hover/add:scale-110" />
+            </Button>
+          </div>
+        ) : (
+          <Button
+            onClick={handleAddBundle}
+            className="w-full"
+            disabled={isExpired || !bundle.isActive}
+          >
+            {isExpired ? "Offer Expired" : "Add Bundle to Cart"}
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

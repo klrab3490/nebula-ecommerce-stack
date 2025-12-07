@@ -393,7 +393,11 @@ export function BundleManagement() {
                 <div>
                   <strong>Valid Until:</strong>{" "}
                   {bundle.validUntil
-                    ? new Date(bundle.validUntil).toLocaleDateString()
+                    ? new Date(bundle.validUntil).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                      })
                     : "No expiry"}
                 </div>
               </div>

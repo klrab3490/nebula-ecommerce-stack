@@ -9,7 +9,7 @@ import { formatCurrency } from "@/lib/currency";
 import { useState, useEffect, useRef } from "react";
 import { useAppContext } from "@/contexts/AppContext";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heart, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
+import { Heart, ShoppingCart, ChevronLeft, ChevronRight, Plus, Minus } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -49,7 +49,7 @@ export default function ProductPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [reviewRefreshTrigger, setReviewRefreshTrigger] = useState(0);
-  const { addItem } = useAppContext();
+  const { addItem, cart, updateQuantity, removeItem } = useAppContext();
 
   // Slider refs/state
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -175,6 +175,16 @@ export default function ProductPage() {
     });
   };
 
+  const handleQuantityChange = (newQuantity: number) => {
+    if (newQuantity <= 0) {
+      removeItem(product.id);
+    } else {
+      updateQuantity(product.id, newQuantity);
+    }
+  };
+
+  const cartItem = product ? cart.items.find((item) => item.id === product.id) : undefined;
+
   return (
     <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8">
@@ -297,10 +307,37 @@ export default function ProductPage() {
             </div>
 
             <div className="flex gap-3">
-              <Button className="flex-1" size="lg" onClick={handleAddToCart}>
-                <ShoppingCart className="h-4 w-4 mr-2" />
-                Add to Cart
-              </Button>
+              {cartItem ? (
+                <>
+                  <div className="flex items-center gap-2 flex-1">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-12 w-12 bg-transparent border-2 border-primary hover:bg-primary/10"
+                      onClick={() => handleQuantityChange(cartItem.quantity - 1)}
+                    >
+                      <Minus className="h-4 w-4 text-primary" />
+                    </Button>
+
+                    <div className="flex-1 text-center py-2 px-2 bg-primary/5 rounded-lg border border-primary/20">
+                      <span className="text-lg font-bold text-primary">{cartItem.quantity}</span>
+                    </div>
+
+                    <Button
+                      size="icon"
+                      className="h-12 w-12 bg-primary hover:bg-primary/90 text-white border-0 rounded-lg shadow-lg group/add"
+                      onClick={() => handleQuantityChange(cartItem.quantity + 1)}
+                    >
+                      <Plus className="h-4 w-4 transition-transform group-hover/add:scale-110" />
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <Button className="flex-1" size="lg" onClick={handleAddToCart}>
+                  <ShoppingCart className="h-4 w-4 mr-2" />
+                  Add to Cart
+                </Button>
+              )}
               <Button
                 variant={isWishlisted ? "default" : "outline"}
                 size="lg"

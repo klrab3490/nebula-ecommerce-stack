@@ -42,6 +42,16 @@ interface OrderItem {
   price: number;
 }
 
+interface ShippingAddress {
+  name: string;
+  street: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+  phone: string;
+}
+
 export interface Order {
   id: string;
   customer: {
@@ -51,15 +61,10 @@ export interface Order {
   };
   items: OrderItem[];
   total: number;
-  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
-  paymentStatus: "pending" | "paid" | "failed" | "refunded" | string;
-  shippingAddress?: {
-    street?: string;
-    city?: string;
-    state?: string;
-    zipCode?: string;
-    country?: string;
-  };
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled" | "confirmed" | "paid";
+  paymentMethod?: string;
+  paymentStatus: "PENDING" | "PAID" | "FAILED" | "REFUNDED";
+  shippingAddress?: ShippingAddress;
   orderDate: string;
   estimatedDelivery?: string;
   trackingNumber?: string;
@@ -68,10 +73,11 @@ export interface Order {
 type Props = { orders: Order[] };
 
 export default function SellerOrdersClient({ orders: initialOrders }: Props) {
-  const [orders] = useState<Order[]>(initialOrders || []);
+  const [orders, setOrders] = useState<Order[]>(initialOrders || []);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [updatingOrderId, setUpdatingOrderId] = useState<string | null>(null);
 
   const filteredOrders = orders.filter((order) => {
     const matchesSearch =
@@ -83,13 +89,22 @@ export default function SellerOrdersClient({ orders: initialOrders }: Props) {
   });
 
   const getStatusBadge = (status: Order["status"]) => {
-    const statusConfig = {
-      pending: { variant: "outline" as const, color: "text-yellow-600", icon: Clock },
-      processing: { variant: "default" as const, color: "text-blue-600", icon: RefreshCw },
-      shipped: { variant: "secondary" as const, color: "text-purple-600", icon: Truck },
-      delivered: { variant: "default" as const, color: "text-green-600", icon: CheckCircle },
-      cancelled: { variant: "destructive" as const, color: "text-red-600", icon: XCircle },
-    } as const;
+    const statusConfig: Record<
+      Order["status"],
+      {
+        variant: "outline" | "default" | "secondary" | "destructive";
+        color: string;
+        icon: typeof Clock;
+      }
+    > = {
+      pending: { variant: "outline", color: "text-yellow-600", icon: Clock },
+      confirmed: { variant: "default", color: "text-blue-600", icon: CheckCircle },
+      paid: { variant: "default", color: "text-green-600", icon: CheckCircle },
+      processing: { variant: "default", color: "text-blue-600", icon: RefreshCw },
+      shipped: { variant: "secondary", color: "text-purple-600", icon: Truck },
+      delivered: { variant: "default", color: "text-green-600", icon: CheckCircle },
+      cancelled: { variant: "destructive", color: "text-red-600", icon: XCircle },
+    };
 
     const config = statusConfig[status];
     const Icon = config.icon;
@@ -104,21 +119,21 @@ export default function SellerOrdersClient({ orders: initialOrders }: Props) {
 
   const getPaymentBadge = (status: Order["paymentStatus"]) => {
     switch (status) {
-      case "paid":
+      case "PAID":
         return (
           <Badge variant="default" className="bg-green-100 text-green-800 hover:bg-green-100">
             Paid
           </Badge>
         );
-      case "pending":
+      case "PENDING":
         return (
           <Badge variant="outline" className="text-yellow-600">
             Pending
           </Badge>
         );
-      case "failed":
+      case "FAILED":
         return <Badge variant="destructive">Failed</Badge>;
-      case "refunded":
+      case "REFUNDED":
         return <Badge variant="secondary">Refunded</Badge>;
       default:
         return <Badge variant="outline">Unknown</Badge>;
@@ -126,8 +141,35 @@ export default function SellerOrdersClient({ orders: initialOrders }: Props) {
   };
 
   const updateOrderStatus = (orderId: string, newStatus: Order["status"]) => {
-    // In a real app this would call an API to update status and refresh
-    // console.log(`Updating order ${orderId} to status: ${newStatus}`);
+    setUpdatingOrderId(orderId);
+    fetch(`/api/orders/${orderId}/status`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status: newStatus }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          // Update the orders list with the new status
+          const updatedOrders = orders.map((o) =>
+            o.id === orderId ? { ...o, status: newStatus } : o
+          );
+          setOrders(updatedOrders);
+          // Also update selected order if it's the one being updated
+          if (selectedOrder?.id === orderId) {
+            setSelectedOrder({ ...selectedOrder, status: newStatus });
+          }
+        }
+      })
+      .catch((err) => {
+        console.error("Error updating order status:", err);
+        alert("Failed to update order status. Please try again.");
+      })
+      .finally(() => {
+        setUpdatingOrderId(null);
+      });
   };
 
   const ordersByStatus = {
@@ -292,12 +334,20 @@ export default function SellerOrdersClient({ orders: initialOrders }: Props) {
                         <TableCell>{getStatusBadge(order.status)}</TableCell>
                         <TableCell>{getPaymentBadge(order.paymentStatus)}</TableCell>
                         <TableCell className="text-sm text-muted-foreground">
-                          {new Date(order.orderDate).toLocaleDateString()}
+                          {new Date(order.orderDate).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                          })}
                         </TableCell>
                         <TableCell>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                disabled={updatingOrderId === order.id}
+                              >
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
@@ -308,6 +358,15 @@ export default function SellerOrdersClient({ orders: initialOrders }: Props) {
                               {order.status === "pending" && (
                                 <DropdownMenuItem
                                   onClick={() => updateOrderStatus(order.id, "processing")}
+                                  disabled={updatingOrderId === order.id}
+                                >
+                                  <RefreshCw className="h-4 w-4 mr-2" /> Mark Processing
+                                </DropdownMenuItem>
+                              )}
+                              {order.status === "confirmed" && (
+                                <DropdownMenuItem
+                                  onClick={() => updateOrderStatus(order.id, "processing")}
+                                  disabled={updatingOrderId === order.id}
                                 >
                                   <RefreshCw className="h-4 w-4 mr-2" /> Mark Processing
                                 </DropdownMenuItem>
@@ -315,6 +374,7 @@ export default function SellerOrdersClient({ orders: initialOrders }: Props) {
                               {order.status === "processing" && (
                                 <DropdownMenuItem
                                   onClick={() => updateOrderStatus(order.id, "shipped")}
+                                  disabled={updatingOrderId === order.id}
                                 >
                                   <Truck className="h-4 w-4 mr-2" /> Mark Shipped
                                 </DropdownMenuItem>
@@ -322,6 +382,7 @@ export default function SellerOrdersClient({ orders: initialOrders }: Props) {
                               {order.status === "shipped" && (
                                 <DropdownMenuItem
                                   onClick={() => updateOrderStatus(order.id, "delivered")}
+                                  disabled={updatingOrderId === order.id}
                                 >
                                   <CheckCircle className="h-4 w-4 mr-2" /> Mark Delivered
                                 </DropdownMenuItem>
@@ -368,29 +429,126 @@ export default function SellerOrdersClient({ orders: initialOrders }: Props) {
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
+              {/* Order Status */}
+              <div>
+                <h3 className="font-semibold mb-2">Order Status</h3>
+                <div className="flex items-center gap-2">
+                  {getStatusBadge(selectedOrder.status)}
+                  <span className="text-sm text-muted-foreground">
+                    Updated:{" "}
+                    {new Date(selectedOrder.orderDate).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                    })}
+                  </span>
+                </div>
+              </div>
+
+              {/* Customer Information */}
               <div>
                 <h3 className="font-semibold mb-2">Customer Information</h3>
-                <p>{selectedOrder.customer.name}</p>
+                <p className="font-medium">{selectedOrder.customer.name}</p>
                 <p className="text-sm text-muted-foreground">{selectedOrder.customer.email}</p>
+                {selectedOrder.customer.phone && (
+                  <p className="text-sm text-muted-foreground">{selectedOrder.customer.phone}</p>
+                )}
               </div>
 
+              {/* Shipping Address */}
+              {selectedOrder.shippingAddress && (
+                <div>
+                  <h3 className="font-semibold mb-2">Shipping Address</h3>
+                  <div className="bg-muted p-3 rounded-md space-y-1 text-sm">
+                    <p className="font-medium">{selectedOrder.shippingAddress.name}</p>
+                    <p>{selectedOrder.shippingAddress.street}</p>
+                    <p>
+                      {selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.state}{" "}
+                      {selectedOrder.shippingAddress.zipCode}
+                    </p>
+                    <p>{selectedOrder.shippingAddress.country}</p>
+                    <p className="text-muted-foreground">
+                      Phone: {selectedOrder.shippingAddress.phone}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Order Items */}
               <div>
                 <h3 className="font-semibold mb-2">Order Items</h3>
-                {selectedOrder.items.map((item, index) => (
-                  <div key={index} className="flex justify-between py-1">
-                    <span>
-                      {item.name} × {item.quantity}
-                    </span>
-                    <span>{formatCurrency(item.price * item.quantity)}</span>
-                  </div>
-                ))}
+                <div className="space-y-2">
+                  {selectedOrder.items.map((item, index) => (
+                    <div key={index} className="flex justify-between py-1 border-b last:border-b-0">
+                      <span>
+                        {item.name} × {item.quantity}
+                      </span>
+                      <span>{formatCurrency(item.price * item.quantity)}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
+              {/* Total */}
               <div className="pt-2 border-t">
                 <div className="flex justify-between font-semibold">
                   <span>Total</span>
                   <span>{formatCurrency(selectedOrder.total)}</span>
+                </div>
+              </div>
+
+              {/* Status Update Actions */}
+              <div className="space-y-2 border-t pt-4">
+                <h3 className="font-semibold mb-2">Update Status</h3>
+                <div className="flex gap-2 flex-wrap">
+                  {selectedOrder.status === "pending" && (
+                    <Button
+                      size="sm"
+                      onClick={() => updateOrderStatus(selectedOrder.id, "processing")}
+                      disabled={updatingOrderId === selectedOrder.id}
+                    >
+                      {updatingOrderId === selectedOrder.id ? "Updating..." : "Mark Processing"}
+                    </Button>
+                  )}
+                  {selectedOrder.status === "confirmed" && (
+                    <Button
+                      size="sm"
+                      onClick={() => updateOrderStatus(selectedOrder.id, "processing")}
+                      disabled={updatingOrderId === selectedOrder.id}
+                    >
+                      {updatingOrderId === selectedOrder.id ? "Updating..." : "Mark Processing"}
+                    </Button>
+                  )}
+                  {selectedOrder.status === "processing" && (
+                    <Button
+                      size="sm"
+                      onClick={() => updateOrderStatus(selectedOrder.id, "shipped")}
+                      disabled={updatingOrderId === selectedOrder.id}
+                    >
+                      {updatingOrderId === selectedOrder.id ? "Updating..." : "Mark Shipped"}
+                    </Button>
+                  )}
+                  {selectedOrder.status === "shipped" && (
+                    <Button
+                      size="sm"
+                      onClick={() => updateOrderStatus(selectedOrder.id, "delivered")}
+                      disabled={updatingOrderId === selectedOrder.id}
+                    >
+                      {updatingOrderId === selectedOrder.id ? "Updating..." : "Mark Delivered"}
+                    </Button>
+                  )}
+                  {selectedOrder.status !== "cancelled" &&
+                    !["pending", "processing", "shipped"].includes(selectedOrder.status) && (
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => updateOrderStatus(selectedOrder.id, "cancelled")}
+                        disabled={updatingOrderId === selectedOrder.id}
+                      >
+                        {updatingOrderId === selectedOrder.id ? "Updating..." : "Cancel Order"}
+                      </Button>
+                    )}
                 </div>
               </div>
             </CardContent>

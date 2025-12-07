@@ -3,10 +3,13 @@ import { prisma } from "@/lib/prisma";
 import SellerOrdersClient from "@/components/custom/seller/SellerOrdersClient";
 
 export default async function SellerOrdersPage() {
-  // Fetch orders with related OrderProduct entries
+  // Fetch orders with related OrderProduct entries and shipping address
   const orders = await prisma.order.findMany({
     orderBy: { createdAt: "desc" },
-    include: { products: true },
+    include: {
+      products: true,
+      shippingAddress: true,
+    },
   });
 
   // Batch fetch users and product details to avoid N+1 queries
@@ -47,14 +50,41 @@ export default async function SellerOrdersPage() {
       },
       items,
       total: o.total || 0,
-      status: (["pending", "processing", "shipped", "delivered", "cancelled"].includes(
-        String(o.status)
-      )
+      status: ([
+        "pending",
+        "processing",
+        "shipped",
+        "delivered",
+        "cancelled",
+        "confirmed",
+        "paid",
+      ].includes(String(o.status))
         ? String(o.status)
-        : "pending") as "pending" | "processing" | "shipped" | "delivered" | "cancelled",
-      paymentStatus: "paid",
+        : "pending") as
+        | "pending"
+        | "processing"
+        | "shipped"
+        | "delivered"
+        | "cancelled"
+        | "confirmed"
+        | "paid",
+      paymentMethod: o.paymentMethod || undefined,
+      paymentStatus: (["PENDING", "PAID", "FAILED", "REFUNDED"].includes(String(o.paymentStatus))
+        ? String(o.paymentStatus)
+        : "PENDING") as "PENDING" | "PAID" | "FAILED" | "REFUNDED",
       orderDate: o.createdAt ? o.createdAt.toISOString() : new Date().toISOString(),
       trackingNumber: undefined,
+      shippingAddress: o.shippingAddress
+        ? {
+            name: o.shippingAddress.name,
+            street: o.shippingAddress.street,
+            city: o.shippingAddress.city,
+            state: o.shippingAddress.state,
+            zipCode: o.shippingAddress.zipCode,
+            country: o.shippingAddress.country,
+            phone: o.shippingAddress.phone,
+          }
+        : undefined,
     };
   });
 

@@ -4,9 +4,14 @@ import { Button } from "@/components/ui/button";
 import { useAppContext } from "@/contexts/AppContext";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useUser } from "@clerk/nextjs";
+import { useClerk } from "@clerk/nextjs";
+import { LogIn } from "lucide-react";
 
 export function CartSummary() {
   const { cart, clearCart, currency } = useAppContext();
+  const { user } = useUser();
+  const { openSignIn } = useClerk();
   const { total, itemCount, bundleSavings, finalTotal: cartFinalTotal } = cart;
 
   const shipping = total > 50 ? 0 : 9.99;
@@ -73,9 +78,25 @@ export function CartSummary() {
       </CardContent>
 
       <CardFooter className="flex flex-col gap-2">
-        <Button className="w-full" size="lg" disabled={itemCount === 0} asChild>
-          <a href="/checkout">Proceed to Checkout</a>
-        </Button>
+        {!user ? (
+          <>
+            <Button
+              className="w-full bg-linear-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white border-0 rounded-xl py-6 font-bold shadow-lg hover:shadow-xl transition-all duration-300"
+              size="lg"
+              onClick={() => openSignIn()}
+            >
+              <LogIn className="mr-2 h-5 w-5" />
+              Sign in to Checkout
+            </Button>
+            <p className="text-xs text-center text-muted-foreground">
+              You need to be signed in to proceed with checkout
+            </p>
+          </>
+        ) : (
+          <Button className="w-full" size="lg" disabled={itemCount === 0} asChild>
+            <a href="/checkout">Proceed to Checkout</a>
+          </Button>
+        )}
 
         <Button
           variant="outline"

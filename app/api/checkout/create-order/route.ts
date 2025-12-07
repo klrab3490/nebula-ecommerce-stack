@@ -64,8 +64,11 @@ export async function POST(req: NextRequest) {
     const order = await prisma.order.create({
       data: {
         userId: dbUser?.id || actualUserId,
+        shippingAddressId: addressId || undefined,
         total: validatedCart.calculatedTotal, // Use server-calculated total
         status: orderStatus,
+        paymentMethod: paymentMethod,
+        paymentStatus: "PENDING", // Use PaymentStatus enum
         products: {
           create: cart.items.map((it: CartItem) => ({
             productId: it.id,

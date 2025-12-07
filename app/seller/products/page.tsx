@@ -329,6 +329,7 @@ export default function SellerProducts() {
                               src={product.images[0]}
                               alt={product.name}
                               fill
+                              sizes="(max-width: 768px) 40px, 40px"
                               className="object-cover"
                             />
                           </div>
@@ -357,7 +358,11 @@ export default function SellerProducts() {
                       )}
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
-                      {new Date(product.createdAt).toLocaleDateString()}
+                      {new Date(product.createdAt).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                      })}
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
