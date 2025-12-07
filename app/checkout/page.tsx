@@ -161,7 +161,6 @@ export default function CheckoutPage() {
             total: finalTotal,
             itemCount: cart.itemCount,
           },
-          userId: "current-user-id", // Replace with actual user ID from Clerk
           paymentMethod: "upi",
           addressId: selectedAddressId,
         }),

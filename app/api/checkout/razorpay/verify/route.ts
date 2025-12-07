@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       addressId?: string;
     };
 
-    const { razorpay_payment_id, razorpay_order_id, razorpay_signature, orderId, addressId } =
+    const { razorpay_payment_id, razorpay_order_id, razorpay_signature, orderId } =
       body;
 
     if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature) {
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Verify signature
-    const secret = process.env.NEXT_PUBLIC_RAZORPAY_KEY_SECRET || "";
+    const secret = process.env.RAZORPAY_KEY_SECRET || "";
     const generated = crypto
       .createHmac("sha256", secret)
       .update(razorpay_order_id + "|" + razorpay_payment_id)

@@ -41,6 +41,9 @@ export async function POST(req: NextRequest) {
     }
 
     // 2. Get raw body for signature verification
+    // IMPORTANT: The request body can only be read once. We use req.text() here to obtain the raw body
+    // for signature verification, and then parse it with JSON.parse. Do NOT use req.json() or attempt
+    // to read the body again, as this will break signature verification and/or parsing.
     const rawBody = await req.text();
 
     // 3. Verify signature
