@@ -7,11 +7,11 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 
 export function CartSummary() {
   const { cart, clearCart, currency } = useAppContext();
-  const { total, itemCount } = cart;
+  const { total, itemCount, bundleSavings, finalTotal: cartFinalTotal } = cart;
 
   const shipping = total > 50 ? 0 : 9.99;
   const tax = total * 0.08;
-  const finalTotal = total + shipping + tax;
+  const finalTotal = cartFinalTotal + shipping + tax;
   localStorage.setItem("finalTotal", finalTotal.toString());
 
   console.log("Final Total in CartSummary:", finalTotal);
@@ -30,6 +30,16 @@ export function CartSummary() {
             {total.toFixed(2)}
           </span>
         </div>
+
+        {bundleSavings > 0 && (
+          <div className="flex justify-between text-sm bg-green-50 dark:bg-green-950/20 p-2 rounded-md border border-green-200 dark:border-green-800">
+            <span className="text-green-700 dark:text-green-300 font-medium">Bundle Savings</span>
+            <span className="text-green-700 dark:text-green-300 font-bold">
+              -{currency || "$"}
+              {bundleSavings.toFixed(2)}
+            </span>
+          </div>
+        )}
 
         <div className="flex justify-between text-sm">
           <span>Shipping</span>

@@ -42,12 +42,13 @@ model Product {
   images          String[]
   categories      String[]
   featured        Boolean  @default(false)
+  specifications  Json?    // Stores structured data like quantity, ingredients, how to use
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   OrderProduct  OrderProduct[]
   ProductFAQ    ProductFAQ[]
-  BundleProduct BundleProduct[]
+  BundleItems   BundleItem[]
   reviews       Review[]
 }
 
@@ -90,36 +91,6 @@ model OrderProduct {
   product   Product @relation(fields: [productId], references: [id])
   productId String  @db.ObjectId
   quantity  Int
-  bundleId  String? @db.ObjectId
-  bundle    Bundle? @relation(fields: [bundleId], references: [id])
-}
-
-model Bundle {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String
-  description   String
-  discountType  String // "percentage" | "fixed" | "buy_x_get_y"
-  discountValue Float // percentage (0-100) or fixed amount
-  minQuantity   Int       @default(1)
-  maxQuantity   Int? // null for unlimited
-  isActive      Boolean   @default(true)
-  validFrom     DateTime  @default(now())
-  validUntil    DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  BundleProduct BundleProduct[]
-  OrderProduct  OrderProduct[]
-}
-
-model BundleProduct {
-  id         String  @id @default(auto()) @map("_id") @db.ObjectId
-  bundle     Bundle  @relation(fields: [bundleId], references: [id])
-  bundleId   String  @db.ObjectId
-  product    Product @relation(fields: [productId], references: [id])
-  productId  String  @db.ObjectId
-  quantity   Int     @default(1) // quantity required for this bundle
-  isRequired Boolean @default(true) // false for optional items
 }
 
 model Review {
@@ -136,3 +107,42 @@ model Review {
   @@index([productId])
   @@index([userId])
 }
+
+model Bundle {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  description   String?
+  bundleType    String       // "combo" | "fixed_discount" | "bogo"
+  isActive      Boolean      @default(true)
+  validFrom     DateTime     @default(now())
+  validUntil    DateTime?
+  
+  // Pricing fields
+  normalPrice   Float        // Sum of individual product prices
+  offerPrice    Float        // The price when bundle is applied
+  savings       Float        // normalPrice - offerPrice (auto-calculated)
+  
+  items         BundleItem[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@index([isActive])
+  @@index([bundleType])
+}
+
+model BundleItem {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  bundle     Bundle   @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+  bundleId   String   @db.ObjectId
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  String   @db.ObjectId
+  quantity   Int      @default(1)
+  isRequired Boolean  @default(true)  // required for combo/BOGO, optional for fixed discount
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([bundleId, productId])
+  @@index([productId])
+  @@index([bundleId])
+}
+

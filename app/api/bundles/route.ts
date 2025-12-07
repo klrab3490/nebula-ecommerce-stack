@@ -13,7 +13,7 @@ export async function GET() {
         OR: [{ validUntil: null }, { validUntil: { gte: new Date() } }],
       },
       include: {
-        BundleProduct: {
+        items: {
           include: {
             product: {
               select: {
@@ -55,54 +55,87 @@ export async function POST(req: Request) {
     const {
       name,
       description,
-      discountType,
-      discountValue,
-      minQuantity,
-      maxQuantity,
+      bundleType,
       validUntil,
-      products, // Array of { productId, quantity, isRequired }
+      items, // Array of { productId, quantity, isRequired }
     } = body;
 
     // Validate required fields
-    if (
-      !name ||
-      !description ||
-      !discountType ||
-      discountValue === undefined ||
-      !products?.length
-    ) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    if (!name || !bundleType || !items?.length) {
+      return NextResponse.json(
+        { error: "Missing required fields: name, bundleType, items" },
+        { status: 400 }
+      );
     }
 
-    // Validate discountType
-    if (!["percentage", "fixed", "buy_x_get_y"].includes(discountType)) {
-      return NextResponse.json({ error: "Invalid discount type" }, { status: 400 });
+    // Validate bundleType
+    if (!["combo", "fixed_discount", "bogo"].includes(bundleType)) {
+      return NextResponse.json({ error: "Invalid bundle type" }, { status: 400 });
     }
 
-    // Create bundle with products
+    // Fetch product details to calculate prices
+    const productIds = items.map((item: any) => item.productId);
+    const products = await prisma.product.findMany({
+      where: { id: { in: productIds } },
+      select: { id: true, price: true, discountedPrice: true },
+    });
+
+    // Calculate normal price (sum of individual prices)
+    let normalPrice = 0;
+    items.forEach((item: any) => {
+      const product = products.find((p) => p.id === item.productId);
+      if (product) {
+        const itemPrice = product.discountedPrice || product.price;
+        normalPrice += itemPrice * (item.quantity || 1);
+      }
+    });
+
+    // Calculate offer price based on bundle type
+    let offerPrice = normalPrice;
+    switch (bundleType) {
+      case "combo":
+        offerPrice = normalPrice * 0.8; // 20% off
+        break;
+      case "fixed_discount":
+        offerPrice = normalPrice * 0.9; // 10% off
+        break;
+      case "bogo":
+        offerPrice = normalPrice * 0.5; // 50% off
+        break;
+    }
+
+    const savings = normalPrice - offerPrice;
+
+    // Create bundle with items
     const bundle = await prisma.bundle.create({
       data: {
         name,
         description,
-        discountType,
-        discountValue,
-        minQuantity: minQuantity || 1,
-        maxQuantity,
+        bundleType,
+        normalPrice,
+        offerPrice,
+        savings,
         validUntil: validUntil ? new Date(validUntil) : null,
-        BundleProduct: {
-          create: products.map(
-            (p: { productId: string; quantity?: number; isRequired?: boolean }) => ({
-              productId: p.productId,
-              quantity: p.quantity || 1,
-              isRequired: p.isRequired !== false,
-            })
-          ),
+        items: {
+          create: items.map((item: any) => ({
+            productId: item.productId,
+            quantity: item.quantity || 1,
+            isRequired: item.isRequired !== false,
+          })),
         },
       },
       include: {
-        BundleProduct: {
+        items: {
           include: {
-            product: true,
+            product: {
+              select: {
+                id: true,
+                name: true,
+                price: true,
+                discountedPrice: true,
+                images: true,
+              },
+            },
           },
         },
       },

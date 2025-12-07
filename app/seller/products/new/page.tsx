@@ -19,6 +19,12 @@ interface ProductFormData {
   images: string[]; // Array of image URLs
   categories: string[]; // Array of category names
   faqs: { question: string; answer: string }[]; // Array of FAQs
+  specifications?: {
+    quantity?: string;
+    ingredients?: string;
+    howToUse?: string;
+    benefits?: string;
+  }; // Product specifications
   featured: boolean; // Whether product is featured
 }
 
@@ -38,6 +44,12 @@ export default function AddProductPage() {
     images: [],
     categories: [],
     faqs: [],
+    specifications: {
+      quantity: "",
+      ingredients: "",
+      howToUse: "",
+      benefits: "",
+    },
     featured: false,
   });
 
@@ -184,6 +196,7 @@ export default function AddProductPage() {
           images: formData.images,
           categories: formData.categories,
           faqs: formData.faqs,
+          specifications: formData.specifications,
           featured: formData.featured,
         }),
       });
@@ -734,6 +747,107 @@ export default function AddProductPage() {
                   {errors.categories}
                 </p>
               )}
+            </CardContent>
+          </Card>
+
+          {/* Specifications */}
+          <Card className="border-0 shadow-lg bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm">
+            <CardHeader className="pb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-teal-100 dark:bg-teal-900/50 rounded-full flex items-center justify-center">
+                  <span className="text-teal-600 dark:text-teal-400 text-xl">📋</span>
+                </div>
+                <div>
+                  <CardTitle className="text-xl">Product Specifications</CardTitle>
+                  <CardDescription className="text-sm">
+                    Add detailed specifications like quantity, ingredients, usage instructions
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                  Quantity / Size
+                </label>
+                <Input
+                  placeholder="e.g., 100ml, 50g, 200ml"
+                  value={formData.specifications?.quantity || ""}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      specifications: { ...prev.specifications, quantity: e.target.value },
+                    }))
+                  }
+                  className="h-12 text-base transition-all duration-200 border-slate-200 focus:border-primary focus:ring-primary/20 hover:border-slate-300"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Specify the product size or quantity
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                  Ingredients
+                </label>
+                <textarea
+                  placeholder="List all ingredients, one per line or separated by commas"
+                  value={formData.specifications?.ingredients || ""}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      specifications: { ...prev.specifications, ingredients: e.target.value },
+                    }))
+                  }
+                  className="flex min-h-[100px] w-full rounded-lg border border-slate-200 px-4 py-3 text-base transition-all duration-200 focus:border-primary focus:ring-primary/20 hover:border-slate-300"
+                  rows={4}
+                />
+                <p className="text-xs text-muted-foreground">
+                  List the product ingredients or composition
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                  How to Use
+                </label>
+                <textarea
+                  placeholder="Provide step-by-step usage instructions"
+                  value={formData.specifications?.howToUse || ""}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      specifications: { ...prev.specifications, howToUse: e.target.value },
+                    }))
+                  }
+                  className="flex min-h-[100px] w-full rounded-lg border border-slate-200 px-4 py-3 text-base transition-all duration-200 focus:border-primary focus:ring-primary/20 hover:border-slate-300"
+                  rows={4}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Explain how customers should use the product
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                  Benefits
+                </label>
+                <textarea
+                  placeholder="List the key benefits and advantages of this product"
+                  value={formData.specifications?.benefits || ""}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      specifications: { ...prev.specifications, benefits: e.target.value },
+                    }))
+                  }
+                  className="flex min-h-[100px] w-full rounded-lg border border-slate-200 px-4 py-3 text-base transition-all duration-200 focus:border-primary focus:ring-primary/20 hover:border-slate-300"
+                  rows={4}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Highlight what makes this product beneficial
+                </p>
+              </div>
             </CardContent>
           </Card>
 

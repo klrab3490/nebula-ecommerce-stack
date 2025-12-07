@@ -94,9 +94,7 @@ export default function ReviewList({ productId, refreshTrigger = 0 }: ReviewList
           <User className="w-8 h-8 text-gray-400 dark:text-gray-600" />
         </div>
         <h3 className="text-lg font-semibold text-foreground mb-2">No Reviews Yet</h3>
-        <p className="text-muted-foreground">
-          Be the first to review this product!
-        </p>
+        <p className="text-muted-foreground">Be the first to review this product!</p>
       </div>
     );
   }
@@ -130,7 +128,7 @@ export default function ReviewList({ productId, refreshTrigger = 0 }: ReviewList
             {/* Review Header */}
             <div className="flex items-start gap-4 mb-4">
               {/* User Avatar */}
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
                   {review.user.name.charAt(0).toUpperCase()}
                 </div>
@@ -149,9 +147,7 @@ export default function ReviewList({ productId, refreshTrigger = 0 }: ReviewList
             </div>
 
             {/* Review Comment */}
-            <p className="text-foreground leading-relaxed whitespace-pre-wrap">
-              {review.comment}
-            </p>
+            <p className="text-foreground leading-relaxed whitespace-pre-wrap">{review.comment}</p>
           </div>
         ))}
       </div>

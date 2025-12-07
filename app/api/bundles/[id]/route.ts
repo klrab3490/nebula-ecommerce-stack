@@ -11,7 +11,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     const bundle = await prisma.bundle.findUnique({
       where: { id },
       include: {
-        BundleProduct: {
+        items: {
           include: {
             product: {
               select: {
@@ -55,43 +55,42 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     }
 
     const body = await req.json();
-    const {
-      name,
-      description,
-      discountType,
-      discountValue,
-      minQuantity,
-      maxQuantity,
-      isActive,
-      validUntil,
-      products,
-    } = body;
+    const { name, description, bundleType, offerPrice, isActive, validUntil, items } = body;
 
     // Update bundle
     const updateData: {
       name?: string;
       description?: string;
-      discountType?: string;
-      discountValue?: number;
-      minQuantity?: number;
-      maxQuantity?: number;
+      bundleType?: string;
+      offerPrice?: number;
+      normalPrice?: number;
+      savings?: number;
       isActive?: boolean;
       validUntil?: Date | null;
     } = {};
     if (name !== undefined) updateData.name = name;
     if (description !== undefined) updateData.description = description;
-    if (discountType !== undefined) updateData.discountType = discountType;
-    if (discountValue !== undefined) updateData.discountValue = discountValue;
-    if (minQuantity !== undefined) updateData.minQuantity = minQuantity;
-    if (maxQuantity !== undefined) updateData.maxQuantity = maxQuantity;
+    if (bundleType !== undefined) updateData.bundleType = bundleType;
     if (isActive !== undefined) updateData.isActive = isActive;
     if (validUntil !== undefined) updateData.validUntil = validUntil ? new Date(validUntil) : null;
+
+    // If offerPrice is provided, recalculate savings
+    if (offerPrice !== undefined) {
+      const currentBundle = await prisma.bundle.findUnique({
+        where: { id },
+        select: { normalPrice: true },
+      });
+      if (currentBundle) {
+        updateData.offerPrice = offerPrice;
+        updateData.savings = currentBundle.normalPrice - offerPrice;
+      }
+    }
 
     const bundle = await prisma.bundle.update({
       where: { id },
       data: updateData,
       include: {
-        BundleProduct: {
+        items: {
           include: {
             product: true,
           },
@@ -99,20 +98,20 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       },
     });
 
-    // If products array is provided, update bundle products
-    if (products) {
-      // Remove existing bundle products
-      await prisma.bundleProduct.deleteMany({
+    // If items array is provided, update bundle items
+    if (items) {
+      // Remove existing bundle items
+      await prisma.bundleItem.deleteMany({
         where: { bundleId: id },
       });
 
-      // Add new bundle products
-      await prisma.bundleProduct.createMany({
-        data: products.map((p: { productId: string; quantity?: number; isRequired?: boolean }) => ({
+      // Add new bundle items
+      await prisma.bundleItem.createMany({
+        data: items.map((item: { productId: string; quantity?: number; isRequired?: boolean }) => ({
           bundleId: id,
-          productId: p.productId,
-          quantity: p.quantity || 1,
-          isRequired: p.isRequired !== false,
+          productId: item.productId,
+          quantity: item.quantity || 1,
+          isRequired: item.isRequired !== false,
         })),
       });
     }

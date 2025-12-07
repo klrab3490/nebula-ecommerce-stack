@@ -17,6 +17,12 @@ interface ProductFormData {
   images: string[];
   categories: string[];
   faqs?: { question: string; answer: string }[];
+  specifications?: {
+    quantity?: string;
+    ingredients?: string;
+    howToUse?: string;
+    benefits?: string;
+  };
   featured: boolean;
 }
 
@@ -40,6 +46,12 @@ export default function EditProductPage() {
     images: [],
     categories: [],
     faqs: [],
+    specifications: {
+      quantity: "",
+      ingredients: "",
+      howToUse: "",
+      benefits: "",
+    },
     featured: false,
   });
 
@@ -68,6 +80,12 @@ export default function EditProductPage() {
           images: p.images || [],
           categories: p.categories || [],
           faqs: Array.isArray(p.faq) ? p.faq : [],
+          specifications: p.specifications || {
+            quantity: "",
+            ingredients: "",
+            howToUse: "",
+            benefits: "",
+          },
           featured: Boolean(p.featured),
         });
       } catch (err) {
@@ -178,6 +196,7 @@ export default function EditProductPage() {
           images: formData.images,
           categories: formData.categories,
           faqs: formData.faqs || [],
+          specifications: formData.specifications,
           featured: formData.featured,
         }),
       });
@@ -491,6 +510,98 @@ export default function EditProductPage() {
               {errors.categories && (
                 <p className="text-sm text-red-500 mt-2">{errors.categories}</p>
               )}
+            </CardContent>
+          </Card>
+
+          {/* Specifications */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center">
+                  📋
+                </div>
+                <div>
+                  <CardTitle className="text-xl">Product Specifications</CardTitle>
+                  <CardDescription className="text-sm">
+                    Add detailed specifications like quantity, ingredients, usage instructions
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-3">
+                <label className="text-sm font-semibold">Quantity / Size</label>
+                <Input
+                  placeholder="e.g., 100ml, 50g, 200ml"
+                  value={formData.specifications?.quantity || ""}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      specifications: { ...prev.specifications, quantity: e.target.value },
+                    }))
+                  }
+                />
+                <p className="text-xs text-muted-foreground">
+                  Specify the product size or quantity
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-sm font-semibold">Ingredients</label>
+                <textarea
+                  placeholder="List all ingredients, one per line or separated by commas"
+                  value={formData.specifications?.ingredients || ""}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      specifications: { ...prev.specifications, ingredients: e.target.value },
+                    }))
+                  }
+                  className="flex min-h-[100px] w-full rounded-lg border px-4 py-3"
+                  rows={4}
+                />
+                <p className="text-xs text-muted-foreground">
+                  List the product ingredients or composition
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-sm font-semibold">How to Use</label>
+                <textarea
+                  placeholder="Provide step-by-step usage instructions"
+                  value={formData.specifications?.howToUse || ""}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      specifications: { ...prev.specifications, howToUse: e.target.value },
+                    }))
+                  }
+                  className="flex min-h-[100px] w-full rounded-lg border px-4 py-3"
+                  rows={4}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Explain how customers should use the product
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-sm font-semibold">Benefits</label>
+                <textarea
+                  placeholder="List the key benefits and advantages of this product"
+                  value={formData.specifications?.benefits || ""}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      specifications: { ...prev.specifications, benefits: e.target.value },
+                    }))
+                  }
+                  className="flex min-h-[100px] w-full rounded-lg border px-4 py-3"
+                  rows={4}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Highlight what makes this product beneficial
+                </p>
+              </div>
             </CardContent>
           </Card>
 

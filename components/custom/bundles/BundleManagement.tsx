@@ -36,12 +36,9 @@ interface Product {
 interface BundleFormData {
   name: string;
   description: string;
-  discountType: "percentage" | "fixed" | "buy_x_get_y";
-  discountValue: number;
-  minQuantity: number;
-  maxQuantity?: number;
+  bundleType: "combo" | "fixed_discount" | "bogo";
   validUntil?: string;
-  products: {
+  items: {
     productId: string;
     quantity: number;
     isRequired: boolean;
@@ -51,10 +48,8 @@ interface BundleFormData {
 const initialFormData: BundleFormData = {
   name: "",
   description: "",
-  discountType: "percentage",
-  discountValue: 0,
-  minQuantity: 1,
-  products: [],
+  bundleType: "combo",
+  items: [],
 };
 
 export function BundleManagement() {
@@ -129,18 +124,15 @@ export function BundleManagement() {
     setEditingBundle(bundle);
     setFormData({
       name: bundle.name,
-      description: bundle.description,
-      discountType: bundle.discountType as "percentage" | "fixed" | "buy_x_get_y",
-      discountValue: bundle.discountValue,
-      minQuantity: bundle.minQuantity,
-      maxQuantity: bundle.maxQuantity || undefined,
+      description: bundle.description || "",
+      bundleType: bundle.bundleType as "combo" | "fixed_discount" | "bogo",
       validUntil: bundle.validUntil
         ? new Date(bundle.validUntil).toISOString().split("T")[0]
         : undefined,
-      products: bundle.BundleProduct.map((bp) => ({
-        productId: bp.productId,
-        quantity: bp.quantity,
-        isRequired: bp.isRequired,
+      items: bundle.items.map((item) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        isRequired: item.isRequired,
       })),
     });
     setIsDialogOpen(true);
@@ -168,23 +160,21 @@ export function BundleManagement() {
   const addProduct = () => {
     setFormData((prev) => ({
       ...prev,
-      products: [...prev.products, { productId: "", quantity: 1, isRequired: true }],
+      items: [...prev.items, { productId: "", quantity: 1, isRequired: true }],
     }));
   };
 
   const removeProduct = (index: number) => {
     setFormData((prev) => ({
       ...prev,
-      products: prev.products.filter((_, i) => i !== index),
+      items: prev.items.filter((_, i) => i !== index),
     }));
   };
 
   const updateProduct = (index: number, field: string, value: string | number | boolean) => {
     setFormData((prev) => ({
       ...prev,
-      products: prev.products.map((product, i) =>
-        i === index ? { ...product, [field]: value } : product
-      ),
+      items: prev.items.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
     }));
   };
 
@@ -233,13 +223,13 @@ export function BundleManagement() {
                 </div>
 
                 <div>
-                  <Label htmlFor="discountType">Discount Type</Label>
+                  <Label htmlFor="bundleType">Bundle Type</Label>
                   <Select
-                    value={formData.discountType}
+                    value={formData.bundleType}
                     onValueChange={(value: string) =>
                       setFormData((prev) => ({
                         ...prev,
-                        discountType: value as "percentage" | "fixed" | "buy_x_get_y",
+                        bundleType: value as "combo" | "fixed_discount" | "bogo",
                       }))
                     }
                   >
@@ -247,9 +237,9 @@ export function BundleManagement() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="percentage">Percentage Off</SelectItem>
-                      <SelectItem value="fixed">Fixed Amount Off</SelectItem>
-                      <SelectItem value="buy_x_get_y">Buy X Get Y</SelectItem>
+                      <SelectItem value="combo">Combo (products bundled together)</SelectItem>
+                      <SelectItem value="fixed_discount">Fixed Discount</SelectItem>
+                      <SelectItem value="bogo">Buy One Get One</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -266,65 +256,8 @@ export function BundleManagement() {
                       description: e.target.value,
                     }))
                   }
-                  required
+                  placeholder="Describe this bundle offer"
                 />
-              </div>
-
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <Label htmlFor="discountValue">
-                    {formData.discountType === "percentage"
-                      ? "Discount %"
-                      : formData.discountType === "fixed"
-                        ? "Discount Amount"
-                        : "Free Items"}
-                  </Label>
-                  <Input
-                    id="discountValue"
-                    type="number"
-                    value={formData.discountValue}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        discountValue: Number(e.target.value),
-                      }))
-                    }
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="minQuantity">Min Quantity</Label>
-                  <Input
-                    id="minQuantity"
-                    type="number"
-                    value={formData.minQuantity}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        minQuantity: Number(e.target.value),
-                      }))
-                    }
-                    min="1"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="maxQuantity">Max Quantity (Optional)</Label>
-                  <Input
-                    id="maxQuantity"
-                    type="number"
-                    value={formData.maxQuantity || ""}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        maxQuantity: e.target.value ? Number(e.target.value) : undefined,
-                      }))
-                    }
-                    min="1"
-                  />
-                </div>
               </div>
 
               <div>
@@ -351,10 +284,10 @@ export function BundleManagement() {
                   </Button>
                 </div>
 
-                {formData.products.map((product, index) => (
+                {formData.items.map((item, index) => (
                   <div key={index} className="flex items-center space-x-2 p-3 border rounded">
                     <Select
-                      value={product.productId}
+                      value={item.productId}
                       onValueChange={(value: string) => updateProduct(index, "productId", value)}
                     >
                       <SelectTrigger className="flex-1">
@@ -371,7 +304,7 @@ export function BundleManagement() {
 
                     <Input
                       type="number"
-                      value={product.quantity}
+                      value={item.quantity}
                       onChange={(e) => updateProduct(index, "quantity", Number(e.target.value))}
                       min="1"
                       className="w-20"
@@ -380,7 +313,7 @@ export function BundleManagement() {
 
                     <div className="flex items-center space-x-2">
                       <Switch
-                        checked={product.isRequired}
+                        checked={item.isRequired}
                         onCheckedChange={(checked: boolean) =>
                           updateProduct(index, "isRequired", checked)
                         }
@@ -444,18 +377,18 @@ export function BundleManagement() {
             <CardContent>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <strong>Discount:</strong>{" "}
-                  {bundle.discountType === "percentage"
-                    ? `${bundle.discountValue}%`
-                    : bundle.discountType === "fixed"
-                      ? formatCurrency(bundle.discountValue)
-                      : `Buy ${bundle.minQuantity} Get ${bundle.discountValue}`}
+                  <strong>Bundle Type:</strong>{" "}
+                  {bundle.bundleType === "combo"
+                    ? "Combo Offer"
+                    : bundle.bundleType === "fixed_discount"
+                      ? "Fixed Discount"
+                      : "Buy One Get One"}
                 </div>
                 <div>
-                  <strong>Min Quantity:</strong> {bundle.minQuantity}
+                  <strong>Savings:</strong> {formatCurrency(bundle.savings)}
                 </div>
                 <div>
-                  <strong>Products:</strong> {bundle.BundleProduct.length}
+                  <strong>Products:</strong> {bundle.items.length}
                 </div>
                 <div>
                   <strong>Valid Until:</strong>{" "}

@@ -20,6 +20,7 @@ export async function POST(req: NextRequest) {
       categories,
       featured,
       faqs,
+      specifications,
     } = await req.json();
 
     // Validate required fields
@@ -96,6 +97,7 @@ export async function POST(req: NextRequest) {
         images: images || [],
         categories: categories || [],
         featured: featured || false,
+        specifications: specifications || null,
         createdAt: now,
         updatedAt: now,
         ProductFAQ: faqCreates.length > 0 ? { create: faqCreates } : undefined,

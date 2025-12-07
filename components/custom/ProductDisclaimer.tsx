@@ -13,7 +13,7 @@ export default function ProductDisclaimer({ className = "" }: ProductDisclaimerP
       className={`bg-amber-50/80 dark:bg-amber-900/20 backdrop-blur-sm border border-amber-200 dark:border-amber-800/50 rounded-2xl p-6 ${className}`}
     >
       <div className="flex items-start gap-3">
-        <div className="flex-shrink-0 mt-0.5">
+        <div className="shrink-0 mt-0.5">
           <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
         </div>
         <div className="flex-1 space-y-2">
@@ -28,8 +28,8 @@ export default function ProductDisclaimer({ className = "" }: ProductDisclaimerP
             </p>
             <p>
               <strong>Patch Test Recommended:</strong> Before full application, we recommend
-              performing a patch test on a small area of skin to check for any allergic reactions
-              or sensitivities.
+              performing a patch test on a small area of skin to check for any allergic reactions or
+              sensitivities.
             </p>
             <p>
               <strong>Not Medical Advice:</strong> This product is for cosmetic use only and is not
