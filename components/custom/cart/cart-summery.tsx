@@ -14,7 +14,7 @@ export function CartSummary() {
   const finalTotal = cartFinalTotal + shipping + tax;
   localStorage.setItem("finalTotal", finalTotal.toString());
 
-  console.log("Final Total in CartSummary:", finalTotal);
+  // console.log("Final Total in CartSummary:", finalTotal);
 
   return (
     <Card className="sticky top-4">

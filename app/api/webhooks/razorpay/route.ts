@@ -68,16 +68,13 @@ export async function POST(req: NextRequest) {
     const event = JSON.parse(rawBody);
     const { event: eventType, payload } = event;
 
-    console.log(`Received Razorpay webhook: ${eventType}`, {
-      paymentId: payload?.payment?.entity?.id,
-      orderId: payload?.payment?.entity?.order_id,
-    });
+    // console.log(`Received Razorpay webhook: ${eventType}`, { paymentId: payload?.payment?.entity?.id, orderId: payload?.payment?.entity?.order_id,});
 
     // 5. Check idempotency - prevent duplicate processing
     const eventId = event.id || `${eventType}_${payload?.payment?.entity?.id}`;
 
     if (processedEvents.has(eventId)) {
-      console.log(`Event ${eventId} already processed, skipping`);
+      // console.log(`Event ${eventId} already processed, skipping`);
       return NextResponse.json({ status: "already_processed" });
     }
 
@@ -106,7 +103,7 @@ export async function POST(req: NextRequest) {
         break;
 
       default:
-        console.log(`Unhandled event type: ${eventType}`);
+        // console.log(`Unhandled event type: ${eventType}`);
         return NextResponse.json({ status: "ignored" });
     }
 
@@ -136,7 +133,7 @@ async function handlePaymentCaptured(payload: any) {
   const paymentId = payment.id;
   const amount = payment.amount / 100; // Convert paise to rupees
 
-  console.log(`Payment captured: ${paymentId} for order ${razorpayOrderId}`);
+  // console.log(`Payment captured: ${paymentId} for order ${razorpayOrderId}`);
 
   // Find order by Razorpay order ID (preferred) or fallback to amount matching
   let order = null;
@@ -175,7 +172,7 @@ async function handlePaymentCaptured(payload: any) {
     },
   });
 
-  console.log(`Order ${order.id} marked as paid`);
+  // console.log(`Order ${order.id} marked as paid`);
 
   // TODO: Send confirmation email
   // TODO: Create shipment in Shiprocket
@@ -195,11 +192,7 @@ async function handlePaymentFailed(payload: any) {
   const errorCode = payment.error_code;
   const errorDescription = payment.error_description;
 
-  console.log(`Payment failed: ${paymentId}`, {
-    orderId: razorpayOrderId,
-    errorCode,
-    errorDescription,
-  });
+  // console.log(`Payment failed: ${paymentId}`, { orderId: razorpayOrderId, errorCode, errorDescription, });
 
   // Find and update order
   const order = await prisma.order.findFirst({
@@ -213,7 +206,7 @@ async function handlePaymentFailed(payload: any) {
       data: { status: "failed" },
     });
 
-    console.log(`Order ${order.id} marked as failed`);
+    // console.log(`Order ${order.id} marked as failed`);
   }
 
   // TODO: Send payment failed email
@@ -230,7 +223,7 @@ async function handlePaymentAuthorized(payload: any) {
   const payment = payload.payment.entity;
   const paymentId = payment.id;
 
-  console.log(`Payment authorized: ${paymentId} (requires manual capture)`);
+  // console.log(`Payment authorized: ${paymentId} (requires manual capture)`);
 
   // TODO: Update order status to "authorized"
   // TODO: Notify admin for manual capture
@@ -248,9 +241,7 @@ async function handleRefundCreated(payload: any) {
   const refundId = refund.id;
   const amount = refund.amount / 100;
 
-  console.log(`Refund created: ${refundId} for payment ${paymentId}`, {
-    amount,
-  });
+  // console.log(`Refund created: ${refundId} for payment ${paymentId}`, { amount, });
 
   // Find order by payment ID (need to store this in Order model)
   // For now, find by amount
@@ -270,7 +261,7 @@ async function handleRefundCreated(payload: any) {
       data: { status: "refund_pending" },
     });
 
-    console.log(`Order ${order.id} marked as refund_pending`);
+    // console.log(`Order ${order.id} marked as refund_pending`);
   }
 
   // TODO: Send refund initiated email
@@ -288,9 +279,7 @@ async function handleRefundProcessed(payload: any) {
   const refundId = refund.id;
   const amount = refund.amount / 100;
 
-  console.log(`Refund processed: ${refundId} for payment ${paymentId}`, {
-    amount,
-  });
+  // console.log(`Refund processed: ${refundId} for payment ${paymentId}`, { amount, });
 
   // Find and update order
   const order = await prisma.order.findFirst({
@@ -309,7 +298,7 @@ async function handleRefundProcessed(payload: any) {
       data: { status: "refunded" },
     });
 
-    console.log(`Order ${order.id} marked as refunded`);
+    // console.log(`Order ${order.id} marked as refunded`);
   }
 
   // TODO: Send refund completed email

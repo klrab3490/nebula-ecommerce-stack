@@ -20,6 +20,7 @@ export default function CheckoutPage() {
   });
 
   const router = useRouter();
+  const { userData } = useAppContext();
   const [address, setAddress] = useState<any>(null);
   const [addresses, setAddresses] = useState<any[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
@@ -87,7 +88,7 @@ export default function CheckoutPage() {
   }, []);
 
   const handleCashOnDelivery = async () => {
-    if (!cart || finalTotal <= 0) {
+    if (!cart || cart.finalTotal <= 0) {
       alert("Your cart is empty.");
       return;
     }
@@ -101,6 +102,9 @@ export default function CheckoutPage() {
     setProcessingOrder(true);
 
     try {
+      // Debug: Log cart data before sending
+      // console.log("Cart data being sent:", { items: cart.items, total: cart.finalTotal, itemCount: cart.itemCount, });
+
       // Create order directly with COD status
       const res = await fetch("/api/checkout/create-order", {
         method: "POST",
@@ -108,10 +112,10 @@ export default function CheckoutPage() {
         body: JSON.stringify({
           cart: {
             items: cart.items,
-            total: finalTotal,
+            total: cart.finalTotal, // Use cart.finalTotal (subtotal after bundles) not finalTotal (with shipping/tax)
             itemCount: cart.itemCount,
           },
-          userId: "current-user-id", // Replace with actual user ID from Clerk
+          userId: userData ? userData.id : null, // TODO: replace with actual user ID from your auth provider (e.g. Clerk)
           paymentMethod: "cod",
           addressId: selectedAddressId,
         }),
@@ -137,7 +141,7 @@ export default function CheckoutPage() {
   };
 
   const handleUPIPayment = useCallback(async () => {
-    if (!cart || finalTotal <= 0) {
+    if (!cart || cart.finalTotal <= 0) {
       alert("Your cart is empty.");
       return;
     }
@@ -158,7 +162,7 @@ export default function CheckoutPage() {
         body: JSON.stringify({
           cart: {
             items: cart.items,
-            total: finalTotal,
+            total: cart.finalTotal, // Use cart.finalTotal (subtotal after bundles) not finalTotal (with shipping/tax)
             itemCount: cart.itemCount,
           },
           paymentMethod: "upi",
@@ -239,7 +243,7 @@ export default function CheckoutPage() {
                 orderId: dbOrderId, // Pass our database orderId
                 cart: {
                   items: cart.items,
-                  total: finalTotal,
+                  total: cart.finalTotal, // Use cart.finalTotal (subtotal after bundles) not finalTotal (with shipping/tax)
                   itemCount: cart.itemCount,
                 },
                 addressId: selectedAddressId,
@@ -404,7 +408,9 @@ export default function CheckoutPage() {
                       <Wallet className="h-5 w-5 text-primary" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-gray-100">UPI Payment</p>
+                      <p className="font-medium text-gray-900 dark:text-gray-100">
+                        Prepaid Delivery
+                      </p>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         Pay securely using UPI, Cards, Net Banking
                       </p>

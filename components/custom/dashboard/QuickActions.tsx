@@ -2,16 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Plus,
-  Package,
-  ShoppingCart,
-  BarChart3,
-  Settings,
-  Users,
-  Download,
-  Upload,
-} from "lucide-react";
+import { Plus, Package, ShoppingCart, Settings, Users, Download, Upload } from "lucide-react";
 import Link from "next/link";
 
 interface QuickAction {
@@ -43,13 +34,6 @@ export function QuickActions() {
       description: "Manage your product catalog",
       href: "/seller/product-list",
       icon: Package,
-      variant: "outline",
-    },
-    {
-      label: "Analytics Report",
-      description: "View detailed performance metrics",
-      href: "/seller/analytics",
-      icon: BarChart3,
       variant: "outline",
     },
   ];

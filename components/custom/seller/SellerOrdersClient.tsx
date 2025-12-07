@@ -127,7 +127,7 @@ export default function SellerOrdersClient({ orders: initialOrders }: Props) {
 
   const updateOrderStatus = (orderId: string, newStatus: Order["status"]) => {
     // In a real app this would call an API to update status and refresh
-    console.log(`Updating order ${orderId} to status: ${newStatus}`);
+    // console.log(`Updating order ${orderId} to status: ${newStatus}`);
   };
 
   const ordersByStatus = {
