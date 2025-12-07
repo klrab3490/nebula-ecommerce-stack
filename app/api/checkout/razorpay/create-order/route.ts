@@ -2,14 +2,21 @@
 
 import Razorpay from "razorpay";
 import { NextRequest, NextResponse } from "next/server";
+import { checkRateLimit, RateLimitPresets } from "@/lib/rateLimit";
 
 export async function POST(req: NextRequest) {
   try {
+    // Rate limiting: 10 requests per minute
+    const rateLimitResponse = checkRateLimit(req, RateLimitPresets.PAYMENT);
+    if (rateLimitResponse) {
+      return rateLimitResponse;
+    }
+
     const body = await req.json();
     const { amount, currency, orderID } = body;
     const razorpay = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID,
-      key_secret: process.env.RAZORPAY_KEY_SECRET,
+      key_secret: process.env.NEXT_PUBLIC_RAZORPAY_KEY_SECRET,
     });
 
     const options = {

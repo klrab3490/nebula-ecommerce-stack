@@ -68,13 +68,19 @@ model ProductFAQ {
 }
 
 model Order {
-  id        String         @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String         @db.ObjectId
-  products  OrderProduct[]
-  total     Float
-  status    String
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+  id               String         @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String         @db.ObjectId
+  products         OrderProduct[]
+  total            Float
+  status           String // "pending" | "paid" | "confirmed" | "failed" | "refund_pending" | "refunded" | "cancelled"
+  razorpayOrderId  String? // Razorpay order_id for tracking
+  razorpayPaymentId String? // Razorpay payment_id after successful payment
+  paymentMethod    String? // "upi" | "cod" | "card" | "netbanking"
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@index([razorpayOrderId])
+  @@index([status])
 }
 
 model OrderProduct {
