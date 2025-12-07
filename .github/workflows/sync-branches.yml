@@ -6,11 +6,17 @@ on:
     branches:
       - main
 
+env:
+  TARGET_BRANCH: nikantha
+
 jobs:
   sync-branches:
     # Only run if PR was merged (not just closed)
-    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'nikantha'
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
     
     steps:
       - name: Checkout repository
@@ -24,16 +30,15 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
       
-      - name: Sync main to nikantha
+      - name: Sync main to ${{ env.TARGET_BRANCH }}
+        id: sync-step
         run: |
-          git fetch origin main:main
-          git checkout nikantha
+          git checkout ${{ env.TARGET_BRANCH }}
           git merge main --no-edit
-          git push origin nikantha
-        continue-on-error: true
+          git push origin ${{ env.TARGET_BRANCH }}
       
       - name: Create issue on merge conflict
-        if: failure()
+        if: steps.sync-step.outcome == 'failure'
         uses: actions/github-script@v7
         with:
           script: |
@@ -43,7 +48,7 @@ jobs:
               title: '🔄 Branch Sync Failed: Merge Conflict Detected',
               body: `## Branch Sync Failed
               
-              The automatic sync from \`main\` to \`nikantha\` failed due to merge conflicts.
+              The automatic sync from \`main\` to \`${{ env.TARGET_BRANCH }}\` failed due to merge conflicts.
               
               **PR that triggered this:** #${{ github.event.pull_request.number }}
               **Merged by:** @${{ github.event.pull_request.merged_by.login }}
@@ -51,10 +56,11 @@ jobs:
               ### Action Required
               Please manually resolve the conflicts:
               \`\`\`bash
-              git checkout nikantha
-              git pull origin main
+              git checkout ${{ env.TARGET_BRANCH }}
+              git fetch origin main
+              git merge origin/main
               # Resolve conflicts
-              git push origin nikantha
+              git push origin ${{ env.TARGET_BRANCH }}
               \`\`\`
               
               This issue was created automatically by the sync-branches workflow.`,
