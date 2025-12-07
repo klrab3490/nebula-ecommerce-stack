@@ -120,6 +120,12 @@ export async function validateCartOrThrow(cart: Cart): Promise<ValidatedCart> {
   const validation = await validateCart(cart);
 
   if (!validation.isValid) {
+    console.error("Cart validation failed:", {
+      errors: validation.errors,
+      providedTotal: validation.providedTotal,
+      calculatedTotal: validation.calculatedTotal,
+      items: validation.items,
+    });
     throw ApiErrors.BadRequest("Cart validation failed", { errors: validation.errors });
   }
 

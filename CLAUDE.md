@@ -152,7 +152,6 @@ All API routes follow Next.js App Router conventions in `app/api/`:
   - `/seller/products` - Product management
   - `/seller/orders` - Order management
   - `/seller/customers` - Customer list
-  - `/seller/analytics` - Analytics dashboard
 
 ### Database Schema (Prisma)
 

@@ -26,6 +26,9 @@ export async function POST(req: NextRequest) {
 
     const { cart, userId, paymentMethod = "upi", addressId } = parsed;
 
+    // Debug logging
+    // console.log("Received cart data:", JSON.stringify(cart, null, 2));
+
     if (!cart || !Array.isArray(cart.items) || cart.items.length === 0) {
       return NextResponse.json({ error: "Empty cart" }, { status: 400 });
     }

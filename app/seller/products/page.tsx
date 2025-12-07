@@ -70,7 +70,7 @@ export default function SellerProducts() {
           throw new Error(data.error || "Failed to fetch products");
         }
 
-        console.log(data.products);
+        // console.log(data.products);
         setProducts(data.products || []);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");

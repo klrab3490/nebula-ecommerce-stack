@@ -45,12 +45,6 @@ const navigationItems = [
     description: "Process orders",
   },
   {
-    label: "Analytics",
-    href: "/seller/analytics",
-    icon: BarChart3,
-    description: "Performance insights",
-  },
-  {
     label: "Customers",
     href: "/seller/customers",
     icon: Users,

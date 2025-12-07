@@ -39,10 +39,6 @@ export default function Navbar() {
           label: "Locate Store",
           href: "/locate-store",
         },
-        {
-          label: "Cart",
-          href: "/cart",
-        },
         ...(isSeller
           ? [
               {
