@@ -67,4 +67,56 @@ Addressing critical security vulnerabilities and code quality issues identified 
 
 ## Progress
 
-[Work starts here]
+### ✅ All Critical Security Issues Fixed
+
+**1. CRITICAL Security Fix: Razorpay Secret Key Exposure**
+- ✅ Removed `NEXT_PUBLIC_` prefix from `RAZORPAY_KEY_SECRET` in all files
+- ✅ Updated `app/api/checkout/razorpay/create-order/route.ts` line 19
+- ✅ Updated `app/api/checkout/razorpay/verify/route.ts` line 41
+- ✅ Updated `.env.example` line 28
+- ✅ Verified no other files use the exposed secret
+
+**Impact**: This was a critical security vulnerability that would have exposed the API secret to anyone viewing the browser's page source or DevTools. Now the secret is properly kept server-side only.
+
+**2. Fixed Hardcoded User ID**
+- ✅ Removed hardcoded `"current-user-id"` placeholder from `app/checkout/page.tsx`
+- ✅ Removed the `userId` field entirely from the create-order request
+- Server-side auth via `currentUser()` from Clerk already handles user identification properly
+
+**3. Added Production Warning for Rate Limiting Memory Leak**
+- ✅ Added comprehensive warning comment in `lib/rateLimit.ts` line 74-83
+- Documents the setInterval memory leak issue in serverless environments
+- Provides migration path to Redis-based rate limiting
+- Clarifies when in-memory solution is appropriate
+
+**4. Removed Unused Variables**
+- ✅ Removed unused `cart` and `addressId` from `app/api/checkout/razorpay/verify/route.ts` line 29
+- ✅ Removed unused `startTime` from `app/api/health/route.ts` line 25
+- Cleans up ESLint warnings
+
+**5. Enhanced Webhook Body Reading Comment**
+- ✅ Added detailed comment in `app/api/webhooks/razorpay/route.ts` line 43-46
+- Explains why req.text() must be used instead of req.json()
+- Warns against reading the body multiple times
+- Addresses code review feedback from resolved thread
+
+## Files Modified
+
+1. `.env.example` - Fixed secret exposure
+2. `app/api/checkout/razorpay/create-order/route.ts` - Fixed secret usage
+3. `app/api/checkout/razorpay/verify/route.ts` - Fixed secret usage, removed unused variables
+4. `app/api/health/route.ts` - Removed unused variable
+5. `app/api/webhooks/razorpay/route.ts` - Enhanced comment
+6. `app/checkout/page.tsx` - Removed hardcoded user ID
+7. `lib/rateLimit.ts` - Added production warning
+
+## Summary
+
+All code review feedback has been addressed:
+- ✅ Critical security vulnerability fixed (secret exposure)
+- ✅ Hardcoded placeholder removed (user ID)
+- ✅ Production considerations documented (memory leak)
+- ✅ Code quality improved (unused variables)
+- ✅ Documentation enhanced (webhook comment)
+
+Ready for review and security scan.

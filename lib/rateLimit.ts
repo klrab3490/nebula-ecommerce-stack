@@ -72,6 +72,15 @@ function cleanupExpiredEntries() {
 }
 
 // Cleanup every 5 minutes
+// WARNING: In serverless/edge environments (Vercel, AWS Lambda, etc.), this setInterval
+// creates a new timer on each cold start that is never cleaned up, causing potential memory leaks.
+// For production deployments, consider migrating to Redis-based rate limiting with TTL:
+// - Use @upstash/ratelimit for serverless-compatible Redis rate limiting
+// - Or use a proper background job system to handle cleanup
+// This in-memory solution is suitable for:
+// - Development environments
+// - Traditional server deployments (not serverless)
+// - Low-traffic applications where cold starts are infrequent
 setInterval(cleanupExpiredEntries, 5 * 60 * 1000);
 
 /**
