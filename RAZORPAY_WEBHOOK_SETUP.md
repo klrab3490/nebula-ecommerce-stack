@@ -311,8 +311,8 @@ Even if user closes browser after payment, webhook ensures order is marked as pa
 ```bash
 # Production .env
 RAZORPAY_WEBHOOK_SECRET=whsec_live_xxxxxxxxxx
-NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_live_xxxxxxxxxx
-NEXT_PUBLIC_RAZORPAY_KEY_SECRET=live_xxxxxxxxxx
+RAZORPAY_KEY_ID=rzp_live_xxxxxxxxxx
+RAZORPAY_KEY_SECRET=live_xxxxxxxxxx
 ```
 
 ## Monitoring

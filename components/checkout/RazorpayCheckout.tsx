@@ -49,7 +49,7 @@ export default function RazorpayCheckoutButton({ amountPaisa = 50000 }: { amount
       }
 
       const options: any = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        key: process.env.RAZORPAY_KEY_ID,
         amount: data.amount || amountPaisa,
         currency: data.currency || "INR",
         name: "Nebula Store",
