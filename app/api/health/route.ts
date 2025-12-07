@@ -22,8 +22,6 @@ import { prisma } from "@/lib/prisma";
  * }
  */
 export async function GET() {
-  const startTime = Date.now();
-
   try {
     // Check database connectivity
     const dbCheckStart = Date.now();
