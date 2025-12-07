@@ -4,7 +4,6 @@ import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useAppContext } from "@/contexts/AppContext";
-import { formatDate } from "@/lib/utils";
 import { Bundle, formatCurrency } from "@/lib/bundles";
 import { Package, Tag, Clock, Gift } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -142,7 +141,7 @@ export function BundleCard({ bundle }: BundleCardProps) {
         {bundle.validUntil && (
           <div className="flex items-center space-x-2 text-xs text-muted-foreground">
             <Clock className="h-3 w-3" />
-            <span>Valid until: {formatDate(bundle.validUntil)}</span>
+            <span>Valid until: {new Date(bundle.validUntil).toLocaleDateString()}</span>
           </div>
         )}
 

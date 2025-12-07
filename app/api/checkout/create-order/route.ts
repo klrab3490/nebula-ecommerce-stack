@@ -30,11 +30,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Empty cart" }, { status: 400 });
     }
 
-    // Require addressId for order creation
-    if (!addressId) {
-      return NextResponse.json({ error: "Shipping address is required" }, { status: 400 });
-    }
-
     // Validate cart items, stock, and pricing server-side
     const validatedCart = await validateCartOrThrow(cart);
 
@@ -59,17 +54,6 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Verify the address belongs to the user
-    if (dbUser && addressId) {
-      const address = await prisma.address.findUnique({
-        where: { id: addressId },
-      });
-
-      if (!address || address.userId !== dbUser.id) {
-        return NextResponse.json({ error: "Invalid address" }, { status: 400 });
-      }
-    }
-
     // Determine order status based on payment method
     const orderStatus = paymentMethod === "cod" ? "confirmed" : "pending";
 
@@ -77,10 +61,8 @@ export async function POST(req: NextRequest) {
     const order = await prisma.order.create({
       data: {
         userId: dbUser?.id || actualUserId,
-        addressId: addressId,
         total: validatedCart.calculatedTotal, // Use server-calculated total
         status: orderStatus,
-        paymentMethod: paymentMethod,
         products: {
           create: cart.items.map((it: CartItem) => ({
             productId: it.id,
@@ -88,7 +70,7 @@ export async function POST(req: NextRequest) {
           })),
         },
       },
-      include: { products: true, address: true },
+      include: { products: true },
     });
 
     // If COD, order is immediately confirmed

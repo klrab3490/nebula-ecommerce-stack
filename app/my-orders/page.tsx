@@ -1,56 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Package,
-  Truck,
-  CheckCircle,
-  Clock,
-  XCircle,
-  ChevronRight,
-  Filter,
-  Loader2,
-} from "lucide-react";
+import { Package, Truck, CheckCircle, Clock, XCircle, ChevronRight, Filter } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useUser } from "@clerk/nextjs";
-import { formatCurrency } from "@/lib/currency";
-import { formatDate } from "@/lib/utils";
 
-interface OrderItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-}
-
-interface Address {
-  id: string;
-  name: string;
-  street: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
-  phone: string;
-}
-
-interface Order {
-  id: string;
-  date: string;
-  total: number;
-  status: string;
-  items: OrderItem[];
-  razorpayOrderId?: string;
-  razorpayPaymentId?: string;
-  paymentMethod?: string;
-  shippingAddress?: Address;
-}
+import { orders } from "@/lib/mock-data";
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -83,89 +42,12 @@ const getStatusIcon = (status: string) => {
 };
 
 export default function MyOrdersPage() {
-  const { user, isLoaded } = useUser();
   const [activeTab, setActiveTab] = useState("all");
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchOrders = async () => {
-      if (!isLoaded) return;
-
-      if (!user) {
-        setError("Please sign in to view your orders");
-        setLoading(false);
-        return;
-      }
-
-      try {
-        setLoading(true);
-        const response = await fetch("/api/orders");
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch orders");
-        }
-
-        const data = await response.json();
-        setOrders(data.orders || []);
-      } catch (err) {
-        console.error("Error fetching orders:", err);
-        setError("Failed to load orders. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOrders();
-  }, [user, isLoaded]);
 
   const filteredOrders =
     activeTab === "all"
       ? orders
       : orders.filter((order) => order.status.toLowerCase() === activeTab);
-
-  if (!isLoaded || loading) {
-    return (
-      <div className="container mx-auto px-4 py-8 max-w-5xl">
-        <div className="flex items-center justify-center min-h-[400px]">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return (
-      <div className="container mx-auto px-4 py-8 max-w-5xl">
-        <div className="text-center py-16 bg-muted/20 rounded-lg border border-dashed border-muted">
-          <Package className="h-12 w-12 mx-auto text-muted-foreground mb-4 opacity-50" />
-          <h3 className="text-lg font-medium">Sign in required</h3>
-          <p className="text-muted-foreground mt-1 max-w-sm mx-auto">
-            Please sign in to view your order history.
-          </p>
-          <Button className="mt-6" asChild>
-            <Link href="/sign-in">Sign In</Link>
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="container mx-auto px-4 py-8 max-w-5xl">
-        <div className="text-center py-16 bg-muted/20 rounded-lg border border-dashed border-muted">
-          <XCircle className="h-12 w-12 mx-auto text-destructive mb-4 opacity-50" />
-          <h3 className="text-lg font-medium">Error loading orders</h3>
-          <p className="text-muted-foreground mt-1 max-w-sm mx-auto">{error}</p>
-          <Button className="mt-6" onClick={() => window.location.reload()}>
-            Try Again
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
@@ -201,13 +83,13 @@ export default function MyOrdersPage() {
                       <span className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">
                         Order Placed
                       </span>
-                      <span className="text-sm font-medium">{formatDate(order.date)}</span>
+                      <span className="text-sm font-medium">{order.date}</span>
                     </div>
                     <div className="flex flex-col">
                       <span className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">
                         Total
                       </span>
-                      <span className="text-sm font-medium">{formatCurrency(order.total)}</span>
+                      <span className="text-sm font-medium">${order.total.toFixed(2)}</span>
                     </div>
                     <div className="flex flex-col">
                       <span className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">
@@ -245,7 +127,7 @@ export default function MyOrdersPage() {
                               Qty: {item.quantity}
                             </p>
                             <p className="text-sm font-medium mt-1 text-primary">
-                              {formatCurrency(item.price)}
+                              ${item.price.toFixed(2)}
                             </p>
                           </div>
                         </div>

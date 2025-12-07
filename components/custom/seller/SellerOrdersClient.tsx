@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { formatCurrency } from "@/lib/currency";
-import { formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -293,7 +292,7 @@ export default function SellerOrdersClient({ orders: initialOrders }: Props) {
                         <TableCell>{getStatusBadge(order.status)}</TableCell>
                         <TableCell>{getPaymentBadge(order.paymentStatus)}</TableCell>
                         <TableCell className="text-sm text-muted-foreground">
-                          {formatDate(order.orderDate)}
+                          {new Date(order.orderDate).toLocaleDateString()}
                         </TableCell>
                         <TableCell>
                           <DropdownMenu>
