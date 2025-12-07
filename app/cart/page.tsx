@@ -6,6 +6,7 @@ import { ArrowLeft, ShoppingBag } from "lucide-react";
 import { useAppContext } from "@/contexts/AppContext";
 import { CartItem } from "@/components/custom/cart/cart-items";
 import { CartSummary } from "@/components/custom/cart/cart-summery";
+import { BundleDetector } from "@/components/custom/cart/BundleDetector";
 
 export default function CartPage() {
   const { cart } = useAppContext();
@@ -107,6 +108,11 @@ export default function CartPage() {
                 <CartItem item={item} />
               </div>
             ))}
+
+            {/* Bundle Detector - Shows applicable bundle offers */}
+            <div className="mt-8">
+              <BundleDetector />
+            </div>
           </div>
 
           <div className="lg:col-span-1">

@@ -4,10 +4,10 @@ import React from "react";
 import { Gift } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { BundleDiscount, formatCurrency } from "@/lib/bundles";
+import { AppliedBundle, formatCurrency } from "@/lib/bundles";
 
 interface CartBundleDiscountsProps {
-  appliedDiscounts: BundleDiscount[];
+  appliedDiscounts: AppliedBundle[];
   totalDiscount: number;
   currency?: string;
 }
@@ -38,7 +38,7 @@ export function CartBundleDiscounts({
                 </Badge>
               </div>
               <div className="text-green-600 font-medium">
-                -{formatCurrency(discount.discount, currency)}
+                -{formatCurrency(discount.savings, currency)}
               </div>
             </div>
           ))}

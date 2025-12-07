@@ -2,7 +2,7 @@
 
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { Bundle, BundleDiscount, applyBestBundleDiscounts } from "@/lib/bundles";
+import { Bundle, AppliedBundle, calculateCartWithBundles } from "@/lib/bundles";
 import { createContext, useContext, useEffect, useState, useReducer, ReactNode } from "react";
 
 // -------- Types --------
@@ -35,8 +35,8 @@ interface CartState {
   total: number;
   itemCount: number;
   bundles: Bundle[];
-  appliedBundleDiscounts: BundleDiscount[];
-  bundleDiscount: number;
+  appliedBundles: AppliedBundle[];
+  bundleSavings: number;
   finalTotal: number;
 }
 
@@ -51,17 +51,15 @@ type CartAction =
 
 // -------- Helper function to calculate cart totals with bundles --------
 const calculateCartTotals = (items: CartItem[], bundles: Bundle[]) => {
-  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const result = calculateCartWithBundles(items, bundles);
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  const bundleResult = applyBestBundleDiscounts(items, bundles);
-
   return {
-    total,
+    total: result.subtotal,
     itemCount,
-    appliedBundleDiscounts: bundleResult.appliedDiscounts,
-    bundleDiscount: bundleResult.totalDiscount,
-    finalTotal: bundleResult.finalTotal,
+    appliedBundles: result.appliedBundles,
+    bundleSavings: result.bundleSavings,
+    finalTotal: result.total,
   };
 };
 
@@ -124,8 +122,8 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         total: 0,
         itemCount: 0,
         bundles: state.bundles,
-        appliedBundleDiscounts: [],
-        bundleDiscount: 0,
+        appliedBundles: [],
+        bundleSavings: 0,
         finalTotal: 0,
       };
 
@@ -215,8 +213,8 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     total: 0,
     itemCount: 0,
     bundles: [],
-    appliedBundleDiscounts: [],
-    bundleDiscount: 0,
+    appliedBundles: [],
+    bundleSavings: 0,
     finalTotal: 0,
   });
 

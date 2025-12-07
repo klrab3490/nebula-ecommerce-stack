@@ -16,6 +16,7 @@ import {
   PlusCircle,
   ArrowLeft,
   Store,
+  Star,
 } from "lucide-react";
 
 const navigationItems = [
@@ -30,6 +31,12 @@ const navigationItems = [
     href: "/seller/products",
     icon: Package,
     description: "Manage inventory",
+  },
+  {
+    label: "Featured Products",
+    href: "/seller/featured-products",
+    icon: Star,
+    description: "Manage featured items",
   },
   {
     label: "Orders",

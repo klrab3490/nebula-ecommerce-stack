@@ -29,7 +29,13 @@ interface Product {
   alt?: string;
   description: string;
   features: string[];
-  specifications: { [key: string]: string };
+  specifications?: {
+    quantity?: string;
+    ingredients?: string;
+    howToUse?: string;
+    benefits?: string;
+    [key: string]: string | undefined;
+  };
   faq: { question: string; answer: string }[];
 }
 
@@ -185,25 +191,29 @@ export default function ProductPage() {
             <Card className="overflow-hidden p-0">
               <CardContent className="p-0 relative">
                 <div
-                  className="relative w-full h-96 overflow-hidden"
+                  className="relative w-full h-[600px] overflow-hidden"
                   onTouchStart={onTouchStart}
                   onTouchMove={onTouchMove}
                   onTouchEnd={onTouchEnd}
                 >
                   <div
                     ref={trackRef}
-                    className="flex h-full transition-transform duration-300"
+                    className="flex h-[600px] transition-transform duration-300"
                     style={{
                       transform: `translateX(-${currentImageIndex * 100}%)`,
                     }}
                   >
                     {product.images.map((image, idx) => (
-                      <div key={idx} className="min-w-full h-full relative">
+                      <div
+                        key={idx}
+                        className="min-w-full h-full relative flex items-center justify-center bg-white"
+                      >
                         <Image
                           src={image || "/placeholder.svg"}
                           alt={`${product.name} view ${idx + 1}`}
-                          fill
-                          className="object-cover"
+                          width={1000}
+                          height={1000}
+                          className="object-contain w-full h-full rounded-lg"
                         />
                       </div>
                     ))}
@@ -246,7 +256,7 @@ export default function ProductPage() {
                       alt={`${product.name} view ${index + 1}`}
                       width={80}
                       height={80}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                     />
                   </button>
                 ))}
@@ -300,22 +310,88 @@ export default function ProductPage() {
               </Button>
             </div>
 
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="font-semibold mb-4">Specifications</h3>
-                <div className="space-y-3">
-                  {Object.entries(product.specifications).map(([key, value]) => (
-                    <div
-                      key={key}
-                      className="flex justify-between py-2 border-b border-border last:border-0"
-                    >
-                      <span className="text-muted-foreground">{key}</span>
-                      <span className="font-medium">{value}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            {product.specifications && Object.keys(product.specifications).length > 0 && (
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold">Product Specifications</h3>
+
+                {product.specifications.quantity && (
+                  <Card>
+                    <CardContent className="p-6">
+                      <h4 className="font-semibold mb-2 flex items-center gap-2">
+                        <span className="text-purple-600 dark:text-purple-400">📦</span>
+                        Quantity
+                      </h4>
+                      <p className="text-muted-foreground text-sm">
+                        {product.specifications.quantity}
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {product.specifications.ingredients && (
+                  <Card>
+                    <CardContent className="p-6">
+                      <h4 className="font-semibold mb-2 flex items-center gap-2">
+                        <span className="text-green-600 dark:text-green-400">🌿</span>
+                        Ingredients
+                      </h4>
+                      <p className="text-muted-foreground text-sm whitespace-pre-line">
+                        {product.specifications.ingredients}
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {product.specifications.howToUse && (
+                  <Card>
+                    <CardContent className="p-6">
+                      <h4 className="font-semibold mb-2 flex items-center gap-2">
+                        <span className="text-blue-600 dark:text-blue-400">📝</span>
+                        How to Use
+                      </h4>
+                      <p className="text-muted-foreground text-sm whitespace-pre-line">
+                        {product.specifications.howToUse}
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {product.specifications.benefits && (
+                  <Card>
+                    <CardContent className="p-6">
+                      <h4 className="font-semibold mb-2 flex items-center gap-2">
+                        <span className="text-pink-600 dark:text-pink-400">✨</span>
+                        Benefits
+                      </h4>
+                      <p className="text-muted-foreground text-sm whitespace-pre-line">
+                        {product.specifications.benefits}
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Other custom specifications */}
+                {Object.entries(product.specifications)
+                  .filter(
+                    ([key]) => !["quantity", "ingredients", "howToUse", "benefits"].includes(key)
+                  )
+                  .map(
+                    ([key, value]) =>
+                      value && (
+                        <Card key={key}>
+                          <CardContent className="p-6">
+                            <h4 className="font-semibold mb-2 capitalize">
+                              {key.replace(/([A-Z])/g, " $1").trim()}
+                            </h4>
+                            <p className="text-muted-foreground text-sm whitespace-pre-line">
+                              {value}
+                            </p>
+                          </CardContent>
+                        </Card>
+                      )
+                  )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -332,7 +408,9 @@ export default function ProductPage() {
               {product.faq.map((item, index) => (
                 <AccordionItem key={index} value={`item-${index}`}>
                   <AccordionTrigger className="text-left">{item.question}</AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">{item.answer}</AccordionContent>
+                  <AccordionContent className="text-muted-foreground">
+                    {item.answer}
+                  </AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
