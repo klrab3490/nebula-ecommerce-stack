@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Badge } from "@/components/ui/badge";
+import { formatCurrency } from "@/lib/currency";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,7 +19,6 @@ import {
   ArrowDownRight,
   BarChart3,
 } from "lucide-react";
-import { formatCurrency } from "@/lib/currency";
 
 type DailyPoint = { name: string; sales: number; orders: number; visitors?: number };
 type TopProduct = { name: string; sold: number; revenue: number };

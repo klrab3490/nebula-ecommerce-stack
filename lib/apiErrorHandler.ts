@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 
-/**
- * Standard API Error Response
- */
+// Standard API Error Response
 export interface ApiError {
   error: string;
   message?: string;
@@ -11,9 +9,7 @@ export interface ApiError {
   path?: string;
 }
 
-/**
- * Custom API Error Class
- */
+// Custom API Error Class
 export class ApiException extends Error {
   statusCode: number;
   details?: any;
@@ -26,9 +22,7 @@ export class ApiException extends Error {
   }
 }
 
-/**
- * Common API Errors
- */
+// Common API Errors
 export const ApiErrors = {
   BadRequest: (message: string = "Bad Request", details?: any) =>
     new ApiException(message, 400, details),

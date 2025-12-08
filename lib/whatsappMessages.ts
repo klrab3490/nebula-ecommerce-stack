@@ -6,13 +6,14 @@ export interface WhatsAppMessageContext {
   pathname: string;
   productName?: string;
   productUrl?: string;
+  products?: { id: string; name: string }[];
 }
 
 /**
  * Generate a context-aware WhatsApp message based on the current page
  */
 export function generateWhatsAppMessage(context: WhatsAppMessageContext): string {
-  const { pathname, productName, productUrl } = context;
+  const { pathname, productName, productUrl, products = [] } = context;
 
   // Product page - include product name and URL
   if (pathname.startsWith("/products/") && productName) {
@@ -32,6 +33,13 @@ export function generateWhatsAppMessage(context: WhatsAppMessageContext): string
   // Products listing page
   if (pathname === "/products") {
     return "Hi! I'm browsing your products and have some questions.";
+  }
+
+  // Product details page - extract product ID from URL
+  if (pathname.startsWith("/products/") && !productName) {
+    const productId = pathname.split("/").pop();
+    const productName = products.find((p) => p.id === productId)?.name || "this product";
+    return `Hi! I'm interested in product ${productName}. Can you provide more details?`;
   }
 
   // Contact page

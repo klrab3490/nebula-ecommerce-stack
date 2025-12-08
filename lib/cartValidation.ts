@@ -113,9 +113,7 @@ export async function validateCart(cart: Cart): Promise<ValidatedCart> {
   };
 }
 
-/**
- * Validate cart and throw error if invalid
- */
+// Validate cart and throw error if invalid
 export async function validateCartOrThrow(cart: Cart): Promise<ValidatedCart> {
   const validation = await validateCart(cart);
 

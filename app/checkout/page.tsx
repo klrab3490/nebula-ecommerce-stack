@@ -1,18 +1,17 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { Label } from "@/components/ui/label";
+import { Wallet, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAppContext } from "@/contexts/AppContext";
 import { useCallback, useEffect, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CreditCard, Wallet, Package } from "lucide-react";
 
 type PaymentMethod = "upi" | "cod";
 
 export default function CheckoutPage() {
-  const { cart, clearCart } = useAppContext();
   const [finalTotal, setFinalTotal] = useState<number>(() => {
     if (typeof window === "undefined") return 0;
     const v = localStorage.getItem("finalTotal");
@@ -20,14 +19,14 @@ export default function CheckoutPage() {
   });
 
   const router = useRouter();
-  const { userData } = useAppContext();
-  const [address, setAddress] = useState<any>(null);
-  const [addresses, setAddresses] = useState<any[]>([]);
-  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("upi");
-  const [processingOrder, setProcessingOrder] = useState(false);
+  const [address, setAddress] = useState<any>(null);
   const [cartLoaded, setCartLoaded] = useState(false);
+  const [addresses, setAddresses] = useState<any[]>([]);
+  const { userData, cart, clearCart } = useAppContext();
+  const [processingOrder, setProcessingOrder] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("upi");
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;

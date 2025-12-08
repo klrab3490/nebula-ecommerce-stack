@@ -1,13 +1,13 @@
 "use client";
 
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
+import ErrorBoundary from "@/components/ErrorBoundary";
+import { extractRouterConfig } from "uploadthing/server";
+import { ourFileRouter } from "@/app/api/uploadthing/core";
 import { AppContextProvider } from "@/contexts/AppContext";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
-import { extractRouterConfig } from "uploadthing/server";
-import { ourFileRouter } from "@/app/api/uploadthing/core";
-import ErrorBoundary from "@/components/ErrorBoundary";
 
 interface ProviderWrapperProps {
   children: ReactNode;

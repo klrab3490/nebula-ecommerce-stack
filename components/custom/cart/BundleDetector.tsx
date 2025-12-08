@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { BundleOfferCard } from "./BundleOfferCard";
-import { Bundle, getApplicableBundles } from "@/lib/bundles";
 import { useAppContext } from "@/contexts/AppContext";
+import { Bundle, getApplicableBundles } from "@/lib/bundles";
 
 export function BundleDetector() {
   const { cart, currency } = useAppContext();

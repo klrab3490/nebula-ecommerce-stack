@@ -1,5 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+"use server";
+
 import { prisma } from "@/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * GET /api/bundles/by-product/[productId] - Fetch bundles containing a specific product

@@ -1,8 +1,7 @@
 /**
  * Bundle Creation and Management Examples
  *
- * This file contains example functions for creating and managing bundles
- * in the e-commerce system.
+ * This file contains example functions for creating and managing bundles in the e-commerce system.
  */
 
 import { prisma } from "@/lib/prisma";
@@ -176,9 +175,7 @@ export async function createBOGOBundle(
   return bundle;
 }
 
-/**
- * Example: Update bundle pricing
- */
+// Example: Update bundle pricing
 export async function updateBundlePricing(bundleId: string, newOfferPrice: number) {
   const bundle = await prisma.bundle.findUnique({
     where: { id: bundleId },
@@ -200,9 +197,7 @@ export async function updateBundlePricing(bundleId: string, newOfferPrice: numbe
   });
 }
 
-/**
- * Example: Deactivate a bundle
- */
+// Example: Deactivate a bundle
 export async function deactivateBundle(bundleId: string) {
   return await prisma.bundle.update({
     where: { id: bundleId },
@@ -210,9 +205,7 @@ export async function deactivateBundle(bundleId: string) {
   });
 }
 
-/**
- * Example: Get all bundles for a product
- */
+// Example: Get all bundles for a product
 export async function getBundlesForProduct(productId: string) {
   return await prisma.bundle.findMany({
     where: {
@@ -239,29 +232,3 @@ export async function getBundlesForProduct(productId: string) {
     orderBy: { savings: "desc" },
   });
 }
-
-/**
- * Example: Usage in API route or server action
- *
- * // Create a combo bundle
- * const bundle = await createComboBundle(
- *   ["product-id-1", "product-id-2"],
- *   "Summer Skin Care Combo",
- *   "Get our bestselling moisturizer and sunscreen together!"
- * );
- *
- * // Create a BOGO bundle
- * const bogo = await createBOGOBundle(
- *   "product-id-1",
- *   "product-id-2",
- *   "Buy 1 Get 1 Free",
- *   100 // 100% off = free
- * );
- *
- * // Create a fixed discount bundle
- * const fixedBundle = await createFixedDiscountBundle(
- *   ["product-id-1", "product-id-2", "product-id-3"],
- *   "Complete Beauty Kit",
- *   15 // 15% off
- * );
- */

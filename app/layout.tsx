@@ -3,19 +3,8 @@ import Script from "next/script";
 import type { Metadata } from "next";
 import Navbar from "@/components/custom/Navbar";
 import Footer from "@/components/custom/Footer";
-import ClientFloatingButton from "@/components/ClientFloatingButton";
-// import { Geist, Geist_Mono } from "next/font/google";
 import { ProviderWrapper } from "@/components/ProviderWrapper";
-
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
+import ClientFloatingButton from "@/components/ClientFloatingButton";
 
 export const metadata: Metadata = {
   title: "Nebula E-Commerce - Premium Beauty & Wellness",

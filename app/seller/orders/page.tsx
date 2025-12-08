@@ -1,4 +1,3 @@
-import React from "react";
 import { prisma } from "@/lib/prisma";
 import SellerOrdersClient from "@/components/custom/seller/SellerOrdersClient";
 

@@ -3,7 +3,6 @@
 import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { currentUser } from "@clerk/nextjs/server";
 import { checkRateLimit, RateLimitPresets } from "@/lib/rateLimit";
 
 type CartItem = { id: string; quantity: number; price: number; name: string };

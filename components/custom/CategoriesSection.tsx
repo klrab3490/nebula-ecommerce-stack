@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
+import { Heart, Sun, Star } from "lucide-react";
 import { getPalette } from "@/components/theme/colorPalette";
-import { Heart, Leaf, Sun, Gift, Star } from "lucide-react";
 
 type Category = {
   name: string;

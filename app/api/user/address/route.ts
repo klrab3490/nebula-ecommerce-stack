@@ -1,7 +1,7 @@
 "use server";
 
-import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 
 // Resolve Clerk session user to our Prisma User id.

@@ -9,6 +9,9 @@ import { formatCurrency } from "@/lib/currency";
 import { useState, useEffect, useRef } from "react";
 import { useAppContext } from "@/contexts/AppContext";
 import { Card, CardContent } from "@/components/ui/card";
+import ReviewForm from "@/components/custom/reviews/ReviewForm";
+import ReviewList from "@/components/custom/reviews/ReviewList";
+import ProductDisclaimer from "@/components/custom/ProductDisclaimer";
 import { Heart, ShoppingCart, ChevronLeft, ChevronRight, Plus, Minus } from "lucide-react";
 import {
   Accordion,
@@ -16,9 +19,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import ReviewForm from "@/components/custom/reviews/ReviewForm";
-import ReviewList from "@/components/custom/reviews/ReviewList";
-import ProductDisclaimer from "@/components/custom/ProductDisclaimer";
 
 interface Product {
   id: string;

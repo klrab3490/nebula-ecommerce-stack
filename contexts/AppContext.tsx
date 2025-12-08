@@ -10,7 +10,7 @@ type Product = {
   id: string;
   name: string;
   price: number;
-  image: string;
+  images: string[];
   alt: string;
 };
 
@@ -272,9 +272,23 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     localStorage.setItem("cart", JSON.stringify(cart.items));
   }, [cart.items]);
 
-  // Dummy fetchers
+  // fecth Actual data
+  // Fetch product data on mount
+  useEffect(() => {
+    fetchProductData();
+  }, []);
+
   const fetchProductData = async () => {
-    setProducts([]); // replace with productsDummyData
+    try {
+      const response = await fetch("/api/products");
+      if (response.ok) {
+        const data = await response.json();
+        const generalProducts = data.products;
+        setProducts(generalProducts);
+      }
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
   };
 
   const fetchUserData = async () => {

@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ShoppingBag } from "lucide-react";
 import { useAppContext } from "@/contexts/AppContext";
+import { ArrowLeft, ShoppingBag } from "lucide-react";
 import { CartItem } from "@/components/custom/cart/cart-items";
 import { CartSummary } from "@/components/custom/cart/cart-summery";
 import { BundleDetector } from "@/components/custom/cart/BundleDetector";

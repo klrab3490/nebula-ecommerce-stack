@@ -1,4 +1,3 @@
-import React from "react";
 import { prisma } from "@/lib/prisma";
 import { Badge } from "@/components/ui/badge";
 import { CalendarDays, AlertCircle } from "lucide-react";

@@ -1,20 +1,20 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Minus, Plus, Trash2, AlertTriangle } from "lucide-react";
 import { useAppContext } from "@/contexts/AppContext";
+import { Minus, Plus, Trash2, AlertTriangle } from "lucide-react";
 import type { CartItem as CartItemType } from "@/contexts/AppContext";
-import { useState } from "react";
 
 interface CartItemProps {
   item: CartItemType;
 }
 
 export function CartItem({ item }: CartItemProps) {
-  const { updateQuantity, removeItem, currency, cart } = useAppContext();
   const [showWarning, setShowWarning] = useState(false);
+  const { updateQuantity, removeItem, currency, cart } = useAppContext();
 
   // Check if this item is part of an applied bundle
   const isInAppliedBundle =
