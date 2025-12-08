@@ -8,33 +8,33 @@ export type CategoryPalette = {
 
 export const CATEGORY_PALETTES: CategoryPalette[] = [
   {
-    id: "violet-pink-blue",
-    gradient: "from-purple-600 via-pink-600 to-blue-600",
+    id: "purple-pink-orange",
+    gradient: "from-purple-600 via-pink-600 to-orange-500",
     accent: "from-purple-500 to-pink-500",
-    glowClass: "opacity-40",
+    glowClass: "opacity-30",
   },
   {
-    id: "pink-orange",
-    gradient: "from-pink-500 to-orange-400",
-    accent: "from-pink-400 to-orange-400",
+    id: "orange-rose-pink",
+    gradient: "from-orange-500 via-rose-500 to-pink-600",
+    accent: "from-orange-400 to-pink-500",
     glowClass: "opacity-35",
   },
   {
-    id: "teal-green",
-    gradient: "from-teal-400 via-emerald-400 to-green-500",
-    accent: "from-teal-400 to-green-400",
+    id: "teal-emerald-cyan",
+    gradient: "from-teal-500 via-emerald-500 to-cyan-500",
+    accent: "from-teal-400 to-emerald-500",
     glowClass: "opacity-30",
   },
   {
-    id: "indigo-sky",
-    gradient: "from-indigo-500 via-sky-400 to-cyan-400",
-    accent: "from-indigo-500 to-sky-400",
+    id: "indigo-purple-pink",
+    gradient: "from-indigo-500 via-purple-500 to-pink-500",
+    accent: "from-indigo-500 to-purple-500",
     glowClass: "opacity-30",
   },
   {
-    id: "rose-gold",
-    gradient: "from-rose-500 via-amber-400 to-yellow-400",
-    accent: "from-rose-500 to-amber-400",
+    id: "amber-orange-red",
+    gradient: "from-amber-500 via-orange-500 to-red-500",
+    accent: "from-amber-500 to-orange-500",
     glowClass: "opacity-30",
   },
 ];
