@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
-import { Edit, ArrowLeft, Trash2 } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
+import { Edit, ArrowLeft, Trash2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Accordion,
@@ -29,12 +29,12 @@ interface Product {
 }
 
 export default function ProductViewPage() {
-  const router = useRouter();
   const params = useParams() as { id?: string };
   const id = params?.id;
-  const [product, setProduct] = useState<Product | null>(null);
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [product, setProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     if (!id) return;

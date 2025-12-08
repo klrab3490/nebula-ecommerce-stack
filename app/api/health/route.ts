@@ -1,5 +1,7 @@
-import { NextResponse } from "next/server";
+"use server";
+
 import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
 
 /**
  * Health Check Endpoint
@@ -24,9 +26,9 @@ import { prisma } from "@/lib/prisma";
 export async function GET() {
   try {
     // Check database connectivity
-    const dbCheckStart = Date.now();
     let databaseStatus = "down";
     let databaseResponseTime = 0;
+    const dbCheckStart = Date.now();
 
     try {
       // Simple query to check database connection (MongoDB-compatible)

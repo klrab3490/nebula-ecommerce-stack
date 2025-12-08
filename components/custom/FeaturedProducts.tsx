@@ -299,12 +299,12 @@ export default function FeaturedProducts({
                     </div>
 
                     {/* Product Info with Better Typography */}
-                    <h3 className="font-bold text-lg text-foreground mb-4 line-clamp-2 leading-tight group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300 min-h-[3.5rem]">
+                    <h3 className="font-bold text-lg text-foreground mb-4 line-clamp-2 leading-tight group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300 min-h-14">
                       {product.name}
                     </h3>
 
                     {/* Category Badge */}
-                    <div className="mb-4 flex flex-wrap gap-1 min-h-[1.75rem]">
+                    <div className="mb-4 flex flex-wrap gap-1 min-h-7">
                       {product.categories.slice(0, 2).map((category, idx) => (
                         <span
                           key={idx}
@@ -316,7 +316,7 @@ export default function FeaturedProducts({
                     </div>
 
                     {/* Enhanced Pricing with Better Visual Hierarchy */}
-                    <div className="flex items-center justify-between mb-4 min-h-[2rem]">
+                    <div className="flex items-center justify-between mb-4 min-h-8">
                       <div className="flex items-center gap-3">
                         {hasDiscount && (
                           <>
@@ -341,7 +341,7 @@ export default function FeaturedProducts({
                     </div>
 
                     {/* Stock Status - Fixed height */}
-                    <div className="mb-4 min-h-[1.25rem]">
+                    <div className="mb-4 min-h-5">
                       {product.stock < 10 && product.stock > 0 && (
                         <p className="text-xs text-orange-600 dark:text-orange-400">
                           Only {product.stock} left in stock!

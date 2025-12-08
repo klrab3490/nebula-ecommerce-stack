@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useMemo, useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
+import { useMemo, useState, useEffect } from "react";
 import { Search, SlidersHorizontal } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ProductCard } from "@/components/custom/ProductCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 

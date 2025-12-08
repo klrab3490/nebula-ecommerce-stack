@@ -41,9 +41,7 @@ export interface AppliedBundle {
   appliedItems: string[]; // product IDs in cart that matched
 }
 
-/**
- * Find bundles that contain a specific product
- */
+// Find bundles that contain a specific product
 export function findBundlesForProduct(productId: string, bundles: Bundle[]): Bundle[] {
   return bundles.filter(
     (bundle) =>
@@ -53,9 +51,7 @@ export function findBundlesForProduct(productId: string, bundles: Bundle[]): Bun
   );
 }
 
-/**
- * Check if all required items of a bundle are in the cart
- */
+// Check if all required items of a bundle are in the cart
 export function isBundleApplicable(bundle: Bundle, cartItems: CartItem[]): boolean {
   const requiredItems = bundle.items.filter((item) => item.isRequired);
 
@@ -65,9 +61,7 @@ export function isBundleApplicable(bundle: Bundle, cartItems: CartItem[]): boole
   });
 }
 
-/**
- * Get all applicable bundles for current cart
- */
+// Get all applicable bundles for current cart
 export function getApplicableBundles(cartItems: CartItem[], bundles: Bundle[]): Bundle[] {
   return bundles.filter(
     (bundle) =>
@@ -77,9 +71,7 @@ export function getApplicableBundles(cartItems: CartItem[], bundles: Bundle[]): 
   );
 }
 
-/**
- * Calculate total price for a specific bundle if applied
- */
+// Calculate total price for a specific bundle if applied
 export function calculateBundlePrice(
   bundle: Bundle,
   cartItems: CartItem[]
@@ -130,9 +122,7 @@ export function calculateBundlePrice(
   };
 }
 
-/**
- * Get all applied bundles in cart (best matching first)
- */
+// Get all applied bundles in cart (best matching first)
 export function getAppliedBundles(cartItems: CartItem[], bundles: Bundle[]): AppliedBundle[] {
   const applicable = getApplicableBundles(cartItems, bundles);
 
@@ -156,9 +146,7 @@ export function getAppliedBundles(cartItems: CartItem[], bundles: Bundle[]): App
   }));
 }
 
-/**
- * Calculate final cart total with best bundle applied
- */
+// Calculate final cart total with best bundle applied
 export function calculateCartWithBundles(
   cartItems: CartItem[],
   bundles: Bundle[]
@@ -184,9 +172,7 @@ export function calculateCartWithBundles(
   };
 }
 
-/**
- * Format currency for display
- */
+// Format currency for display
 export function formatCurrency(amount: number, currency: string = "INR"): string {
   return new Intl.NumberFormat("en-IN", {
     style: "currency",

@@ -1,17 +1,17 @@
 "use client";
 
-import React, { useEffect, useState, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useState, Suspense } from "react";
 import { CheckCircle, Package, Home } from "lucide-react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 function SuccessContent() {
-  const searchParams = useSearchParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");
-  const [orderDetails, setOrderDetails] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [orderDetails, setOrderDetails] = useState<any>(null);
 
   useEffect(() => {
     if (orderId) {

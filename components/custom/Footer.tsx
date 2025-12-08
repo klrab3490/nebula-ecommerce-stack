@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import SocialLinks from "@/components/custom/SocialLinks";
 
 export default function Footer() {

@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import StarRating from "./StarRating";
-import { formatDistanceToNow } from "date-fns";
 import { User } from "lucide-react";
+import StarRating from "./StarRating";
+import { useEffect, useState } from "react";
+import { formatDistanceToNow } from "date-fns";
 
 interface Review {
   id: string;

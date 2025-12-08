@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { Gift } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";

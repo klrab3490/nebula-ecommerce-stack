@@ -1,10 +1,10 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { AlertCircle, Gift, TrendingDown } from "lucide-react";
 import { AppliedBundle } from "@/lib/bundles";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { AlertCircle, Gift, TrendingDown } from "lucide-react";
 
 interface BundleOfferCardProps {
   bundle: AppliedBundle;

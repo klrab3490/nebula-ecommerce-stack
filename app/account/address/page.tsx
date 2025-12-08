@@ -8,8 +8,8 @@ import React, { useEffect, useState } from "react";
 
 export default function ManageAddressesPage() {
   const router = useRouter();
-  const [addresses, setAddresses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [addresses, setAddresses] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const fetchAddresses = async () => {

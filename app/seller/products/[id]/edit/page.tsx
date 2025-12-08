@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import React, { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { Edit, ArrowLeft, Loader2, Plus, X } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 interface ProductFormData {
   name: string;

@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface SlideData {
@@ -70,18 +70,6 @@ const slides: SlideData[] = [
     backgroundImage: "/Saffron Gel.jpg",
   },
 ];
-
-// {
-//     id: 11,
-//     type: "product",
-//     productImage: "/placeholder-4cqd6.png",
-//     title: "Premium Wireless Headphones",
-//     subtitle: "Crystal Clear Audio Experience",
-//     description:
-//         "Immerse yourself in studio-quality sound with our flagship wireless headphones featuring active noise cancellation.",
-//     buttonText: "Learn More",
-//     buttonLink: "#",
-// },
 
 export default function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);

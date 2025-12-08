@@ -1,9 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Mail, MessageSquare, Phone, MapPin, Clock, MessageCircle } from "lucide-react";
 import SocialLinks from "@/components/custom/SocialLinks";
 import { generateWhatsAppMessage, generateWhatsAppUrl } from "@/lib/whatsappMessages";
+import { Mail, MessageSquare, Phone, MapPin, Clock, MessageCircle } from "lucide-react";
 
 export default function ContactUs() {
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
@@ -180,7 +180,9 @@ export default function ContactUs() {
                       <div className="bg-white/50 dark:bg-zinc-800/50 backdrop-blur-sm rounded-xl p-4">
                         <div className="text-2xl mb-2">📦</div>
                         <h4 className="font-semibold text-sm mb-1">Order Support</h4>
-                        <p className="text-xs text-muted-foreground">Track and manage your orders</p>
+                        <p className="text-xs text-muted-foreground">
+                          Track and manage your orders
+                        </p>
                       </div>
                     </div>
 

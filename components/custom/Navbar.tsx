@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
+import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { useClerk, UserButton } from "@clerk/nextjs";
 import { useAppContext } from "@/contexts/AppContext";
@@ -11,6 +10,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { ModeToggle } from "@/components/theme/mode-toggle";
 import { getPalette } from "@/components/theme/colorPalette";
 import { CartIcon } from "@/components/custom/cart/cart-icon";
+import NavbarSearch from "@/components/custom/NavbarSearch";
 import { Menu, House, Search, ShoppingBag, ShoppingCart, User, X } from "lucide-react";
 
 export default function Navbar() {
@@ -21,11 +21,23 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
+  const handleCloseSearch = useCallback(() => {
+    setIsSearchOpen(false);
+  }, []);
+
+  const handleCloseMenu = useCallback(() => {
+    setIsMenuOpen(false);
+  }, []);
+
   const NavbarData = user
     ? [
         {
           label: "Home",
           href: "/",
+        },
+        {
+          label: "About",
+          href: "/about",
         },
         {
           label: "Products",
@@ -54,12 +66,12 @@ export default function Navbar() {
           href: "/",
         },
         {
-          label: "Products",
-          href: "/products",
-        },
-        {
           label: "About",
           href: "/about",
+        },
+        {
+          label: "Products",
+          href: "/products",
         },
         {
           label: "Locate Store",
@@ -80,17 +92,21 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/60 backdrop-blur-xl supports-backdrop-filter:bg-background/40 transition-all duration-300">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <div className="grid grid-cols-3 items-center w-full">
             {/* Left section - Navigation */}
             <div className="flex items-center justify-start">
-              <div className="hidden lg:flex items-center space-x-1">
+              <div className="hidden xl:flex items-center">
                 {NavbarData.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-all duration-300 hover:bg-accent/50 rounded-full group"
+                    className={`relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full group ${
+                      pathname === item.href
+                        ? "text-foreground bg-white/10"
+                        : "text-muted-foreground hover:text-foreground hover:bg-white/10"
+                    }`}
                   >
                     {item.label}
                   </Link>
@@ -99,7 +115,7 @@ export default function Navbar() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="lg:hidden ml-2 h-10 w-10 hover:bg-accent/50 rounded-full transition-colors"
+                className="xl:hidden ml-2 h-10 w-10 hover:bg-accent/50 rounded-full transition-colors"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -132,12 +148,7 @@ export default function Navbar() {
             <div className="flex items-center justify-end gap-3">
               {isSearchOpen && (
                 <div className="hidden md:flex relative animate-in slide-in-from-right-4 fade-in duration-300">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input
-                    placeholder="Search products..."
-                    className="pl-10 pr-4 w-64 h-9 bg-secondary/50 border-transparent focus:bg-background focus:border-primary/20 focus:ring-2 focus:ring-primary/10 rounded-full transition-all"
-                    autoFocus
-                  />
+                  <NavbarSearch onClose={handleCloseSearch} />
                 </div>
               )}
 
@@ -146,15 +157,16 @@ export default function Navbar() {
                   variant="ghost"
                   size="icon"
                   onClick={() => setIsSearchOpen(!isSearchOpen)}
-                  className={`hidden md:inline-flex h-10 w-10 hover:bg-accent/80 ${isSearchOpen ? "bg-accent" : ""} bg-linear-to-r ${palette.accent} bg-opacity-10 hover:bg-opacity-20`}
+                  className={`hidden md:inline-flex h-10 w-10 hover:bg-accent/80 rounded-full transition-all duration-300 ${isSearchOpen ? "bg-accent" : ""}`}
                 >
-                  <Search className="h-5 w-5" />
+                  {isSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
                 </Button>
 
                 <Button
                   variant="ghost"
                   size="icon"
-                  className={`hidden md:inline-flex relative h-10 w-10 hover:bg-accent/50 rounded-full transition-all duration-300`}
+                  onClick={() => router.push("/cart")}
+                  className="hidden md:inline-flex relative h-10 w-10 hover:bg-accent/50 rounded-full transition-all duration-300"
                 >
                   <CartIcon />
                 </Button>
@@ -214,34 +226,20 @@ export default function Navbar() {
         </div>
 
         {isMenuOpen && (
-          <div className="lg:hidden border-t border-border/40 bg-background/95 backdrop-blur-xl animate-in slide-in-from-top-5 fade-in duration-300 absolute w-full z-40 shadow-xl">
+          <div className="xl:hidden border-t border-border/40 bg-background/95 backdrop-blur-xl animate-in slide-in-from-top-5 fade-in duration-300 absolute w-full left-0 z-40 shadow-xl">
             <div className="px-4 py-6 space-y-6">
               {/* Mobile Search Section */}
-              {isSearchOpen && (
-                <div className="relative animate-in slide-in-from-top-2 duration-200">
-                  <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-                  <Input
-                    placeholder="Search products..."
-                    className="pl-12 pr-4 h-12 text-base bg-accent/50 border-border/50 focus:bg-background focus:border-border rounded-xl"
-                    autoFocus
-                  />
-                </div>
-              )}
+              <NavbarSearch isMobile onClose={handleCloseMenu} />
 
               <div className="flex items-center justify-between gap-3 pb-4 border-b border-border/50 md:hidden">
                 <div className="flex items-center gap-3">
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => setIsSearchOpen(!isSearchOpen)}
-                    className={`h-12 w-12 hover:bg-accent/50 rounded-xl ${isSearchOpen ? "bg-accent" : ""}`}
-                  >
-                    <Search className="h-5 w-5" />
-                  </Button>
-
-                  <Button
-                    variant="ghost"
-                    size="icon"
+                    onClick={() => {
+                      router.push("/cart");
+                      setIsMenuOpen(false);
+                    }}
                     className="relative h-12 w-12 hover:bg-accent/50 rounded-xl"
                   >
                     <CartIcon />
@@ -258,63 +256,44 @@ export default function Navbar() {
                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-4 mb-3">
                   Navigation
                 </h3>
-                <Link
-                  href="/"
-                  className="flex items-center px-4 py-3 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-xl transition-all duration-200 active:scale-95"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Home
-                </Link>
-                <Link
-                  href="/products"
-                  className="flex items-center px-4 py-3 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-xl transition-all duration-200 active:scale-95"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Products
-                </Link>
-                <Link
-                  href="/about"
-                  className="flex items-center px-4 py-3 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-xl transition-all duration-200 active:scale-95"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  About
-                </Link>
-                <Link
-                  href="/contact"
-                  className="flex items-center px-4 py-3 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-xl transition-all duration-200 active:scale-95"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Contact
-                </Link>
+                {NavbarData.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`flex items-center px-4 py-3 text-base font-medium rounded-xl transition-all duration-200 active:scale-95 ${
+                      pathname === item.href
+                        ? "text-foreground bg-accent/70"
+                        : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                    }`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
               </div>
 
-              {/* Quick Actions */}
-              <div className="space-y-2 pt-4 border-t border-border/50">
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-4 mb-3">
-                  Quick Actions
-                </h3>
-                {user && isSeller && (
+              {/* Quick Actions for logged-in users */}
+              {user && (
+                <div className="space-y-2 pt-4 border-t border-border/50">
+                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-4 mb-3">
+                    Quick Actions
+                  </h3>
                   <Link
-                    href="/seller"
+                    href="/account"
                     className="flex items-center px-4 py-3 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-xl transition-all duration-200 active:scale-95"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Seller Dashboard
+                    My Account
                   </Link>
-                )}
-                <button
-                  className="flex items-center w-full px-4 py-3 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-xl transition-all duration-200 active:scale-95 text-left"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  My Orders
-                </button>
-                <button
-                  className="flex items-center w-full px-4 py-3 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-xl transition-all duration-200 active:scale-95 text-left"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Wishlist
-                </button>
-              </div>
+                  <Link
+                    href="/cart"
+                    className="flex items-center px-4 py-3 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-xl transition-all duration-200 active:scale-95"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Cart
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         )}

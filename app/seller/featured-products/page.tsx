@@ -1,11 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import React, { useState, useEffect } from "react";
+import { getCurrencySymbol } from "@/lib/currency";
+import { Search, Star, AlertTriangle, CheckCircle2, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import {
   Table,
@@ -15,8 +16,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, Star, AlertTriangle, CheckCircle2, XCircle, Loader2, Save } from "lucide-react";
-import { getCurrencySymbol } from "@/lib/currency";
 
 interface Product {
   id: string;
@@ -35,10 +34,10 @@ interface Product {
 
 export default function FeaturedProductsPage() {
   const currencySymbol = getCurrencySymbol();
-  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
   const [updatingIds, setUpdatingIds] = useState<Set<string>>(new Set());
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 

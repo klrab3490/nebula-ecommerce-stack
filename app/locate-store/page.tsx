@@ -1,17 +1,16 @@
 "use client";
 
-import React from "react";
-import { MapPin, Phone, Clock, Navigation, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { MapPin, Phone, Clock, Navigation, Mail } from "lucide-react";
 
 export default function LocateStorePage() {
   // Store details from environment variables or defaults
-  const storeAddress = process.env.NEXT_PUBLIC_STORE_ADDRESS || "Kerala, India";
   const storeCity = process.env.NEXT_PUBLIC_STORE_CITY || "Kerala";
   const storeState = process.env.NEXT_PUBLIC_STORE_STATE || "Kerala";
   const storeZipCode = process.env.NEXT_PUBLIC_STORE_ZIP || "695001";
   const storePhone = process.env.NEXT_PUBLIC_STORE_PHONE || "+91 98765 43210";
   const storeEmail = process.env.NEXT_PUBLIC_STORE_EMAIL || "store@nebula.com";
+  const storeAddress = process.env.NEXT_PUBLIC_STORE_ADDRESS || "Kerala, India";
   const storeMapEmbedUrl =
     process.env.NEXT_PUBLIC_STORE_MAP_EMBED_URL ||
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3945.7304!2d76.9366!3d8.5241!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOMKwMzEnMjcuNyJOIDc2wrA1NicxMS44IkU!5e0!3m2!1sen!2sin!4v1234567890";

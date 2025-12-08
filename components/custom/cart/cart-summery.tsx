@@ -1,12 +1,12 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { useAppContext } from "@/contexts/AppContext";
-import { Separator } from "@/components/ui/separator";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { LogIn } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { useClerk } from "@clerk/nextjs";
-import { LogIn } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { useAppContext } from "@/contexts/AppContext";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function CartSummary() {
   const { cart, clearCart, currency } = useAppContext();

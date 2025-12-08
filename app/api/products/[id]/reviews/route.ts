@@ -1,12 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+"use server";
+
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // GET /api/products/[id]/reviews - Get all reviews for a product
-export async function GET(
-  request: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
 
@@ -57,10 +56,7 @@ export async function GET(
 }
 
 // POST /api/products/[id]/reviews - Create a review for a product
-export async function POST(
-  request: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { userId: clerkId } = await auth();
 
@@ -77,10 +73,7 @@ export async function POST(
     }
 
     if (!rating || rating < 1 || rating > 5) {
-      return NextResponse.json(
-        { error: "Rating must be between 1 and 5" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Rating must be between 1 and 5" }, { status: 400 });
     }
 
     if (!comment || comment.trim().length === 0) {

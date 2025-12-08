@@ -1,8 +1,7 @@
 "use client";
 
-import React from "react";
-import { Instagram, Facebook, Twitter } from "lucide-react";
 import Link from "next/link";
+import { Instagram, Facebook } from "lucide-react";
 
 interface SocialLinksProps {
   variant?: "footer" | "contact";
@@ -12,7 +11,7 @@ interface SocialLinksProps {
 export default function SocialLinks({ variant = "footer", className = "" }: SocialLinksProps) {
   const instagramUrl = process.env.NEXT_PUBLIC_INSTAGRAM_URL || "#";
   const facebookUrl = process.env.NEXT_PUBLIC_FACEBOOK_URL || "#";
-  const twitterUrl = process.env.NEXT_PUBLIC_TWITTER_URL || "#";
+  // const twitterUrl = process.env.NEXT_PUBLIC_TWITTER_URL || "#";
 
   const socialPlatforms = [
     {
@@ -29,13 +28,13 @@ export default function SocialLinks({ variant = "footer", className = "" }: Soci
       color: "hover:bg-blue-500",
       gradient: "from-blue-500 to-blue-600",
     },
-    {
-      name: "Twitter",
-      url: twitterUrl,
-      icon: Twitter,
-      color: "hover:bg-sky-400",
-      gradient: "from-sky-400 to-sky-500",
-    },
+    // {
+    //   name: "Twitter",
+    //   url: twitterUrl,
+    //   icon: Twitter,
+    //   color: "hover:bg-sky-400",
+    //   gradient: "from-sky-400 to-sky-500",
+    // },
   ];
 
   const baseClasses =

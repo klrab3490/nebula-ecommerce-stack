@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Send } from "lucide-react";
 import StarRating from "./StarRating";
 import { useUser } from "@clerk/nextjs";
-import { Send } from "lucide-react";
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 interface ReviewFormProps {
   productId: string;
@@ -81,9 +81,7 @@ export default function ReviewForm({ productId, onReviewSubmitted }: ReviewFormP
   if (!isSignedIn) {
     return (
       <div className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-2xl p-6 border border-white/30 dark:border-zinc-700/50 text-center">
-        <p className="text-muted-foreground">
-          Please sign in to leave a review
-        </p>
+        <p className="text-muted-foreground">Please sign in to leave a review</p>
       </div>
     );
   }
@@ -97,15 +95,8 @@ export default function ReviewForm({ productId, onReviewSubmitted }: ReviewFormP
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Rating */}
         <div>
-          <label className="block text-sm font-semibold mb-2 text-foreground">
-            Your Rating
-          </label>
-          <StarRating
-            rating={rating}
-            interactive
-            onRatingChange={setRating}
-            size={32}
-          />
+          <label className="block text-sm font-semibold mb-2 text-foreground">Your Rating</label>
+          <StarRating rating={rating} interactive onRatingChange={setRating} size={32} />
         </div>
 
         {/* Comment */}
@@ -122,9 +113,7 @@ export default function ReviewForm({ productId, onReviewSubmitted }: ReviewFormP
             className="w-full bg-white/50 dark:bg-zinc-800/50 backdrop-blur-sm border-2 border-white/20 dark:border-zinc-700/50 rounded-xl px-4 py-3 text-base transition-all duration-300 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 resize-none placeholder:text-muted-foreground"
             disabled={isSubmitting}
           />
-          <p className="text-xs text-muted-foreground mt-1">
-            Minimum 10 characters
-          </p>
+          <p className="text-xs text-muted-foreground mt-1">Minimum 10 characters</p>
         </div>
 
         {/* Error Message */}

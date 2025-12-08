@@ -58,9 +58,7 @@ export default function StarRating({
             onMouseLeave={handleMouseLeave}
             disabled={!interactive}
             className={`relative transition-all duration-200 ${
-              interactive
-                ? "cursor-pointer hover:scale-110 active:scale-95"
-                : "cursor-default"
+              interactive ? "cursor-pointer hover:scale-110 active:scale-95" : "cursor-default"
             }`}
             aria-label={`${starValue} star${starValue !== 1 ? "s" : ""}`}
           >
@@ -85,12 +83,7 @@ export default function StarRating({
             {/* Partially filled star */}
             {isPartiallyFilled && (
               <div className="absolute top-0 left-0 overflow-hidden" style={{ width: "50%" }}>
-                <Star
-                  size={size}
-                  className="text-yellow-400"
-                  fill="currentColor"
-                  strokeWidth={2}
-                />
+                <Star size={size} className="text-yellow-400" fill="currentColor" strokeWidth={2} />
               </div>
             )}
           </button>

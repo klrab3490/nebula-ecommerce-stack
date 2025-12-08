@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Sparkles, Sun, Wind } from "lucide-react";
-import path from "path";
 
 // Custom animations styles
 const animationStyles = `

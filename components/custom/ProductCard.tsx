@@ -4,12 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/currency";
-import { Heart, ShoppingCart, Sparkles, TrendingUp, Plus, Minus } from "lucide-react";
 import { useAppContext } from "@/contexts/AppContext";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Heart, ShoppingCart, Sparkles, TrendingUp, Plus, Minus } from "lucide-react";
 
 interface ProductCard {
   id: string;

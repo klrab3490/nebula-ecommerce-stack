@@ -1,9 +1,12 @@
 "use client";
 
+import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/currency";
 import { Separator } from "@/components/ui/separator";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Package,
@@ -15,9 +18,6 @@ import {
   Filter,
   AlertCircle,
 } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { formatCurrency } from "@/lib/currency";
 
 interface OrderItem {
   id: string;
@@ -34,22 +34,6 @@ interface Order {
   status: string;
   items: OrderItem[];
 }
-
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "delivered":
-      return "default";
-    case "pending":
-    case "confirmed":
-      return "secondary";
-    case "paid":
-      return "default";
-    case "cancelled":
-      return "destructive";
-    default:
-      return "outline";
-  }
-};
 
 const getStatusIcon = (status: string) => {
   switch (status.toLowerCase()) {

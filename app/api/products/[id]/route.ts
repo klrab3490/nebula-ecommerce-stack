@@ -1,9 +1,9 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/authSeller";
 import { utapi } from "@/lib/uploadthing-server";
+import { NextRequest, NextResponse } from "next/server";
 
 type RouteContext = { params: Promise<{ id: string }> };
 

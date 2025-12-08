@@ -1,12 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { MessageCircle, X } from "lucide-react";
+import Image from "next/image";
+import { X } from "lucide-react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { generateWhatsAppMessage, generateWhatsAppUrl } from "@/lib/whatsappMessages";
+import { useAppContext } from "@/contexts/AppContext";
 
 export default function WhatsAppFloatingButton() {
   const pathname = usePathname();
+  const { products } = useAppContext();
   const [isVisible, setIsVisible] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -34,7 +37,7 @@ export default function WhatsAppFloatingButton() {
   }
 
   const handleClick = () => {
-    const message = generateWhatsAppMessage({ pathname });
+    const message = generateWhatsAppMessage({ pathname, products });
     const whatsappUrl = generateWhatsAppUrl(whatsappNumber, message);
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   };
@@ -72,25 +75,26 @@ export default function WhatsAppFloatingButton() {
         {/* Main Button */}
         <button
           onClick={handleClick}
-          className="group relative flex items-center justify-center w-16 h-16 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-full shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95"
+          className="group relative flex items-center justify-center w-16 h-16 bg-white hover:bg-[#128C7E] text-white rounded-full shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95"
           aria-label="Chat on WhatsApp"
         >
           {/* Glow Effect */}
-          <div className="absolute -inset-1 bg-[#25D366] rounded-full blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300 animate-pulse"></div>
+          <div className="absolute -inset-1 bg-white hover:bg-[#128C7E] rounded-full blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300 animate-pulse"></div>
 
           {/* Icon */}
           <div className="relative">
-            <MessageCircle size={32} fill="white" className="drop-shadow-lg" />
+            <Image
+              src="/whatsapp.png"
+              alt="WhatsApp"
+              width={32}
+              height={32}
+              className="drop-shadow-lg hover:bg-[#128C7E]"
+            />
           </div>
 
           {/* Ripple Effect */}
           <span className="absolute inset-0 rounded-full animate-ping bg-[#25D366] opacity-20"></span>
         </button>
-
-        {/* Small badge/notification (optional - can be enabled based on business logic) */}
-        {/* <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold animate-bounce">
-          1
-        </div> */}
       </div>
 
       {/* Add animation styles */}
