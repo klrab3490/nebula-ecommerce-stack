@@ -19,7 +19,7 @@ export function ProviderWrapper({ children }: ProviderWrapperProps) {
       <AppContextProvider>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >

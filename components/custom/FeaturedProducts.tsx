@@ -1,11 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { getCurrencySymbol } from "@/lib/currency";
-import { Clock, Star, ShoppingCart, Plus, Minus } from "lucide-react";
-import { useAppContext } from "@/contexts/AppContext";
+import { Clock } from "lucide-react";
+import { ProductCard } from "@/components/custom/ProductCard";
 
 // Custom animations styles
 const shimmerKeyframes = `
@@ -62,14 +59,13 @@ interface FeaturedProductsProps {
 
 export default function FeaturedProducts({
   daysFromNow = 7,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onAddToCart,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onReadMore,
 }: FeaturedProductsProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const currencySymbol = getCurrencySymbol();
-  const { addItem, cart, updateQuantity, removeItem } = useAppContext();
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
     hours: 0,
@@ -122,27 +118,6 @@ export default function FeaturedProducts({
 
     return () => clearInterval(timer);
   }, [daysFromNow]);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const renderStarRating = (rating: number, maxRating = 5) => (
-    <div
-      className="flex items-center gap-0.5"
-      role="img"
-      aria-label={`${rating} out of ${maxRating} stars`}
-    >
-      {Array.from({ length: maxRating }, (_, i) => (
-        <Star
-          key={i}
-          className={`w-5 h-5 transition-all duration-300 ${
-            i < rating
-              ? "text-amber-400 fill-amber-400 hover:text-amber-300 hover:fill-amber-300 drop-shadow-sm transform hover:scale-110"
-              : "text-gray-300 dark:text-gray-600 hover:text-gray-400"
-          }`}
-          aria-hidden="true"
-        />
-      ))}
-    </div>
-  );
 
   const timeUnits = [
     { value: timeLeft.days, label: "Days" },
@@ -197,225 +172,63 @@ export default function FeaturedProducts({
 
       {/* Section Title */}
       <div className="text-center mb-12">
-        <h2 className="text-4xl md:text-5xl font-black mb-4 bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
-          🔥 Featured Products
+        <div className="inline-block mb-4">
+          <span className="text-sm font-bold text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30 px-4 py-2 rounded-full">
+            ⚡ FEATURED COLLECTION
+          </span>
+        </div>
+        <h2 className="text-4xl md:text-5xl font-black mb-4 text-gradient-primary">
+          Featured Products
         </h2>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-medium">
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-medium leading-relaxed">
           Discover our handpicked selection of premium products at unbeatable prices
         </p>
-        <div className="w-24 h-1 bg-linear-to-r from-purple-500 to-pink-500 mx-auto mt-4 rounded-full"></div>
+        <div className="w-24 h-1 bg-linear-to-r from-purple-500 via-pink-500 to-orange-500 mx-auto mt-6 rounded-full"></div>
       </div>
 
       {/* Loading State */}
       {loading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {[...Array(4)].map((_, index) => (
             <div
               key={index}
-              className="bg-white/95 dark:bg-zinc-900/95 rounded-2xl p-7 shadow-xl animate-pulse"
+              className="bg-white dark:bg-card rounded-2xl p-5 shadow-premium animate-pulse"
             >
-              <div className="bg-gray-200 dark:bg-gray-700 h-52 rounded-2xl mb-6"></div>
-              <div className="bg-gray-200 dark:bg-gray-700 h-4 rounded mb-4"></div>
-              <div className="bg-gray-200 dark:bg-gray-700 h-4 rounded mb-4 w-3/4"></div>
-              <div className="bg-gray-200 dark:bg-gray-700 h-6 rounded mb-6"></div>
-              <div className="bg-gray-200 dark:bg-gray-700 h-12 rounded"></div>
+              <div className="aspect-square bg-linear-to-br from-gray-200 via-gray-100 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 rounded-xl mb-4"></div>
+              <div className="bg-gray-200 dark:bg-gray-700 h-5 rounded-lg mb-3 w-3/4"></div>
+              <div className="bg-gray-200 dark:bg-gray-700 h-4 rounded-lg mb-3 w-full"></div>
+              <div className="bg-gray-200 dark:bg-gray-700 h-10 rounded-xl"></div>
             </div>
           ))}
         </div>
       )}
 
-      {/* Enhanced Product Cards Grid */}
+      {/* Products Grid - Using Shared ProductCard */}
       {!loading && products.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {products.map((product, index) => {
-            const hasDiscount = product.discountedPrice && product.discountedPrice < product.price;
-            const discountPercentage = hasDiscount
-              ? Math.round(((product.price - product.discountedPrice!) / product.price) * 100)
-              : 0;
-            const currentPrice = hasDiscount ? product.discountedPrice! : product.price;
-            const originalPrice = product.price;
-
-            const handleButtonClick = () => {
-              addItem({
-                id: product.id,
-                name: product.name,
-                price: product.discountedPrice || product.price,
-                image: product.images[0] || "/placeholder.svg",
-              });
-              if (onAddToCart) {
-                onAddToCart(product.id);
-              }
-            };
-
-            const handleQuantityChange = (newQuantity: number) => {
-              if (newQuantity <= 0) {
-                removeItem(product.id);
-              } else {
-                updateQuantity(product.id, newQuantity);
-              }
-            };
-
-            const cartItem = cart.items.find((item) => item.id === product.id);
-
-            return (
-              <div
-                key={product.id}
-                className="group relative overflow-hidden h-full"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                {/* Glow Effect */}
-                <div className="absolute -inset-0.5 bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-500 animate-pulse"></div>
-
-                {/* Main Card */}
-                <div className="relative bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-white/20 dark:border-zinc-700/50 overflow-hidden h-full flex flex-col">
-                  {/* Discount Badge with Animation */}
-                  {hasDiscount && (
-                    <div className="absolute top-4 left-4 z-20">
-                      <div className="relative">
-                        <div className="absolute inset-0 bg-linear-to-r from-purple-600 to-pink-600 rounded-full blur-sm animate-pulse"></div>
-                        <div className="relative bg-linear-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transform group-hover:scale-110 transition-transform duration-300">
-                          <span className="drop-shadow-sm">-{discountPercentage}%</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Shine Effect */}
-                  <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
-
-                  <div className="p-7 flex-1 flex flex-col">
-                    {/* Product Image with Enhanced Effects */}
-                    <div className="relative mb-6 bg-linear-to-br from-gray-50 to-gray-100 dark:from-zinc-800 dark:to-zinc-900 rounded-2xl overflow-hidden shadow-inner">
-                      <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5"></div>
-                      <Image
-                        src={
-                          product.images[0] || "/placeholder.svg?height=200&width=200&query=product"
-                        }
-                        alt={product.name}
-                        className="w-full h-52 object-contain group-hover:scale-110 transition-all duration-700 ease-out p-4 relative z-10"
-                        width={200}
-                        height={200}
-                      />
-                    </div>
-
-                    {/* Product Info with Better Typography */}
-                    <h3 className="font-bold text-lg text-foreground mb-4 line-clamp-2 leading-tight group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300 min-h-14">
-                      {product.name}
-                    </h3>
-
-                    {/* Category Badge */}
-                    <div className="mb-4 flex flex-wrap gap-1 min-h-7">
-                      {product.categories.slice(0, 2).map((category, idx) => (
-                        <span
-                          key={idx}
-                          className="text-xs px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full font-medium"
-                        >
-                          {category}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Enhanced Pricing with Better Visual Hierarchy */}
-                    <div className="flex items-center justify-between mb-4 min-h-8">
-                      <div className="flex items-center gap-3">
-                        {hasDiscount && (
-                          <>
-                            <span className="text-muted-foreground line-through text-base font-medium">
-                              {currencySymbol}
-                              {originalPrice.toLocaleString()}
-                            </span>
-                            <div className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-1 rounded-lg text-xs font-bold">
-                              SAVE {currencySymbol}
-                              {(originalPrice - currentPrice).toLocaleString()}
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="mb-4">
-                      <span className="text-2xl font-black bg-linear-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
-                        {currencySymbol}
-                        {currentPrice.toLocaleString()}
-                      </span>
-                    </div>
-
-                    {/* Stock Status - Fixed height */}
-                    <div className="mb-4 min-h-5">
-                      {product.stock < 10 && product.stock > 0 && (
-                        <p className="text-xs text-orange-600 dark:text-orange-400">
-                          Only {product.stock} left in stock!
-                        </p>
-                      )}
-                      {product.stock === 0 && (
-                        <p className="text-xs text-red-600 dark:text-red-400">Out of stock</p>
-                      )}
-                      {product.stock >= 10 && (
-                        <p className="text-xs text-green-600 dark:text-green-400">In stock</p>
-                      )}
-                    </div>
-
-                    {/* Enhanced Action Button - Push to bottom */}
-                    <div className="mt-auto">
-                      {cartItem ? (
-                        <div className="flex items-center gap-2 w-full">
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="h-10 w-10 bg-transparent border-2 border-purple-600 hover:bg-purple-600/10 transition-all duration-300"
-                            onClick={() => handleQuantityChange(cartItem.quantity - 1)}
-                          >
-                            <Minus className="h-3 w-3 text-purple-600" />
-                          </Button>
-
-                          <div className="flex-1 text-center py-2 px-2 bg-purple-50 dark:bg-purple-950/30 rounded-xl border border-purple-200 dark:border-purple-800">
-                            <span className="text-base font-bold text-purple-700 dark:text-purple-300">
-                              {cartItem.quantity}
-                            </span>
-                          </div>
-
-                          <Button
-                            size="icon"
-                            className="h-10 w-10 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl shadow-lg transition-all duration-300 group/add"
-                            onClick={() => handleQuantityChange(cartItem.quantity + 1)}
-                          >
-                            <Plus className="h-3 w-3 transition-transform group-hover/add:scale-110" />
-                          </Button>
-                        </div>
-                      ) : (
-                        <Button
-                          onClick={handleButtonClick}
-                          disabled={product.stock === 0}
-                          className="w-full relative overflow-hidden bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl py-6 font-bold text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 group/btn disabled:opacity-50 disabled:cursor-not-allowed"
-                          size="lg"
-                        >
-                          <div className="absolute inset-0 bg-linear-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
-                          <div className="relative flex items-center justify-center gap-2">
-                            <ShoppingCart className="w-5 h-5" />
-                            <span>{product.stock === 0 ? "Out of Stock" : "Add To Cart"}</span>
-                          </div>
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {products.map((product, index) => (
+            <div
+              key={product.id}
+              className="animate-fade-in-up"
+              style={{ animationDelay: `${index * 80}ms` }}
+            >
+              <ProductCard product={product} />
+            </div>
+          ))}
         </div>
       )}
 
       {/* No Products State */}
       {!loading && products.length === 0 && (
-        <div className="text-center py-16">
-          <div className="w-24 h-24 bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-6">
-            <span className="text-slate-500 text-4xl">📦</span>
+        <div className="text-center py-20">
+          <div className="w-24 h-24 bg-linear-to-br from-orange-100 to-pink-100 dark:from-orange-900/30 dark:to-pink-900/30 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <span className="text-5xl">📦</span>
           </div>
-          <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
             No Featured Products Yet
           </h3>
-          <p className="text-slate-600 dark:text-slate-400 mb-6">
-            Check back later for amazing deals and featured items!
+          <p className="text-gray-600 dark:text-gray-400 text-lg">
+            Check back soon for amazing deals and featured items!
           </p>
         </div>
       )}

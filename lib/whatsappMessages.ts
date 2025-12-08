@@ -1,7 +1,4 @@
-/**
- * Utility functions for generating context-aware WhatsApp messages
- */
-
+// Utility functions for generating context-aware WhatsApp messages
 export interface WhatsAppMessageContext {
   pathname: string;
   productName?: string;
@@ -9,9 +6,7 @@ export interface WhatsAppMessageContext {
   products?: { id: string; name: string }[];
 }
 
-/**
- * Generate a context-aware WhatsApp message based on the current page
- */
+// Generate a context-aware WhatsApp message based on the current page
 export function generateWhatsAppMessage(context: WhatsAppMessageContext): string {
   const { pathname, productName, productUrl, products = [] } = context;
 
