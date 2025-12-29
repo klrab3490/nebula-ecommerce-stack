@@ -65,7 +65,7 @@
     "@types/react-dom": "^19.2.3",
     "baseline-browser-mapping": "^2.9.3",
     "eslint": "^9.39.1",
-    "eslint-config-next": "16.0.7",
+    "eslint-config-next": "16.0.8",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "husky": "^9.1.7",
